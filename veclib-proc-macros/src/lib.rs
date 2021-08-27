@@ -138,3 +138,46 @@ pub fn setup_division(item: TokenStream) -> TokenStream {
     }
     ".replace("{a_a}", vector_type.to_string().as_str()).parse().unwrap()
 }
+
+#[proc_macro]
+pub fn setup_vector_maths_f32(item: TokenStream) -> TokenStream {
+    // The type of vector (Vector2, Vector3, Vector4)
+    let vector_type: u8 = item.to_string().parse::<u8>().unwrap();
+    "
+    impl Vector{a_a}<f32> {
+        // Get the distance from another vector
+        pub fn distance(&self, other: &Self) -> f32 {
+            let test: Vector{a_a}<f32> = self.clone() - other.clone();
+            return test.length();
+        }
+        // Get the length square of the current vector (Saves us a sqrt operation)
+        pub fn length_sqrt(&self) -> f32 {
+            let mut len: f32 = 0.0;
+            for i in 0..{a_a} { len += self[i]*self[i]; }
+            return len;
+        }  
+        // Get the length of the current vector
+        pub fn length(&self) -> f32 {
+            return self.length_sqrt().sqrt();
+        }
+        // Normalize the current vector
+        pub fn normalize(&mut self) {
+            let len = self.length();
+            for i in 0..{a_a} { self[i] /= len; }
+        }
+        // Get the normalized value of the current vector without updating it
+        pub fn normalized(&self) -> Self {
+            let len = self.length();
+            let mut output: Self = Self::ZERO;  
+            for i in 0..{a_a} { output[i] = self[i] / len; }
+            return output
+        }
+        // Get the dot product between two vectors  
+        pub fn dot(&self, other: &Self) -> f32 {
+            let mut dot: f32 = 0.0;
+            for i in 0..{a_a} { dot += self[i] * other[i]; }
+            return dot;
+        }    
+    }
+    ".replace("{a_a}", vector_type.to_string().as_str()).parse().unwrap()
+}

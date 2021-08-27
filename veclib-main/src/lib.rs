@@ -10,6 +10,7 @@ use veclib_proc_macros::setup_addition;
 use veclib_proc_macros::setup_subtraction;
 use veclib_proc_macros::setup_multiplication;
 use veclib_proc_macros::setup_division;
+use veclib_proc_macros::setup_vector_maths_f32;
 // Export the types
 pub use vectors::Vector2;
 pub use vectors::Vector3;

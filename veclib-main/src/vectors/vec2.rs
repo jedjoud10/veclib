@@ -119,32 +119,5 @@ crate::setup_addition!(2);
 crate::setup_subtraction!(2);
 crate::setup_multiplication!(2);
 crate::setup_division!(2);
-
-// Vector arithmatics
-impl Vector2<f32> {
-    // Get the distance from another vector
-    pub fn distance(&self, other: &Self) -> f32 {
-        let test: Vector2<f32> = self.clone() - other.clone();
-        return test.length();
-    }
-    // Get the length of the current vector
-    pub fn length(&self) -> f32 {
-        return self.length_sqrt().sqrt();
-    }
-    // Get the length square of the current vector (Saves us a sqrt operation)
-    pub fn length_sqrt(&self) -> f32 {
-        return self[0] + self[1];
-    }
-    // Normalize the current vector
-    pub fn normalize(&mut self) {
-        todo!()
-    }
-    // Get the normalized value of the current vector without updating it
-    pub fn normalized(&self) -> Self {
-        todo!()
-    }
-    // Get the dot product between two vectors  
-    pub fn dot(&self, other: &Self) -> f32 {
-        todo!()
-    }    
-}
+// Setup the shared vector arithmatics
+crate::setup_vector_maths_f32!(2);

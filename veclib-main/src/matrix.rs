@@ -1,6 +1,6 @@
 use std::{iter::Copied, ops::{Add, Div, Index, IndexMut}};
 
-use crate::{Quaternion, types::DefaultStates, vectors::{Vector3, Vector4}};
+use crate::{Quaternion, types::DefaultStates, vector::Swizzable, vectors::{Vector3, Vector4}};
 
 // A simple f32 matrix made of 4 f32/f64 vectors
 // TODO: Turn this into a generic struct
@@ -90,7 +90,11 @@ impl Matrix4x4<f32> {
 // Transform a vector by the matrix
 impl Matrix4x4<f32> {
     // Transform a 4D vector by the matrix
-    pub fn transform_vector(&self, vector: &Vector4<f32>) -> Vector4<f32>{
+    pub fn transform_vector(&self, vector: &Vector4<f32>) -> Vector4<f32> {
         todo!();
+    }
+    // Transform a 3D point by the matrix, basically create a 4D vector out of it with the W component being 1.0
+    pub fn transform_point(&self, point: &Vector3<f32>) -> Vector3<f32> {
+        return self.transform_vector(&Vector4::new(point.x(), point.y(), point.z(), 1.0)).get3([0, 1, 2]);
     }
 }

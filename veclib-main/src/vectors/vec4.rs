@@ -3,7 +3,7 @@ use crate::{types::DefaultStates, vector::Swizzable};
 use super::{Vector2, Vector3};
 
 // A simple 4D vector, no simd support what-so-ever
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone, Copy)]
 pub struct Vector4<T> {
     pub data: [T; 4],
 }
@@ -125,3 +125,5 @@ crate::setup_addition!(4);
 crate::setup_subtraction!(4);
 crate::setup_multiplication!(4);
 crate::setup_division!(4);
+// Setup the shared vector arithmatics
+crate::setup_vector_maths_f32!(4);
