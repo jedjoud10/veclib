@@ -1,4 +1,4 @@
-use std::ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Sub, SubAssign};
+use std::ops::{Add, Neg, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Sub, SubAssign};
 use crate::{types::DefaultStates, vector::Swizzable};
 use super::{Vector2, Vector3};
 
@@ -120,10 +120,46 @@ impl Vector4<bool> {
     }
 }
 
-// Run the procedural macros to setup all the operators
-crate::setup_addition!(4);
-crate::setup_subtraction!(4);
-crate::setup_multiplication!(4);
-crate::setup_division!(4);
+// Run the macros
+crate::setup_add!(Vector4<T>, T);
+crate::setup_sub!(Vector4<T>, T);
+crate::setup_mul!(Vector4<T>, T);
+crate::setup_div!(Vector4<T>, T);
+crate::setup_una!(Vector4<T>, T);
+
 // Setup the shared vector arithmatics
-crate::setup_vector_maths_f32!(4);
+impl Vector4<f32> {
+    // Get the distance from another vector
+    pub fn distance(&self, other: &Self) -> f32 {
+        let test: Vector4<f32> = self.clone() - other.clone();
+        return test.length();
+    }
+    // Get the length square of the current vector (Saves us a sqrt operation)
+    pub fn length_sqrt(&self) -> f32 {
+        let mut len: f32 = 0.0;
+        for i in 0..4 { len += self[i]*self[i]; }
+        return len;
+    }  
+    // Get the length of the current vector
+    pub fn length(&self) -> f32 {
+        return self.length_sqrt().sqrt();
+    }
+    // Normalize the current vector
+    pub fn normalize(&mut self) {
+        let len = self.length();
+        for i in 0..4 { self[i] /= len; }
+    }
+    // Get the normalized value of the current vector without updating it
+    pub fn normalized(&self) -> Self {
+        let len = self.length();
+        let mut output: Self = Self::ZERO;  
+        for i in 0..4 { output[i] = self[i] / len; }
+        return output
+    }
+    // Get the dot product between two vectors  
+    pub fn dot(&self, other: &Self) -> f32 {
+        let mut dot: f32 = 0.0;
+        for i in 0..4 { dot += self[i] * other[i]; }
+        return dot;
+    }    
+}

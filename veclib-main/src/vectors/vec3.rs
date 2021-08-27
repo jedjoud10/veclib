@@ -1,4 +1,4 @@
-use std::ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Sub, SubAssign};
+use std::ops::{Add, AddAssign, Neg, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Sub, SubAssign};
 use crate::{types::DefaultStates, vector::{Swizzable, Vectorable}};
 use super::{Vector2, Vector4};
 
@@ -117,11 +117,12 @@ impl Vector3<bool> {
     }
 }
 
-// Run the procedural macros to setup all the operators
-crate::setup_addition!(3);
-crate::setup_subtraction!(3);
-crate::setup_multiplication!(3);
-crate::setup_division!(3);
+// Run the macros
+crate::setup_add!(Vector3<T>, T);
+crate::setup_sub!(Vector3<T>, T);
+crate::setup_mul!(Vector3<T>, T);
+crate::setup_div!(Vector3<T>, T);
+crate::setup_una!(Vector3<T>, T);
 
 // Vector3 arithmatics
 impl Vector3<f32> {    
@@ -135,4 +136,38 @@ impl Vector3<f32> {
 }
 
 // Setup the shared vector arithmatics
-crate::setup_vector_maths_f32!(3);
+impl Vector3<f32> {
+    // Get the distance from another vector
+    pub fn distance(&self, other: &Self) -> f32 {
+        let test: Vector3<f32> = self.clone() - other.clone();
+        return test.length();
+    }
+    // Get the length square of the current vector (Saves us a sqrt operation)
+    pub fn length_sqrt(&self) -> f32 {
+        let mut len: f32 = 0.0;
+        for i in 0..3 { len += self[i]*self[i]; }
+        return len;
+    }  
+    // Get the length of the current vector
+    pub fn length(&self) -> f32 {
+        return self.length_sqrt().sqrt();
+    }
+    // Normalize the current vector
+    pub fn normalize(&mut self) {
+        let len = self.length();
+        for i in 0..3 { self[i] /= len; }
+    }
+    // Get the normalized value of the current vector without updating it
+    pub fn normalized(&self) -> Self {
+        let len = self.length();
+        let mut output: Self = Self::ZERO;  
+        for i in 0..3 { output[i] = self[i] / len; }
+        return output
+    }
+    // Get the dot product between two vectors  
+    pub fn dot(&self, other: &Self) -> f32 {
+        let mut dot: f32 = 0.0;
+        for i in 0..3 { dot += self[i] * other[i]; }
+        return dot;
+    }    
+}

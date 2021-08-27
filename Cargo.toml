@@ -1,5 +1,4 @@
 [workspace]
 members = [
-    "veclib-main",
-    "veclib-proc-macros"
+    "veclib-main"
 ]

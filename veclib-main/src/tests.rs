@@ -43,4 +43,11 @@ mod tests {
         assert_eq!(Vector4::<i32>::ONE + Vector4::<i32>::W * 2, Vector4::new(1, 1, 1, 3));
         assert_eq!(Vector2::<i32>::ONE - Vector2::<i32>::ZERO, Vector2::ONE);
     }
+    // Vector arithemtics
+    #[test]
+    pub fn arithemtics() {
+        let val = Vector3::<f32>::X;
+        let test = val.dot(&Vector3::Y);
+        assert_eq!(test, 0.0);
+    }
 }
