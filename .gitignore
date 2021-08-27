@@ -1,3 +1,4 @@
 /veclib-derive/target
 /veclib-main/target
+/target
 Cargo.lock

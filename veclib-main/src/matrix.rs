@@ -65,7 +65,7 @@ impl Matrix {
         let mut zaxis: Vector3<f32> = (target.clone() - eye.clone()).normalized();    
         let xaxis: Vector3<f32> = zaxis.cross(up);
         let yaxis: Vector3<f32> = xaxis.cross(&zaxis);
-
+        /*
         zaxis = zaxis;
 
         mat4 viewMatrix = {
@@ -74,8 +74,8 @@ impl Matrix {
           vec4(zaxis.x, zaxis.y, zaxis.z, -dot(zaxis, eye)),
           vec4(0, 0, 0, 1)
         };
-    
-        return viewMatrix;
+        */
+        todo!();
     }
     // Create a rotation matrix
     // Create a scale matrix
