@@ -1,16 +1,16 @@
-use std::ops::{Index, IndexMut};
+use std::{iter::Copied, ops::{Add, Div, Index, IndexMut}};
 
-use crate::vectors::{Vector3, Vector4};
+use crate::{Quaternion, types::DefaultStates, vectors::{Vector3, Vector4}};
 
-// A simple f32 matrix made of 4 f32 vectors
+// A simple f32 matrix made of 4 f32/f64 vectors
 // TODO: Turn this into a generic struct
-pub struct Matrix {
-    pub data: [Vector4<f32>; 4],
+pub struct Matrix4x4<T> where T: DefaultStates + Clone + Copy {
+    pub data: [Vector4<T>; 4],
 }
 
 // Indexer
-impl Index<usize> for Matrix {
-    type Output = Vector4<f32>;
+impl<T> Index<usize> for Matrix4x4<T> where T: DefaultStates + Clone + Copy {
+    type Output = Vector4<T>;
     // Index
     fn index(&self, index: usize) -> &Self::Output {
         return &self.data[index];
@@ -18,7 +18,7 @@ impl Index<usize> for Matrix {
 }
 
 // Mut indexer
-impl IndexMut<usize> for Matrix {
+impl<T> IndexMut<usize> for Matrix4x4<T> where T: DefaultStates + Clone + Copy {
     // Mut index
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         return &mut self.data[index];
@@ -27,9 +27,9 @@ impl IndexMut<usize> for Matrix {
 
 // Creation code for the matrix
 #[allow(dead_code)]
-impl Matrix {
+impl Matrix4x4<f32> {
     // Constants
-    pub const IDENTITY: Self = Matrix {
+    pub const IDENTITY: Self = Matrix4x4 {
         data: [Vector4::X, Vector4::Y, Vector4::Z, Vector4::W]
     };
     // Create a perspective projection matrix
@@ -41,6 +41,7 @@ impl Matrix {
         // The output
         let mut matrix: Self = Self::IDENTITY;
         // Remember, this is collumn major
+        // Right now it is using row major but I will switch it to collumn major later
         matrix[0] = Vector4::new(first, 0.0, 0.0, 0.0);
         matrix[1] = Vector4::new(0.0, second, 0.0, 0.0);
         matrix[2] = Vector4::new(0.0, 0.0, (2.0 * far_plane) / (far_plane - near_plane), -(far_plane * near_plane) / (far_plane - near_plane));
@@ -78,6 +79,18 @@ impl Matrix {
         todo!();
     }
     // Create a rotation matrix
-    // Create a scale matrixa
+    pub fn from_quaternion(quat: &Quaternion<f32>) -> Self {
+        todo!();
+    }
+    // Create a scale matrix
+    pub fn from_scale(scale: Vector3<f32>) -> Self {
+        todo!();
+    }
 }
-// Transform the matrix by another value
+// Transform a vector by the matrix
+impl Matrix4x4<f32> {
+    // Transform a 4D vector by the matrix
+    pub fn transform_vector(&self, vector: &Vector4<f32>) -> Vector4<f32>{
+        todo!();
+    }
+}
