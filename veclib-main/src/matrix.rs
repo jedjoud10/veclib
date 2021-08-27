@@ -78,6 +78,6 @@ impl Matrix {
         todo!();
     }
     // Create a rotation matrix
-    // Create a scale matrix
+    // Create a scale matrixa
 }
 // Transform the matrix by another value
