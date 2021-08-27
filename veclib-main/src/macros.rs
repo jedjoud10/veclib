@@ -9,6 +9,15 @@ macro_rules! setup_add {
                 return self;
             }
         }
+        impl<T> Add for &$t where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T> {
+            type Output = $t;
+
+            fn add(self, rhs: Self) -> Self::Output {
+                let mut output = <$t>::ZERO;
+                for i in 0..self.data.len() { output[i] = self[i] + rhs[i]; }
+                return output;
+            }
+        }
         impl<T> AddAssign for $t where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T> {
             fn add_assign(&mut self, rhs: Self) {
                 for i in 0..self.data.len() { self[i] = self[i] + rhs[i]; }       
@@ -39,6 +48,15 @@ macro_rules! setup_sub {
             fn sub(mut self, rhs: Self) -> Self::Output {
                 for i in 0..self.data.len() { self[i] = self[i] - rhs[i]; }
                 return self;
+            }
+        }
+        impl<T> Sub for &$t where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T> {
+            type Output = $t;
+
+            fn sub(self, rhs: Self) -> Self::Output {
+                let mut output = <$t>::ZERO;
+                for i in 0..self.data.len() { output[i] = self[i] - rhs[i]; }
+                return output;
             }
         }
         impl<T> SubAssign for $t where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T> {
@@ -73,6 +91,15 @@ macro_rules! setup_mul {
                 return self;
             }
         }
+        impl<T> Mul for &$t where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T> {
+            type Output = $t;
+
+            fn mul(self, rhs: Self) -> Self::Output {
+                let mut output = <$t>::ZERO;
+                for i in 0..self.data.len() { output[i] = self[i] * rhs[i]; }
+                return output;
+            }
+        }
         impl<T> MulAssign for $t where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T> {
             fn mul_assign(&mut self, rhs: Self) {
                 for i in 0..self.data.len() { self[i] = self[i] * rhs[i]; }       
@@ -103,6 +130,15 @@ macro_rules! setup_div {
             fn div(mut self, rhs: Self) -> Self::Output {
                 for i in 0..self.data.len() { self[i] = self[i] / rhs[i]; }
                 return self;
+            }
+        }
+        impl<T> Div for &$t where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T> {
+            type Output = $t;
+
+            fn div(self, rhs: Self) -> Self::Output {
+                let mut output = <$t>::ZERO;
+                for i in 0..self.data.len() { output[i] = self[i] / rhs[i]; }
+                return output;
             }
         }
         impl<T> DivAssign for $t where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T> {
