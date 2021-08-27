@@ -173,5 +173,14 @@ macro_rules! setup_una {
                 return self;
             }
         }
+        impl<T> Neg for &$t where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Neg<Output = T> {
+            type Output = $t;
+
+            fn neg(mut self) -> Self::Output {
+                let mut output = <$t>::ZERO;
+                for i in 0..self.data.len() { output[i] = -self[i]; }
+                return output;
+            }
+        }
     }
 }
