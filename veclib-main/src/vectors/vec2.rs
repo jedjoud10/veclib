@@ -1,5 +1,5 @@
 use std::ops::{Add, AddAssign, Sub, SubAssign, Mul, MulAssign, Div, DivAssign, Index, IndexMut};
-use crate::{types::DefaultStates, vector::Swizzable};
+use crate::{types::DefaultStates, vector::{Swizzable, Vectorable}};
 use super::{Vector3, Vector4};
 
 // A simple 2D vector, no simd support what-so-ever
@@ -111,3 +111,33 @@ crate::setup_addition!(2);
 crate::setup_subtraction!(2);
 crate::setup_multiplication!(2);
 crate::setup_division!(2);
+
+// Vector maths
+impl Vectorable<f32> for Vector2<f32> {
+    // Get the distance from another vector
+    fn distance(&self, other: &Self) -> f32 {
+        let test: Vector2<f32> = self - other;
+        return test.length();
+    }
+    // Get the length of the current vector
+    fn length(&self) -> f32 {
+        let length = self[0] + self[1] + self[2];
+        return length.sqrt();
+    }
+    // Get the length square of the current vector (Saves us a sqrt operation)
+    fn length_sqrt(&self) -> f32 {
+        todo!()
+    }
+    // Normalize the current vector
+    fn normalize(&mut self) {
+        todo!()
+    }
+    // Get the normalized value of the current vector without updating it
+    fn normalized(&self) -> Self {
+        todo!()
+    }
+    // Get the dot product between two vectors  
+    fn dot(&self, other: &Self) -> f32 {
+        todo!()
+    }    
+}
