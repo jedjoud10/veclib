@@ -59,14 +59,14 @@ impl Matrix {
     }
     // Create a look at matrix
     // https://www.geertarien.com/blog/2017/07/30/breakdown-of-the-lookAt-function-in-OpenGL/
-    pub fn look_at(eye: Vector3<f32>, up: Vector3<f32>, target: Vector3<f32>) -> Self {
+    pub fn look_at(eye: &Vector3<f32>, up: &Vector3<f32>, target: &Vector3<f32>) -> Self {
         // The output
         let mut matrix: Self = Self::IDENTITY;
-        let zaxis: Vector3<f32> = (target - eye).;    
-        let xaxis: Vector3<f32> = normalize(cross(zaxis, up));
-        let yaxis: Vector3<f32> = cross(xaxis, zaxis);
+        let mut zaxis: Vector3<f32> = (target.clone() - eye.clone()).normalized();    
+        let xaxis: Vector3<f32> = zaxis.cross(up);
+        let yaxis: Vector3<f32> = xaxis.cross(&zaxis);
 
-        negate(zaxis);
+        zaxis = zaxis;
 
         mat4 viewMatrix = {
           vec4(xaxis.x, xaxis.y, xaxis.z, -dot(xaxis, eye)),

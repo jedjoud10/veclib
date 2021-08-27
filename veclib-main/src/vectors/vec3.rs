@@ -1,9 +1,9 @@
 use std::ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Sub, SubAssign};
-use crate::{types::DefaultStates, vector::Swizzable};
+use crate::{types::DefaultStates, vector::{Swizzable, Vectorable}};
 use super::{Vector2, Vector4};
 
 // A simple 3D vector, no simd support what-so-ever
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone, Copy)]
 pub struct Vector3<T> {
     pub data: [T; 3],
 }
@@ -112,3 +112,39 @@ crate::setup_addition!(3);
 crate::setup_subtraction!(3);
 crate::setup_multiplication!(3);
 crate::setup_division!(3);
+
+// Vector arithmatics
+impl Vector3<f32> {
+    // Get the distance from another vector
+    pub fn distance(&self, other: &Self) -> f32 {
+        let test: Vector3<f32> = self.clone() - other.clone();
+        return test.length();
+    }
+    // Get the length of the current vector
+    pub fn length(&self) -> f32 {
+        return self.length_sqrt().sqrt();
+    }
+    // Get the length square of the current vector (Saves us a sqrt operation)
+    pub fn length_sqrt(&self) -> f32 {
+        return self[0] + self[1] + self[2];
+    }
+    // Normalize the current vector
+    pub fn normalize(&mut self) {
+        todo!()
+    }
+    // Get the normalized value of the current vector without updating it
+    pub fn normalized(&self) -> Self {
+        todo!()
+    }
+    // Get the dot product between two vectors  
+    pub fn dot(&self, other: &Self) -> f32 {
+        todo!()
+    }    
+    // Get the cross product between two vectors
+    pub fn cross(&self, other: &Self) -> Vector3<f32> {
+        // Normalize both self and other
+        let a = self.normalized();
+        let b = other.normalized();
+        return Vector3::new(a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[1]*b[0]-a[1]*b[0]);
+    }
+}
