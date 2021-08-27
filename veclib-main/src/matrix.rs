@@ -8,6 +8,13 @@ pub struct Matrix4x4<T> where T: DefaultStates + Clone + Copy {
     pub data: [Vector4<T>; 4],
 }
 
+// Default
+impl<T> Default for Matrix4x4<T> where T: DefaultStates + Clone + Copy + Sized {
+    fn default() -> Self {
+        Self::IDENTITY
+    }
+} 
+
 // Indexer
 impl<T> Index<usize> for Matrix4x4<T> where T: DefaultStates + Clone + Copy {
     type Output = Vector4<T>;
@@ -25,13 +32,17 @@ impl<T> IndexMut<usize> for Matrix4x4<T> where T: DefaultStates + Clone + Copy {
     }
 }
 
+// Identity matrix available for everyone
+impl<T> Matrix4x4<T> where T: DefaultStates + Clone + Copy {
+    // Constants
+    pub const IDENTITY: Self = Matrix4x4 {
+        data: [Vector4::<T>::X, Vector4::<T>::Y, Vector4::<T>::Z, Vector4::<T>::W]
+    };
+}
+
 // Creation code for the matrix
 #[allow(dead_code)]
 impl Matrix4x4<f32> {
-    // Constants
-    pub const IDENTITY: Self = Matrix4x4 {
-        data: [Vector4::X, Vector4::Y, Vector4::Z, Vector4::W]
-    };
     // Create a perspective projection matrix
     // Bonk https://www.youtube.com/watch?v=U0_ONQQ5ZNM&ab_channel=BrendanGalea
     pub fn from_perspective(near_plane: f32, far_plane: f32, aspect_ratio: f32, y_fov_radians: f32) -> Self {

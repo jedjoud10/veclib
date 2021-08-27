@@ -8,6 +8,13 @@ pub struct Vector3<T> {
     pub data: [T; 3],
 }
 
+// Default
+impl<T> Default for Vector3<T> where T: DefaultStates + Clone + Copy + Sized {
+    fn default() -> Self {
+        Self::ZERO
+    }
+} 
+
 // Implement the vec3 code
 #[allow(dead_code)]
 impl<T> Vector3<T> where T: DefaultStates + Clone + Copy + Sized {

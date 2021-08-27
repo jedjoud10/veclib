@@ -8,6 +8,13 @@ pub struct Vector4<T> {
     pub data: [T; 4],
 }
 
+// Default
+impl<T> Default for Vector4<T> where T: DefaultStates + Clone + Copy + Sized {
+    fn default() -> Self {
+        Self::ZERO
+    }
+} 
+
 // Implement the vec4 code
 #[allow(dead_code)]
 impl<T> Vector4<T> where T: DefaultStates + Clone + Copy + Sized {

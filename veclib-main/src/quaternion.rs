@@ -5,6 +5,13 @@ pub struct Quaternion<T> {
     data: Vector4<T>,
 }
 
+// Default
+impl<T> Default for Quaternion<T> where T: DefaultStates + Clone + Copy + Sized {
+    fn default() -> Self {
+        Self::IDENTITY
+    }
+} 
+
 // Da code
 impl<T> Quaternion<T> where T: DefaultStates + Clone + Copy + Sized {
     // Constants
