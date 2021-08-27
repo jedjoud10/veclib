@@ -90,6 +90,16 @@ impl<T> Vector3<T> where T: DefaultStates + Clone + Copy + Sized + PartialEq + P
     }
 }
 
+// Getters
+impl<T> Vector3<T> where T: Copy {
+    // Get the X coordinate
+    pub fn x(&self) -> T { return self[0]; }
+    // Get the Y coordinate
+    pub fn y(&self) -> T { return self[1]; } 
+    // Get the Z coordinate
+    pub fn z(&self) -> T { return self[2]; } 
+}
+
 // The comparison logic
 #[allow(dead_code)]
 impl Vector3<bool> {

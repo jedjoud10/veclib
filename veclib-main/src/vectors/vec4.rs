@@ -56,6 +56,18 @@ impl<T> Swizzable<T> for Vector4<T> where T: DefaultStates + Clone + Copy + Size
     }
 }
 
+// Getters
+impl<T> Vector4<T> where T: Copy {
+    // Get the X coordinate
+    pub fn x(&self) -> T { return self[0]; }
+    // Get the Y coordinate
+    pub fn y(&self) -> T { return self[1]; } 
+    // Get the Z coordinate
+    pub fn z(&self) -> T { return self[2]; } 
+    // Get the W coordinate
+    pub fn w(&self) -> T { return self[3]; } 
+}
+
 // Element wise comparison 
 #[allow(dead_code)]
 impl<T> Vector4<T> where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd {
