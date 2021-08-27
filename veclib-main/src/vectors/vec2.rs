@@ -1,4 +1,4 @@
-use std::ops::{Add, AddAssign, Index, IndexMut};
+use std::ops::{Add, AddAssign, Sub, SubAssign, Mul, MulAssign, Div, DivAssign, Index, IndexMut};
 use crate::{types::DefaultStates, vector::Swizzable};
 use super::{Vector3, Vector4};
 
@@ -106,4 +106,8 @@ impl Vector2<bool> {
     }
 }
 
-crate::addition_operator!();
+// Run the procedural macros to setup all the operators
+crate::setup_addition!(2);
+crate::setup_subtraction!(2);
+crate::setup_multiplication!(2);
+crate::setup_division!(2);

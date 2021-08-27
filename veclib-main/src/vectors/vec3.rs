@@ -107,56 +107,8 @@ impl Vector3<bool> {
     }
 }
 
-// The math operations that will be applied to the vectors
-impl<T> Add for Vector3<T> where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T> {
-    type Output = Vector3<T>;
-
-    fn add(mut self, rhs: Self) -> Self::Output {
-        for i in 0..3 { self[i] = self[i] + rhs[i]; }
-        return self;
-    }
-}
-impl<T> AddAssign for Vector3<T> where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T> {
-    fn add_assign(&mut self, rhs: Self) {
-        for i in 0..3 { self[i] = self[i] + rhs[i]; }       
-    }
-}
-impl<T> Sub for Vector3<T> where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T> {
-    type Output = Vector3<T>;
-
-    fn sub(mut self, rhs: Self) -> Self::Output {
-        for i in 0..3 { self[i] = self[i] - rhs[i]; }
-        return self;
-    }
-}
-impl<T> SubAssign for Vector3<T> where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T> {
-    fn sub_assign(&mut self, rhs: Self) {
-        for i in 0..3 { self[i] = self[i] - rhs[i]; }       
-    }
-}
-impl<T> Mul for Vector3<T> where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T> {
-    type Output = Vector3<T>;
-
-    fn mul(mut self, rhs: Self) -> Self::Output {
-        for i in 0..3 { self[i] = self[i] * rhs[i]; }
-        return self;
-    }
-}
-impl<T> MulAssign for Vector3<T> where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T> {
-    fn mul_assign(&mut self, rhs: Self) {
-        for i in 0..3 { self[i] = self[i] * rhs[i]; }       
-    }
-}
-impl<T> Div for Vector3<T> where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T> {
-    type Output = Vector3<T>;
-
-    fn div(mut self, rhs: Self) -> Self::Output {
-        for i in 0..3 { self[i] = self[i] / rhs[i]; }
-        return self;
-    }
-}
-impl<T> DivAssign for Vector3<T> where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T> {
-    fn div_assign(&mut self, rhs: Self) {
-        for i in 0..3 { self[i] = self[i] * rhs[i]; }       
-    }
-}
+// Run the procedural macros to setup all the operators
+crate::setup_addition!(3);
+crate::setup_subtraction!(3);
+crate::setup_multiplication!(3);
+crate::setup_division!(3);
