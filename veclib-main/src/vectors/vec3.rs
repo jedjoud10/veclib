@@ -123,6 +123,8 @@ crate::setup_sub!(Vector3<T>, T);
 crate::setup_mul!(Vector3<T>, T);
 crate::setup_div!(Vector3<T>, T);
 crate::setup_una!(Vector3<T>, T);
+crate::setup_vector_arithmatics!(Vector3<f32>, T, f32);
+crate::setup_vector_arithmatics!(Vector3<f64>, T, f64);
 
 // Vector3 arithmatics
 impl Vector3<f32> {    
@@ -134,40 +136,13 @@ impl Vector3<f32> {
         return Vector3::new(a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[1]*b[0]-a[1]*b[0]);
     }
 }
-
-// Setup the shared vector arithmatics
-impl Vector3<f32> {
-    // Get the distance from another vector
-    pub fn distance(&self, other: &Self) -> f32 {
-        let test: Vector3<f32> = self.clone() - other.clone();
-        return test.length();
+impl Vector3<f64> {    
+    // Get the cross product between two vectors
+    pub fn cross(&self, other: &Self) -> Vector3<f64> {
+        // Normalize both self and other
+        let a = self.normalized();
+        let b = other.normalized();
+        return Vector3::new(a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[1]*b[0]-a[1]*b[0]);
     }
-    // Get the length square of the current vector (Saves us a sqrt operation)
-    pub fn length_sqrt(&self) -> f32 {
-        let mut len: f32 = 0.0;
-        for i in 0..3 { len += self[i]*self[i]; }
-        return len;
-    }  
-    // Get the length of the current vector
-    pub fn length(&self) -> f32 {
-        return self.length_sqrt().sqrt();
-    }
-    // Normalize the current vector
-    pub fn normalize(&mut self) {
-        let len = self.length();
-        for i in 0..3 { self[i] /= len; }
-    }
-    // Get the normalized value of the current vector without updating it
-    pub fn normalized(&self) -> Self {
-        let len = self.length();
-        let mut output: Self = Self::ZERO;  
-        for i in 0..3 { output[i] = self[i] / len; }
-        return output
-    }
-    // Get the dot product between two vectors  
-    pub fn dot(&self, other: &Self) -> f32 {
-        let mut dot: f32 = 0.0;
-        for i in 0..3 { dot += self[i] * other[i]; }
-        return dot;
-    }    
 }
+

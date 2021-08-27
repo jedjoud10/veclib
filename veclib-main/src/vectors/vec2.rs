@@ -120,41 +120,5 @@ crate::setup_sub!(Vector2<T>, T);
 crate::setup_mul!(Vector2<T>, T);
 crate::setup_div!(Vector2<T>, T);
 crate::setup_una!(Vector2<T>, T);
-
-// Setup the shared vector arithmatics
-impl Vector2<f32> {
-    // Get the distance from another vector
-    pub fn distance(&self, other: &Self) -> f32 {
-        let test: Vector2<f32> = self.clone() - other.clone();
-        return test.length();
-    }
-    // Get the length square of the current vector (Saves us a sqrt operation)
-    pub fn length_sqrt(&self) -> f32 {
-        let mut len: f32 = 0.0;
-        for i in 0..2 { len += self[i]*self[i]; }
-        return len;
-    }  
-    // Get the length of the current vector
-    pub fn length(&self) -> f32 {
-        return self.length_sqrt().sqrt();
-    }
-    // Normalize the current vector
-    pub fn normalize(&mut self) {
-        let len = self.length();
-        for i in 0..2 { self[i] /= len; }
-    }
-    // Get the normalized value of the current vector without updating it
-    pub fn normalized(&self) -> Self {
-        let len = self.length();
-        let mut output: Self = Self::ZERO;  
-        for i in 0..2 { output[i] = self[i] / len; }
-        return output
-    }
-    // Get the dot product between two vectors  
-    pub fn dot(&self, other: &Self) -> f32 {
-        let mut dot: f32 = 0.0;
-        for i in 0..2 { dot += self[i] * other[i]; }
-        return dot;
-    }    
-}
-
+crate::setup_vector_arithmatics!(Vector2<f32>, T, f32);
+crate::setup_vector_arithmatics!(Vector2<f64>, T, f64);

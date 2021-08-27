@@ -4,6 +4,9 @@ pub trait DefaultStates {
     fn on() -> Self;
 }
 
+// A floating point precision trait
+pub trait FloatingPoint {}
+
 // I32
 impl const DefaultStates for i32 {
     fn off() -> Self { 0 }
