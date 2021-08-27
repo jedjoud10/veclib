@@ -1,5 +1,5 @@
 use std::ops::{Add, AddAssign, Index, IndexMut};
-use crate::{addition_operator, types::DefaultStates, vector::Swizzable};
+use crate::{types::DefaultStates, vector::Swizzable};
 use super::{Vector3, Vector4};
 
 // A simple 2D vector, no simd support what-so-ever
@@ -106,4 +106,4 @@ impl Vector2<bool> {
     }
 }
 
-addition_operator!(Vector2<T>);
+crate::addition_operator!();

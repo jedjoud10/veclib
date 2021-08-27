@@ -31,6 +31,8 @@ mod tests {
     // Test the operators
     #[test]
     pub fn operators() {
+        let t = Vector3::<f32>::Y;
+        let y = t + Vector3::<f32>::ONE;
         /*
         let y = Vector3::<f32>::Y;
         let x = Vector3::<f32>::X;
