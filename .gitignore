@@ -1,4 +1,4 @@
-/veclib-derive/target
+/veclib-proc-macros/target
 /veclib-main/target
 /target
 Cargo.lock
