@@ -42,7 +42,7 @@ where
     };
     // Create a new vec4
     pub fn new(f1: T, f2: T, f3: T) -> Self {
-        return Self { data: [f1, f2, f3] };
+        Self { data: [f1, f2, f3] }
     }
 }
 
@@ -51,7 +51,7 @@ impl<T> Index<usize> for Vector3<T> {
     type Output = T;
     // Index
     fn index(&self, index: usize) -> &Self::Output {
-        return &self.data[index];
+        &self.data[index]
     }
 }
 
@@ -59,7 +59,7 @@ impl<T> Index<usize> for Vector3<T> {
 impl<T> IndexMut<usize> for Vector3<T> {
     // Mut index
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        return &mut self.data[index];
+        &mut self.data[index]
     }
 }
 
@@ -69,15 +69,15 @@ where
     T: DefaultStates + Clone + Copy + Sized,
 {
     fn get4(&self, order: [usize; 4]) -> Vector4<T> {
-        return Vector4::new(self[order[0]], self[order[1]], self[order[2]], self[order[3]]);
+        Vector4::new(self[order[0]], self[order[1]], self[order[2]], self[order[3]])
     }
 
     fn get3(&self, order: [usize; 3]) -> Vector3<T> {
-        return Vector3::new(self[order[0]], self[order[1]], self[order[2]]);
+        Vector3::new(self[order[0]], self[order[1]], self[order[2]])
     }
 
     fn get2(&self, order: [usize; 2]) -> Vector2<T> {
-        return Vector2::new(self[order[0]], self[order[1]]);
+        Vector2::new(self[order[0]], self[order[1]])
     }
 }
 
@@ -93,7 +93,7 @@ where
         for i in 0..3 {
             out[i] = self[i] == other[i];
         }
-        return out;
+        out
     }
     // Greater then
     pub fn elem_gt(&self, other: &Self) -> Vector3<bool> {
@@ -101,7 +101,7 @@ where
         for i in 0..3 {
             out[i] = self[i] > other[i];
         }
-        return out;
+        out
     }
     // Less than
     pub fn elem_lt(&self, other: &Self) -> Vector3<bool> {
@@ -109,7 +109,7 @@ where
         for i in 0..3 {
             out[i] = self[i] < other[i];
         }
-        return out;
+        out
     }
     // Greater than or equals
     pub fn elem_gte(&self, other: &Self) -> Vector3<bool> {
@@ -117,7 +117,7 @@ where
         for i in 0..3 {
             out[i] = self[i] >= other[i];
         }
-        return out;
+        out
     }
     // Less than or equals
     pub fn elem_lte(&self, other: &Self) -> Vector3<bool> {
@@ -125,7 +125,7 @@ where
         for i in 0..3 {
             out[i] = self[i] <= other[i];
         }
-        return out;
+        out
     }
 }
 
@@ -136,15 +136,15 @@ where
 {
     // Get the X coordinate
     pub fn x(&self) -> T {
-        return self[0];
+        self[0]
     }
     // Get the Y coordinate
     pub fn y(&self) -> T {
-        return self[1];
+        self[1]
     }
     // Get the Z coordinate
     pub fn z(&self) -> T {
-        return self[2];
+        self[2]
     }
     // Set the X coordinate
     pub fn set_x(&mut self, val: T) {
@@ -169,7 +169,7 @@ impl Vector3<bool> {
         for i in 0..3 {
             out &= self[i];
         }
-        return out;
+        out
     }
     // Return true if one or more elements are true
     pub fn any(&self) -> bool {
@@ -177,7 +177,7 @@ impl Vector3<bool> {
         for i in 0..3 {
             out |= self[i];
         }
-        return out;
+        out
     }
 }
 
@@ -197,7 +197,7 @@ impl Vector3<f32> {
         // Normalize both self and other
         let a = self.normalized();
         let b = other.normalized();
-        return Vector3::new(a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[1] * b[0] - a[0] * b[1]);
+        Vector3::new(a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[1] * b[0] - a[0] * b[1])
     }
 }
 impl Vector3<f64> {
@@ -206,6 +206,6 @@ impl Vector3<f64> {
         // Normalize both self and other
         let a = self.normalized();
         let b = other.normalized();
-        return Vector3::new(a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[1] * b[0] - a[0] * b[1]);
+        Vector3::new(a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[1] * b[0] - a[0] * b[1])
     }
 }

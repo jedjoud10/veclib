@@ -31,7 +31,7 @@ where
     pub const ONE: Self = Vector2 { data: [T::on(), T::on()] };
     // Create a new vec4
     pub fn new(f1: T, f2: T) -> Self {
-        return Self { data: [f1, f2] };
+        Self { data: [f1, f2] }
     }
 }
 
@@ -40,7 +40,7 @@ impl<T> Index<usize> for Vector2<T> {
     type Output = T;
     // Index
     fn index(&self, index: usize) -> &Self::Output {
-        return &self.data[index];
+        &self.data[index]
     }
 }
 
@@ -48,7 +48,7 @@ impl<T> Index<usize> for Vector2<T> {
 impl<T> IndexMut<usize> for Vector2<T> {
     // Mut index
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        return &mut self.data[index];
+        &mut self.data[index]
     }
 }
 
@@ -58,15 +58,15 @@ where
     T: DefaultStates + Clone + Copy + Sized,
 {
     fn get4(&self, order: [usize; 4]) -> Vector4<T> {
-        return Vector4::new(self[order[0]], self[order[1]], self[order[2]], self[order[3]]);
+        Vector4::new(self[order[0]], self[order[1]], self[order[2]], self[order[3]])
     }
 
     fn get3(&self, order: [usize; 3]) -> Vector3<T> {
-        return Vector3::new(self[order[0]], self[order[1]], self[order[2]]);
+        Vector3::new(self[order[0]], self[order[1]], self[order[2]])
     }
 
     fn get2(&self, order: [usize; 2]) -> Vector2<T> {
-        return Vector2::new(self[order[0]], self[order[1]]);
+        Vector2::new(self[order[0]], self[order[1]])
     }
 }
 
@@ -82,7 +82,7 @@ where
         for i in 0..2 {
             out[i] = self[i] == other[i];
         }
-        return out;
+        out
     }
     // Greater then
     pub fn elem_gt(&self, other: &Self) -> Vector2<bool> {
@@ -90,7 +90,7 @@ where
         for i in 0..2 {
             out[i] = self[i] > other[i];
         }
-        return out;
+        out
     }
     // Less than
     pub fn elem_lt(&self, other: &Self) -> Vector2<bool> {
@@ -98,7 +98,7 @@ where
         for i in 0..2 {
             out[i] = self[i] < other[i];
         }
-        return out;
+        out
     }
     // Greater than or equals
     pub fn elem_gte(&self, other: &Self) -> Vector2<bool> {
@@ -106,7 +106,7 @@ where
         for i in 0..2 {
             out[i] = self[i] >= other[i];
         }
-        return out;
+        out
     }
     // Less than or equals
     pub fn elem_lte(&self, other: &Self) -> Vector2<bool> {
@@ -114,7 +114,7 @@ where
         for i in 0..2 {
             out[i] = self[i] <= other[i];
         }
-        return out;
+        out
     }
 }
 
@@ -125,11 +125,11 @@ where
 {
     // Get the X coordinate
     pub fn x(&self) -> T {
-        return self[0];
+        self[0]
     }
     // Get the Y coordinate
     pub fn y(&self) -> T {
-        return self[1];
+        self[1]
     }
     // Set the X coordinate
     pub fn set_x(&mut self, val: T) {
@@ -150,7 +150,7 @@ impl Vector2<bool> {
         for i in 0..2 {
             out &= self[i];
         }
-        return out;
+        out
     }
     // Return true if one or more elements are true
     pub fn any(&self) -> bool {
@@ -158,7 +158,7 @@ impl Vector2<bool> {
         for i in 0..2 {
             out |= self[i];
         }
-        return out;
+        out
     }
 }
 

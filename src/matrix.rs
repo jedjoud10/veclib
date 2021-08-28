@@ -1,6 +1,5 @@
 use std::{
-    iter::Copied,
-    ops::{Add, Div, Index, IndexMut},
+    ops::{Index, IndexMut},
 };
 
 use crate::{
@@ -38,7 +37,7 @@ where
     type Output = Vector4<T>;
     // Index
     fn index(&self, index: usize) -> &Self::Output {
-        return &self.data[index];
+        &self.data[index]
     }
 }
 
@@ -49,7 +48,7 @@ where
 {
     // Mut index
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        return &mut self.data[index];
+        &mut self.data[index]
     }
 }
 
@@ -81,7 +80,7 @@ impl Matrix4x4<f32> {
         matrix[1] = Vector4::new(0.0, second, 0.0, 0.0);
         matrix[2] = Vector4::new(0.0, 0.0, (2.0 * far_plane) / (far_plane - near_plane), -(far_plane * near_plane) / (far_plane - near_plane));
         matrix[3] = Vector4::Z;
-        return matrix;
+        matrix
     }
     // Create a translation matrix
     pub fn from_translation(position: Vector3<f32>) -> Self {
@@ -91,16 +90,16 @@ impl Matrix4x4<f32> {
         matrix[1] = Vector4::new(0.0, 1.0, 0.0, position[1]);
         matrix[2] = Vector4::new(0.0, 0.0, 1.0, position[2]);
         matrix[3] = Vector4::W;
-        return matrix;
+        matrix
     }
     // Create a look at matrix
     // https://www.geertarien.com/blog/2017/07/30/breakdown-of-the-lookAt-function-in-OpenGL/
     pub fn look_at(eye: &Vector3<f32>, up: &Vector3<f32>, target: &Vector3<f32>) -> Self {
         // The output
-        let mut matrix: Self = Self::IDENTITY;
-        let mut zaxis: Vector3<f32> = (target.clone() - eye.clone()).normalized();
+        let _matrix: Self = Self::IDENTITY;
+        let zaxis: Vector3<f32> = (*target - *eye).normalized();
         let xaxis: Vector3<f32> = zaxis.cross(*up);
-        let yaxis: Vector3<f32> = xaxis.cross(zaxis);
+        let _yaxis: Vector3<f32> = xaxis.cross(zaxis);
         /*
         zaxis = zaxis;
 
@@ -114,22 +113,22 @@ impl Matrix4x4<f32> {
         todo!();
     }
     // Create a rotation matrix
-    pub fn from_quaternion(quat: &Quaternion<f32>) -> Self {
+    pub fn from_quaternion(_quat: &Quaternion<f32>) -> Self {
         todo!();
     }
     // Create a scale matrix
-    pub fn from_scale(scale: Vector3<f32>) -> Self {
+    pub fn from_scale(_scale: Vector3<f32>) -> Self {
         todo!();
     }
 }
 // Transform a vector by the matrix
 impl Matrix4x4<f32> {
     // Transform a 4D vector by the matrix
-    pub fn transform_vector(&self, vector: &Vector4<f32>) -> Vector4<f32> {
+    pub fn transform_vector(&self, _vector: &Vector4<f32>) -> Vector4<f32> {
         todo!();
     }
     // Transform a 3D point by the matrix, basically create a 4D vector out of it with the W component being 1.0
     pub fn transform_point(&self, point: &Vector3<f32>) -> Vector3<f32> {
-        return self.transform_vector(&Vector4::new(point.x(), point.y(), point.z(), 1.0)).get3([0, 1, 2]);
+        self.transform_vector(&Vector4::new(point.x(), point.y(), point.z(), 1.0)).get3([0, 1, 2])
     }
 }
