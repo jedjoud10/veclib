@@ -1,3 +1,58 @@
+// Macro for turning a specific type into another, only for vec2s
+#[macro_export]
+macro_rules! impl_from_vec2 {
+    ($t:ty, $a:ty, $($f:ty),+) => {
+        $(
+            impl From<Vector2<$f>> for $t {
+                fn from(val: Vector2<$f>) -> Self {
+                    <$t>::new(val[0] as $a, val[1] as $a)
+                }
+            }
+        )*        
+    };
+}
+// Macro for turning a specific type into another, only for vec3s
+#[macro_export]
+macro_rules! impl_from_vec3 {
+    ($t:ty, $a:ty, $($f:ty),+) => {
+        $(
+            impl From<Vector3<$f>> for $t {
+                fn from(val: Vector3<$f>) -> Self {
+                    <$t>::new(val[0] as $a, val[1] as $a, val[2] as $a)
+                }
+            }
+        )*        
+    };
+}
+// Macro for turning a specific type into another, only for vec4s
+#[macro_export]
+macro_rules! impl_from_vec4 {
+    ($t:ty, $a:ty, $($f:ty),+) => {
+        $(
+            impl From<Vector4<$f>> for $t {
+                fn from(val: Vector4<$f>) -> Self {
+                    <$t>::new(val[0] as $a, val[1] as $a, val[2] as $a, val[3] as $a)
+                }
+            }
+        )*        
+    };
+}
+
+// Implement the default state struct to a specific integer type
+#[macro_export]
+macro_rules! impl_default_state {
+    ($t:ty) => {
+        impl DefaultStates for $t {
+            fn off() -> Self {
+                0
+            }
+            fn on() -> Self {
+                1
+            }
+        }
+    };
+}
+
 #[macro_export]
 macro_rules! setup_add {
     ($t:ty, $a:tt) => {

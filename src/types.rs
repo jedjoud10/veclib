@@ -4,28 +4,17 @@ pub trait DefaultStates {
     fn on() -> Self;
 }
 
-// A floating point precision trait
-pub trait FloatingPoint {}
-
-// I32
-impl DefaultStates for i32 {
-    fn off() -> Self {
-        0
-    }
-    fn on() -> Self {
-        1
-    }
-}
-
-// I64
-impl DefaultStates for i64 {
-    fn off() -> Self {
-        0
-    }
-    fn on() -> Self {
-        1
-    }
-}
+// Integer types
+crate::impl_default_state!(u8);
+crate::impl_default_state!(u16);
+crate::impl_default_state!(u32);
+crate::impl_default_state!(u64);
+crate::impl_default_state!(u128);
+crate::impl_default_state!(i8);
+crate::impl_default_state!(i16);
+crate::impl_default_state!(i32);
+crate::impl_default_state!(i64);
+crate::impl_default_state!(i128);
 
 // F32
 impl DefaultStates for f32 {

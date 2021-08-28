@@ -210,6 +210,26 @@ crate::setup_una!(Vector3<T>, T);
 crate::setup_vector_arithmatics!(Vector3<f32>, T, f32);
 crate::setup_vector_arithmatics!(Vector3<f64>, T, f64);
 
+// Dear lord
+// I deeply apologize for this
+// Floating point to floating point
+crate::impl_from_vec3!(Vector3<f64>, f64, f32);
+crate::impl_from_vec3!(Vector3<f32>, f32, f64);
+// Integers to floating point
+crate::impl_from_vec3!(Vector3<f32>, f32, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128);
+crate::impl_from_vec3!(Vector3<f64>, f64, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128);
+// Integers to integers
+crate::impl_from_vec3!(Vector3<i8>, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128);
+crate::impl_from_vec3!(Vector3<i16>, i16, i8, i32, i64, i128, u8, u16, u32, u64, u128);
+crate::impl_from_vec3!(Vector3<i32>, i32, i8, i16, i64, i128, u8, u16, u32, u64, u128);
+crate::impl_from_vec3!(Vector3<i64>, i64, i8, i16, i32, i128, u8, u16, u32, u64, u128);
+crate::impl_from_vec3!(Vector3<i128>, i128, i8, i16, i32, i64, u8, u16, u32, u64, u128);
+crate::impl_from_vec3!(Vector3<u8>, u8, i8, i16, i32, i64, i128, u16, u32, u64, u128);
+crate::impl_from_vec3!(Vector3<u16>, u16, i8, i16, i32, i64, i128, u8, u32, u64, u128);
+crate::impl_from_vec3!(Vector3<u32>, u32, i8, i16, i32, i64, i128, u8, u16, u64, u128);
+crate::impl_from_vec3!(Vector3<u64>, u64, i8, i16, i32, i64, i128, u8, u16, u32, u128);
+crate::impl_from_vec3!(Vector3<u128>, u128, i8, i16, i32, i64, i128, u8, u16, u32, u64);
+
 // Vector3 arithmatics
 impl Vector3<f32> {
     // Get the cross product between two vectors
