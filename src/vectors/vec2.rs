@@ -1,6 +1,6 @@
-use std::ops::{Add, Neg, AddAssign, Sub, SubAssign, Mul, MulAssign, Div, DivAssign, Index, IndexMut};
-use crate::{types::DefaultStates, vector::{Swizzable}};
 use super::{Vector3, Vector4};
+use crate::{types::DefaultStates, vector::Swizzable};
+use std::ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub, SubAssign};
 
 // A simple 2D vector, no simd support what-so-ever
 #[derive(PartialEq, Debug, Clone, Copy)]
@@ -9,15 +9,21 @@ pub struct Vector2<T> {
 }
 
 // Default
-impl<T> Default for Vector2<T> where T: DefaultStates + Clone + Copy + Sized {
+impl<T> Default for Vector2<T>
+where
+    T: DefaultStates + Clone + Copy + Sized,
+{
     fn default() -> Self {
         Self::ZERO
     }
-} 
+}
 
 // Implement the vec3 code
 #[allow(dead_code)]
-impl<T> Vector2<T> where T: DefaultStates + Clone + Copy + Sized {
+impl<T> Vector2<T>
+where
+    T: DefaultStates + Clone + Copy + Sized,
+{
     // Constants
     pub const ZERO: Self = Vector2 { data: [T::off(), T::off()] };
     pub const X: Self = Vector2 { data: [T::on(), T::on()] };
@@ -25,7 +31,7 @@ impl<T> Vector2<T> where T: DefaultStates + Clone + Copy + Sized {
     pub const ONE: Self = Vector2 { data: [T::on(), T::on()] };
     // Create a new vec4
     pub fn new(f1: T, f2: T) -> Self {
-        return Self { data: [f1, f2] }
+        return Self { data: [f1, f2] };
     }
 }
 
@@ -47,7 +53,10 @@ impl<T> IndexMut<usize> for Vector2<T> {
 }
 
 // Swizzle a vec2
-impl<T> Swizzable<T> for Vector2<T> where T: DefaultStates + Clone + Copy + Sized {
+impl<T> Swizzable<T> for Vector2<T>
+where
+    T: DefaultStates + Clone + Copy + Sized,
+{
     fn get4(&self, order: [usize; 4]) -> Vector4<T> {
         return Vector4::new(self[order[0]], self[order[1]], self[order[2]], self[order[3]]);
     }
@@ -61,51 +70,75 @@ impl<T> Swizzable<T> for Vector2<T> where T: DefaultStates + Clone + Copy + Size
     }
 }
 
-// Element wise comparison 
+// Element wise comparison
 #[allow(dead_code)]
-impl<T> Vector2<T> where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd {
+impl<T> Vector2<T>
+where
+    T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd,
+{
     // Equals
     pub fn elem_eq(&self, other: &Self) -> Vector2<bool> {
-        let mut out: Vector2::<bool> = Vector2::ZERO;
-        for i in 0..2 { out[i] = self[i] == other[i]; } 
+        let mut out: Vector2<bool> = Vector2::ZERO;
+        for i in 0..2 {
+            out[i] = self[i] == other[i];
+        }
         return out;
     }
     // Greater then
     pub fn elem_gt(&self, other: &Self) -> Vector2<bool> {
-        let mut out: Vector2::<bool> = Vector2::ZERO;
-        for i in 0..2 { out[i] = self[i] > other[i]; } 
+        let mut out: Vector2<bool> = Vector2::ZERO;
+        for i in 0..2 {
+            out[i] = self[i] > other[i];
+        }
         return out;
     }
     // Less than
     pub fn elem_lt(&self, other: &Self) -> Vector2<bool> {
-        let mut out: Vector2::<bool> = Vector2::ZERO;
-        for i in 0..2 { out[i] = self[i] < other[i]; } 
+        let mut out: Vector2<bool> = Vector2::ZERO;
+        for i in 0..2 {
+            out[i] = self[i] < other[i];
+        }
         return out;
     }
     // Greater than or equals
     pub fn elem_gte(&self, other: &Self) -> Vector2<bool> {
-        let mut out: Vector2::<bool> = Vector2::ZERO;
-        for i in 0..2 { out[i] = self[i] >= other[i]; } 
+        let mut out: Vector2<bool> = Vector2::ZERO;
+        for i in 0..2 {
+            out[i] = self[i] >= other[i];
+        }
         return out;
     }
     // Less than or equals
     pub fn elem_lte(&self, other: &Self) -> Vector2<bool> {
-        let mut out: Vector2::<bool> = Vector2::ZERO;
-        for i in 0..2 { out[i] = self[i] <= other[i]; } 
+        let mut out: Vector2<bool> = Vector2::ZERO;
+        for i in 0..2 {
+            out[i] = self[i] <= other[i];
+        }
         return out;
     }
 }
 
 // Getters
-impl<T> Vector2<T> where T: Copy {
+impl<T> Vector2<T>
+where
+    T: Copy,
+{
     // Get the X coordinate
-    pub fn x(&self) -> T { return self[0]; }
+    pub fn x(&self) -> T {
+        return self[0];
+    }
     // Get the Y coordinate
-    pub fn y(&self) -> T { return self[1]; } 
+    pub fn y(&self) -> T {
+        return self[1];
+    }
     // Set the X coordinate
-    pub fn set_x(&mut self, val: T) { self[0] = val; }
+    pub fn set_x(&mut self, val: T) {
+        self[0] = val;
+    }
     // Set the Y coordinate
-    pub fn set_y(&mut self, val: T) { self[1] = val; }
+    pub fn set_y(&mut self, val: T) {
+        self[1] = val;
+    }
 }
 
 // The comparison logic
@@ -114,13 +147,17 @@ impl Vector2<bool> {
     // Return true if all the elements are true
     pub fn all(&self) -> bool {
         let mut out: bool = false;
-        for i in 0..2 { out &= self[i]; } 
+        for i in 0..2 {
+            out &= self[i];
+        }
         return out;
     }
     // Return true if one or more elements are true
     pub fn any(&self) -> bool {
         let mut out: bool = false;
-        for i in 0..2 { out |= self[i]; } 
+        for i in 0..2 {
+            out |= self[i];
+        }
         return out;
     }
 }

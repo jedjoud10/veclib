@@ -1,23 +1,40 @@
-use std::{iter::Copied, ops::{Add, Div, Index, IndexMut}};
+use std::{
+    iter::Copied,
+    ops::{Add, Div, Index, IndexMut},
+};
 
-use crate::{Quaternion, types::DefaultStates, vector::Swizzable, vectors::{Vector3, Vector4}};
+use crate::{
+    types::DefaultStates,
+    vector::Swizzable,
+    vectors::{Vector3, Vector4},
+    Quaternion,
+};
 
 // A simple f32 matrix made of 4 f32/f64 vectors
 // TODO: Turn this into a generic struct
 #[derive(Debug, Clone, Copy)]
-pub struct Matrix4x4<T> where T: DefaultStates + Clone + Copy {
+pub struct Matrix4x4<T>
+where
+    T: DefaultStates + Clone + Copy,
+{
     pub data: [Vector4<T>; 4],
 }
 
 // Default
-impl<T> Default for Matrix4x4<T> where T: DefaultStates + Clone + Copy + Sized {
+impl<T> Default for Matrix4x4<T>
+where
+    T: DefaultStates + Clone + Copy + Sized,
+{
     fn default() -> Self {
         Self::IDENTITY
     }
-} 
+}
 
 // Indexer
-impl<T> Index<usize> for Matrix4x4<T> where T: DefaultStates + Clone + Copy {
+impl<T> Index<usize> for Matrix4x4<T>
+where
+    T: DefaultStates + Clone + Copy,
+{
     type Output = Vector4<T>;
     // Index
     fn index(&self, index: usize) -> &Self::Output {
@@ -26,7 +43,10 @@ impl<T> Index<usize> for Matrix4x4<T> where T: DefaultStates + Clone + Copy {
 }
 
 // Mut indexer
-impl<T> IndexMut<usize> for Matrix4x4<T> where T: DefaultStates + Clone + Copy {
+impl<T> IndexMut<usize> for Matrix4x4<T>
+where
+    T: DefaultStates + Clone + Copy,
+{
     // Mut index
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         return &mut self.data[index];
@@ -34,10 +54,13 @@ impl<T> IndexMut<usize> for Matrix4x4<T> where T: DefaultStates + Clone + Copy {
 }
 
 // Identity matrix available for everyone
-impl<T> Matrix4x4<T> where T: DefaultStates + Clone + Copy {
+impl<T> Matrix4x4<T>
+where
+    T: DefaultStates + Clone + Copy,
+{
     // Constants
     pub const IDENTITY: Self = Matrix4x4 {
-        data: [Vector4::<T>::X, Vector4::<T>::Y, Vector4::<T>::Z, Vector4::<T>::W]
+        data: [Vector4::<T>::X, Vector4::<T>::Y, Vector4::<T>::Z, Vector4::<T>::W],
     };
 }
 
@@ -75,7 +98,7 @@ impl Matrix4x4<f32> {
     pub fn look_at(eye: &Vector3<f32>, up: &Vector3<f32>, target: &Vector3<f32>) -> Self {
         // The output
         let mut matrix: Self = Self::IDENTITY;
-        let mut zaxis: Vector3<f32> = (target.clone() - eye.clone()).normalized();    
+        let mut zaxis: Vector3<f32> = (target.clone() - eye.clone()).normalized();
         let xaxis: Vector3<f32> = zaxis.cross(*up);
         let yaxis: Vector3<f32> = xaxis.cross(zaxis);
         /*

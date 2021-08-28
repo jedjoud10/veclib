@@ -1,6 +1,9 @@
 #[cfg(test)]
 mod tests {
-    use crate::{vector::Swizzable, vectors::{Vector2, Vector3, Vector4}};
+    use crate::{
+        vector::Swizzable,
+        vectors::{Vector2, Vector3, Vector4},
+    };
 
     // Test if the vector swizzler works
     #[test]
@@ -33,7 +36,7 @@ mod tests {
     pub fn operators() {
         let y = Vector3::<f32>::Y;
         let test = y + Vector3::<f32>::ONE;
-        assert_eq!(test, Vector3::<f32>::new(1.0, 2.0, 1.0));        
+        assert_eq!(test, Vector3::<f32>::new(1.0, 2.0, 1.0));
         let y = Vector3::<f32>::Y;
         let x = Vector3::<f32>::X;
         let addition = x + y;
