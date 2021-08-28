@@ -1,6 +1,4 @@
-use std::{
-    ops::{Index, IndexMut},
-};
+use std::{ops::{Index, IndexMut, Mul}};
 
 use crate::{
     types::DefaultStates,
@@ -11,7 +9,7 @@ use crate::{
 
 // A simple f32 matrix made of 4 f32/f64 vectors
 // TODO: Turn this into a generic struct
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Matrix4x4<T>
 where
     T: DefaultStates + Clone + Copy,
@@ -68,6 +66,12 @@ where
 // Creation code for the matrix
 #[allow(dead_code)]
 impl Matrix4x4<f32> {
+    // Create a matrix from 4 vector4s
+    pub fn new(vec1: Vector4<f32>, vec2: Vector4<f32>, vec3: Vector4<f32>, vec4: Vector4<f32>) -> Self {
+        return Matrix4x4 {
+            data: [vec1, vec2, vec3, vec4]
+        }
+    }
     // Create a perspective projection matrix
     // Bonk https://www.youtube.com/watch?v=U0_ONQQ5ZNM&ab_channel=BrendanGalea
     pub fn from_perspective(near_plane: f32, far_plane: f32, aspect_ratio: f32, y_fov_radians: f32) -> Self {
@@ -98,21 +102,20 @@ impl Matrix4x4<f32> {
     // https://www.geertarien.com/blog/2017/07/30/breakdown-of-the-lookAt-function-in-OpenGL/
     pub fn look_at(eye: &Vector3<f32>, up: &Vector3<f32>, target: &Vector3<f32>) -> Self {
         // The output
-        let _matrix: Self = Self::default_identity();
         let zaxis: Vector3<f32> = (*target - *eye).normalized();
         let xaxis: Vector3<f32> = zaxis.cross(*up);
-        let _yaxis: Vector3<f32> = xaxis.cross(zaxis);
-        /*
-        zaxis = zaxis;
+        let yaxis: Vector3<f32> = xaxis.cross(zaxis);
+        
+        let zaxis = -zaxis;
 
-        mat4 viewMatrix = {
-          vec4(xaxis.x, xaxis.y, xaxis.z, -dot(xaxis, eye)),
-          vec4(yaxis.x, yaxis.y, yaxis.z, -dot(yaxis, eye)),
-          vec4(zaxis.x, zaxis.y, zaxis.z, -dot(zaxis, eye)),
-          vec4(0, 0, 0, 1)
-        };
-        */
-        todo!();
+        return Matrix4x4::<f32> {
+            data: [
+                Vector4::<f32>::new(xaxis.x(), xaxis.y(), xaxis.z(), xaxis.dot(*eye)),
+                Vector4::<f32>::new(yaxis.x(), yaxis.y(), yaxis.z(), yaxis.dot(*eye)),
+                Vector4::<f32>::new(zaxis.x(), zaxis.y(), zaxis.z(), zaxis.dot(*eye)),
+                Vector4::<f32>::default_x(),
+            ]
+        }
     }
     // Create a rotation matrix
     pub fn from_quaternion(_quat: &Quaternion<f32>) -> Self {
@@ -121,6 +124,37 @@ impl Matrix4x4<f32> {
     // Create a scale matrix
     pub fn from_scale(_scale: Vector3<f32>) -> Self {
         todo!();
+    }
+}
+// Multiply this matrix by another matrix
+impl Mul for Matrix4x4<f32> {
+    type Output = Matrix4x4<f32>;
+
+    fn mul(self, rhs: Self) -> Self::Output {
+        let mut output: Self = self;
+        // Get the A vectors
+        let mut a_vectors: [Vector4<f32>; 4] = [Vector4::<f32>::default_zero(); 4];
+        for y in 0..4 {
+            a_vectors[y][0] = self[0][y];
+            a_vectors[y][1] = self[1][y];
+            a_vectors[y][2] = self[2][y];
+            a_vectors[y][3] = self[3][y];
+        }
+        // Get the dot product
+        for y in 0..4 {
+            for x in 0..4 {
+                // Collumn major
+                // Y is a
+                // X is b
+                
+                // Get A
+                let a: Vector4<f32> = a_vectors[y];
+                let b = rhs[x];
+                println!("{:?} x {:?}", a, b);
+                output[x][y] = a.dot(a);
+            }
+        }
+        return output;
     }
 }
 // Transform a vector by the matrix

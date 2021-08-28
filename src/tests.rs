@@ -1,9 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use crate::{
-        vector::Swizzable,
-        vectors::{Vector2, Vector3, Vector4},
-    };
+    use crate::{Matrix4x4, vector::Swizzable, vectors::{Vector2, Vector3, Vector4}};
 
     // Test if the vector swizzler works
     #[test]
@@ -56,5 +53,12 @@ mod tests {
         let val = Vector3::<f32>::default_x();
         let test = val.dot(Vector3::default_y());
         assert_eq!(test, 0.0);
+    }
+    // Matrix multiplication
+    #[test]
+    pub fn matrix() {
+        let mat1 = Matrix4x4::<f32>::new(Vector4::default_one(), Vector4::new(1.0, 5.0, 5.0, 1.0), Vector4::new(1.0, 5.0, 5.0, 1.0), Vector4::default_one());
+        let mat2 = Matrix4x4::<f32>::new(Vector4::new(2.0, 1.0, 1.0, 1.0), Vector4::default_one(), Vector4::new(4.0, 1.0, 1.0, 3.0), Vector4::default_one());
+        assert_eq!(mat1*mat2, Matrix4x4::<f32>::default_identity());
     }
 }
