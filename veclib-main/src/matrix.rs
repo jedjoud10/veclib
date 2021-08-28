@@ -4,6 +4,7 @@ use crate::{Quaternion, types::DefaultStates, vector::Swizzable, vectors::{Vecto
 
 // A simple f32 matrix made of 4 f32/f64 vectors
 // TODO: Turn this into a generic struct
+#[derive(Debug, Clone, Copy)]
 pub struct Matrix4x4<T> where T: DefaultStates + Clone + Copy {
     pub data: [Vector4<T>; 4],
 }
