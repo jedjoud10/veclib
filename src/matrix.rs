@@ -118,20 +118,29 @@ impl Matrix4x4<f32> {
         }
     }
     // Create a rotation matrix
-    pub fn from_quaternion(_quat: &Quaternion<f32>) -> Self {
-        todo!();
+    pub fn from_quaternion(quat: &Quaternion<f32>) -> Self {
+        let qx = quat[0];
+        let qy = quat[1];
+        let qz = quat[2];
+        let qw = quat[3];
+        let vec1 = Vector4::<f32>::new(1.0 - 2.0*qy*qy - 2.0*qz*qz, 2.0*qx*qy - 2.0*qz*qw, 2.0*qx*qz + 2.0*qy*qw, 0.0);
+        let vec2 = Vector4::<f32>::new(2.0*qx*qy + 2.0*qz*qw, 1.0 - 2.0*qx*qx - 2.0*qz*qz, 2.0*qy*qz - 2.0*qx*qw, 0.0);
+        let vec3 = Vector4::<f32>::new(2.0*qx*qz - 2.0*qy*qw, 2.0*qy*qz + 2.0*qx*qw, 1.0 - 2.0*qx*qx - 2.0*qy*qy, 0.0);
+        let vec4 = Vector4::<f32>::default_w();
+        return Matrix4x4::new(vec1, vec2, vec3, vec4);
     }
     // Create a scale matrix
-    pub fn from_scale(_scale: Vector3<f32>) -> Self {
-        todo!();
+    pub fn from_scale(scale: Vector3<f32>) -> Self {
+        // Too good bro
+        return Matrix4x4::new(
+        Vector4::default_x() * scale.x(), 
+        Vector4::default_y() * scale.y(), 
+        Vector4::default_z() * scale.z(), 
+        Vector4::default_w())
     }
-}
-// Multiply this matrix by another matrix
-impl Mul for Matrix4x4<f32> {
-    type Output = Matrix4x4<f32>;
-
-    fn mul(self, rhs: Self) -> Self::Output {
-        let mut output: Self = self;
+    // Multiply a matrix by this matrix
+    pub fn mul_mat4x4(&self, other: Matrix4x4<f32>) -> Self {
+        let mut output: Self = Self::default_identity();
         // Get the A vectors
         let mut a_vectors: [Vector4<f32>; 4] = [Vector4::<f32>::default_zero(); 4];
         for y in 0..4 {
@@ -149,21 +158,36 @@ impl Mul for Matrix4x4<f32> {
                 
                 // Get A
                 let a: Vector4<f32> = a_vectors[y];
-                let b = rhs[x];
+                let b = other[x];
                 output[x][y] = a.dot(b);
             }
         }
-        return output;
+        return output;    
     }
+    
+}
+// Multiply this matrix by another matrix
+impl Mul for Matrix4x4<f32> {
+    type Output = Matrix4x4<f32>;
+
+    fn mul(self, rhs: Self) -> Self::Output {
+        return self.mul_mat4x4(rhs);
+    }
+        
 }
 // Transform a vector by the matrix
 impl Matrix4x4<f32> {
     // Transform a 4D vector by the matrix
-    pub fn transform_vector(&self, _vector: &Vector4<f32>) -> Vector4<f32> {
-        todo!();
+    pub fn mul_vector(&self, vector: &Vector4<f32>) -> Vector4<f32> {
+        // Multiply the vector by this matrix
+        let x = self[0].dot(*vector);
+        let y = self[1].dot(*vector);
+        let z = self[2].dot(*vector);
+        let w = self[3].dot(*vector);
+        return Vector4::<f32>::new(x, y, z, w);
     }
     // Transform a 3D point by the matrix, basically create a 4D vector out of it with the W component being 1.0
-    pub fn transform_point(&self, point: &Vector3<f32>) -> Vector3<f32> {
-        self.transform_vector(&Vector4::new(point.x(), point.y(), point.z(), 1.0)).get3([0, 1, 2])
+    pub fn mul_point(&self, point: &Vector3<f32>) -> Vector3<f32> {
+        self.mul_vector(&Vector4::new(point.x(), point.y(), point.z(), 1.0)).get3([0, 1, 2])
     }
 }

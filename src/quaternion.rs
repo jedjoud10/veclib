@@ -1,4 +1,6 @@
-use crate::{types::DefaultStates, Vector4};
+use std::ops::{Index, IndexMut};
+
+use crate::{Matrix4x4, Vector4, types::DefaultStates};
 
 // A quaternion that represents a rotation
 pub struct Quaternion<T> {
@@ -12,6 +14,29 @@ where
 {
     fn default() -> Self {
         Self::default_identity()
+    }
+}
+
+// Indexer
+impl<T> Index<usize> for Quaternion<T>
+where
+    T: DefaultStates + Clone + Copy,
+{
+    type Output = T;
+    // Index
+    fn index(&self, index: usize) -> &Self::Output {
+        &self.data[index]
+    }
+}
+
+// Mut indexer
+impl<T> IndexMut<usize> for Quaternion<T>
+where
+    T: DefaultStates + Clone + Copy,
+{
+    // Mut index
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        &mut self.data[index]
     }
 }
 
