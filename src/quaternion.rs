@@ -1,4 +1,4 @@
-use crate::{types::DefaultStates, Vector4};
+use crate::{Vector4};
 
 // A quaternion that represents a rotation
 pub struct Quaternion<T> {
@@ -8,7 +8,7 @@ pub struct Quaternion<T> {
 // Default
 impl<T> Default for Quaternion<T>
 where
-    T: DefaultStates + Clone + Copy + Sized,
+    T: Clone + Copy + Sized,
 {
     fn default() -> Self {
         Self::IDENTITY
@@ -18,7 +18,7 @@ where
 // Da code
 impl<T> Quaternion<T>
 where
-    T: DefaultStates + Clone + Copy + Sized,
+    T: Clone + Copy + Sized,
 {
     // Constants
     pub const IDENTITY: Quaternion<T> = Quaternion { data: Vector4::<T>::W };

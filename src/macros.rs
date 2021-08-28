@@ -1,9 +1,34 @@
+// Implement the consts for a vec3 using a specific type
+#[macro_export]
+macro_rules! setup_vec3_consts {
+    ($t:ty, $f:ty, $on:expr, $off:expr) => {
+        impl<$f> for $t {
+            // Constants
+            pub const ZERO: Self = $t {
+                data: [$on, $off, $off],
+            };
+            pub const X: Self = $t {
+                data: [$on, $off, $off],
+            };
+            pub const Y: Self = $t {
+                data: [$off, $on, $off],
+            };
+            pub const Z: Self = $t {
+                data: [$off, $off, $on],
+            };
+            pub const ONE: Self = $t {
+                data: [$on, $on, $on],
+            };
+        }
+    };
+}
+
 #[macro_export]
 macro_rules! setup_add {
     ($t:ty, $a:tt) => {
         impl<T> Add for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T>,
         {
             type Output = $t;
 
@@ -27,7 +52,7 @@ macro_rules! setup_add {
         */
         impl<T> AddAssign for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T>,
         {
             fn add_assign(&mut self, rhs: Self) {
                 for i in 0..self.data.len() {
@@ -37,7 +62,7 @@ macro_rules! setup_add {
         }
         impl<T> Add<T> for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T>,
         {
             type Output = $t;
 
@@ -50,7 +75,7 @@ macro_rules! setup_add {
         }
         impl<T> AddAssign<T> for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T>,
         {
             fn add_assign(&mut self, rhs: T) {
                 for i in 0..self.data.len() {
@@ -66,7 +91,7 @@ macro_rules! setup_sub {
     ($t:ty, $a:tt) => {
         impl<T> Sub for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T>,
         {
             type Output = $t;
 
@@ -90,7 +115,7 @@ macro_rules! setup_sub {
         */
         impl<T> SubAssign for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T>,
         {
             fn sub_assign(&mut self, rhs: Self) {
                 for i in 0..self.data.len() {
@@ -100,7 +125,7 @@ macro_rules! setup_sub {
         }
         impl<T> Sub<T> for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T>,
         {
             type Output = $t;
 
@@ -113,7 +138,7 @@ macro_rules! setup_sub {
         }
         impl<T> SubAssign<T> for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T>,
         {
             fn sub_assign(&mut self, rhs: T) {
                 for i in 0..self.data.len() {
@@ -129,7 +154,7 @@ macro_rules! setup_mul {
     ($t:ty, $a:tt) => {
         impl<T> Mul for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T>,
         {
             type Output = $t;
 
@@ -153,7 +178,7 @@ macro_rules! setup_mul {
         */
         impl<T> MulAssign for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T>,
         {
             fn mul_assign(&mut self, rhs: Self) {
                 for i in 0..self.data.len() {
@@ -163,7 +188,7 @@ macro_rules! setup_mul {
         }
         impl<T> Mul<T> for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T>,
         {
             type Output = $t;
 
@@ -176,7 +201,7 @@ macro_rules! setup_mul {
         }
         impl<T> MulAssign<T> for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T>,
         {
             fn mul_assign(&mut self, rhs: T) {
                 for i in 0..self.data.len() {
@@ -192,7 +217,7 @@ macro_rules! setup_div {
     ($t:ty, $a:tt) => {
         impl<T> Div for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T>,
         {
             type Output = $t;
 
@@ -216,7 +241,7 @@ macro_rules! setup_div {
         */
         impl<T> DivAssign for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T>,
         {
             fn div_assign(&mut self, rhs: Self) {
                 for i in 0..self.data.len() {
@@ -226,7 +251,7 @@ macro_rules! setup_div {
         }
         impl<T> Div<T> for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T>,
         {
             type Output = $t;
 
@@ -239,7 +264,7 @@ macro_rules! setup_div {
         }
         impl<T> DivAssign<T> for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T>,
         {
             fn div_assign(&mut self, rhs: T) {
                 for i in 0..self.data.len() {
@@ -255,7 +280,7 @@ macro_rules! setup_una {
     ($t:ty, $a:tt) => {
         impl<T> Neg for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Neg<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Neg<Output = T>,
         {
             type Output = $t;
 
@@ -268,7 +293,7 @@ macro_rules! setup_una {
         }
         impl<T> Neg for &$t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Neg<Output = T>,
+            T: Clone + Copy + Sized + PartialEq + PartialOrd + Neg<Output = T>,
         {
             type Output = $t;
 

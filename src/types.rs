@@ -8,7 +8,7 @@ pub trait DefaultStates {
 pub trait FloatingPoint {}
 
 // I32
-impl const DefaultStates for i32 {
+impl DefaultStates for i32 {
     fn off() -> Self {
         0
     }

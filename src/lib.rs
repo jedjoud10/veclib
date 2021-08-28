@@ -1,10 +1,9 @@
 // Math library
-#![feature(const_trait_impl)]
 mod macros;
 mod matrix;
 mod quaternion;
 mod tests;
-mod types;
+//mod types;
 mod vector;
 mod vectors;
 // Export the types

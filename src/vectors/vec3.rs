@@ -1,5 +1,5 @@
 use super::{Vector2, Vector4};
-use crate::{types::DefaultStates, vector::Swizzable};
+use crate::{vector::Swizzable};
 use std::{hash::Hash, ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub, SubAssign}};
 
 // A simple 3D vector, no simd support what-so-ever
@@ -11,7 +11,7 @@ pub struct Vector3<T> {
 // Default
 impl<T> Default for Vector3<T>
 where
-    T: DefaultStates + Clone + Copy + Sized,
+    T: Clone + Copy + Sized,
 {
     fn default() -> Self {
         Self::ZERO
@@ -22,11 +22,11 @@ where
 #[allow(dead_code)]
 impl<T> Vector3<T>
 where
-    T: DefaultStates + Clone + Copy + Sized,
+    T: Clone + Copy + Sized,
 {
     // Constants
     pub const ZERO: Self = Vector3 {
-        data: [T::off(), T::off(), T::off()],
+        data: [T::on(), T::off(), T::off()],
     };
     pub const X: Self = Vector3 {
         data: [T::on(), T::off(), T::off()],
@@ -66,7 +66,7 @@ impl<T> IndexMut<usize> for Vector3<T> {
 // Swizzle a vec3
 impl<T> Swizzable<T> for Vector3<T>
 where
-    T: DefaultStates + Clone + Copy + Sized,
+    T: Clone + Copy + Sized,
 {
     fn get4(&self, order: [usize; 4]) -> Vector4<T> {
         Vector4::new(self[order[0]], self[order[1]], self[order[2]], self[order[3]])
@@ -85,7 +85,7 @@ where
 #[allow(dead_code)]
 impl<T> Vector3<T>
 where
-    T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd,
+    T: Clone + Copy + Sized + PartialEq + PartialOrd,
 {
     // Equals
     pub fn elem_eq(&self, other: &Self) -> Vector3<bool> {

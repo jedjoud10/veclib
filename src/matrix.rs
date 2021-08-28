@@ -3,7 +3,6 @@ use std::{
 };
 
 use crate::{
-    types::DefaultStates,
     vector::Swizzable,
     vectors::{Vector3, Vector4},
     Quaternion,
@@ -14,7 +13,7 @@ use crate::{
 #[derive(Debug, Clone, Copy)]
 pub struct Matrix4x4<T>
 where
-    T: DefaultStates + Clone + Copy,
+    T: Clone + Copy,
 {
     pub data: [Vector4<T>; 4],
 }
@@ -22,7 +21,7 @@ where
 // Default
 impl<T> Default for Matrix4x4<T>
 where
-    T: DefaultStates + Clone + Copy + Sized,
+    T: Clone + Copy + Sized,
 {
     fn default() -> Self {
         Self::IDENTITY
@@ -32,7 +31,7 @@ where
 // Indexer
 impl<T> Index<usize> for Matrix4x4<T>
 where
-    T: DefaultStates + Clone + Copy,
+    T: Clone + Copy,
 {
     type Output = Vector4<T>;
     // Index
@@ -44,7 +43,7 @@ where
 // Mut indexer
 impl<T> IndexMut<usize> for Matrix4x4<T>
 where
-    T: DefaultStates + Clone + Copy,
+    T: Clone + Copy,
 {
     // Mut index
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
@@ -55,7 +54,7 @@ where
 // Identity matrix available for everyone
 impl<T> Matrix4x4<T>
 where
-    T: DefaultStates + Clone + Copy,
+    T: Clone + Copy,
 {
     // Constants
     pub const IDENTITY: Self = Matrix4x4 {
