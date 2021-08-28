@@ -163,8 +163,11 @@ impl Matrix4x4<f32> {
             }
         }
         return output;    
+    }    
+    // Return the inverse of this matrix
+    pub fn inverse(&self) -> Self {
+        todo!();
     }
-    
 }
 // Multiply this matrix by another matrix
 impl Mul for Matrix4x4<f32> {

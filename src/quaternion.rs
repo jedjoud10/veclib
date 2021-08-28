@@ -3,6 +3,7 @@ use std::ops::{Index, IndexMut};
 use crate::{Matrix4x4, Vector4, types::DefaultStates};
 
 // A quaternion that represents a rotation
+#[derive(Debug, Clone, Copy)]
 pub struct Quaternion<T> {
     data: Vector4<T>,
 }
