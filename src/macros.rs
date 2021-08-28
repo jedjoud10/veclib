@@ -358,3 +358,14 @@ macro_rules! setup_vector_arithmatics {
         }
     };
 }
+#[macro_export]
+macro_rules! impl_eq_hash {
+    ($t:ty) => {
+        impl Eq for $t {}
+        impl Hash for $t {
+            fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+                self.data.hash(state);
+            }
+        }
+    };
+}

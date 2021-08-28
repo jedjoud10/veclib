@@ -1,6 +1,6 @@
 use super::{Vector3, Vector4};
 use crate::{types::DefaultStates, vector::Swizzable};
-use std::ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub, SubAssign};
+use std::{hash::Hash, ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub, SubAssign}};
 
 // A simple 2D vector, no simd support what-so-ever
 #[derive(PartialEq, Debug, Clone, Copy)]
@@ -161,6 +161,16 @@ impl Vector2<bool> {
         out
     }
 }
+
+// Eq and Hash for int types
+crate::impl_eq_hash!(Vector2<i16>);
+crate::impl_eq_hash!(Vector2<i32>);
+crate::impl_eq_hash!(Vector2<i64>);
+crate::impl_eq_hash!(Vector2<i128>);
+crate::impl_eq_hash!(Vector2<u16>);
+crate::impl_eq_hash!(Vector2<u32>);
+crate::impl_eq_hash!(Vector2<u64>);
+crate::impl_eq_hash!(Vector2<u128>);
 
 // Run the macros
 crate::setup_add!(Vector2<T>, T);
