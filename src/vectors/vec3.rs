@@ -197,7 +197,7 @@ impl Vector3<f32> {
         // Normalize both self and other
         let a = self.normalized();
         let b = other.normalized();
-        return Vector3::new(a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[1] * b[0] - a[1] * b[0]);
+        return Vector3::new(a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[1] * b[0] - a[0] * b[1]);
     }
 }
 impl Vector3<f64> {
@@ -206,6 +206,6 @@ impl Vector3<f64> {
         // Normalize both self and other
         let a = self.normalized();
         let b = other.normalized();
-        return Vector3::new(a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[1] * b[0] - a[1] * b[0]);
+        return Vector3::new(a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[1] * b[0] - a[0] * b[1]);
     }
 }
