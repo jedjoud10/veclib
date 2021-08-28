@@ -8,7 +8,7 @@ pub trait DefaultStates {
 pub trait FloatingPoint {}
 
 // I32
-impl const DefaultStates for i32 {
+impl DefaultStates for i32 {
     fn off() -> Self {
         0
     }
@@ -18,7 +18,7 @@ impl const DefaultStates for i32 {
 }
 
 // I64
-impl const DefaultStates for i64 {
+impl DefaultStates for i64 {
     fn off() -> Self {
         0
     }
@@ -28,7 +28,7 @@ impl const DefaultStates for i64 {
 }
 
 // F32
-impl const DefaultStates for f32 {
+impl DefaultStates for f32 {
     fn off() -> Self {
         0.0
     }
@@ -38,7 +38,7 @@ impl const DefaultStates for f32 {
 }
 
 // F64
-impl const DefaultStates for f64 {
+impl DefaultStates for f64 {
     fn off() -> Self {
         0.0
     }
@@ -48,7 +48,7 @@ impl const DefaultStates for f64 {
 }
 
 // BOOL
-impl const DefaultStates for bool {
+impl DefaultStates for bool {
     fn off() -> Self {
         false
     }

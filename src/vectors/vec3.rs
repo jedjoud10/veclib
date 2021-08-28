@@ -14,7 +14,7 @@ where
     T: DefaultStates + Clone + Copy + Sized,
 {
     fn default() -> Self {
-        Self::ZERO
+        Self::default_zero()
     }
 }
 
@@ -24,22 +24,32 @@ impl<T> Vector3<T>
 where
     T: DefaultStates + Clone + Copy + Sized,
 {
-    // Constants
-    pub const ZERO: Self = Vector3 {
-        data: [T::off(), T::off(), T::off()],
-    };
-    pub const X: Self = Vector3 {
-        data: [T::on(), T::off(), T::off()],
-    };
-    pub const Y: Self = Vector3 {
-        data: [T::off(), T::on(), T::off()],
-    };
-    pub const Z: Self = Vector3 {
-        data: [T::off(), T::off(), T::on()],
-    };
-    pub const ONE: Self = Vector3 {
-        data: [T::on(), T::on(), T::on()],
-    };
+    // Defaults
+    pub fn default_zero() -> Self {
+        Vector3 {
+            data: [T::off(), T::off(), T::off()],
+        }
+    }
+    pub fn default_x() -> Self {
+        Vector3 {
+            data: [T::on(), T::off(), T::off()],
+        }
+    }
+    pub fn default_y() -> Self {
+        Vector3 {
+            data: [T::off(), T::on(), T::off()],
+        }
+    }
+    pub fn default_z() -> Self {
+        Vector3 {
+            data: [T::off(), T::off(), T::on()],
+        }
+    }
+    pub fn default_one() -> Self {
+        Vector3 {
+            data: [T::on(), T::on(), T::on()],
+        }
+    }
     // Create a new vec4
     pub fn new(f1: T, f2: T, f3: T) -> Self {
         Self { data: [f1, f2, f3] }
@@ -89,7 +99,7 @@ where
 {
     // Equals
     pub fn elem_eq(&self, other: &Self) -> Vector3<bool> {
-        let mut out: Vector3<bool> = Vector3::ZERO;
+        let mut out: Vector3<bool> = Vector3::default_zero();
         for i in 0..3 {
             out[i] = self[i] == other[i];
         }
@@ -97,7 +107,7 @@ where
     }
     // Greater then
     pub fn elem_gt(&self, other: &Self) -> Vector3<bool> {
-        let mut out: Vector3<bool> = Vector3::ZERO;
+        let mut out: Vector3<bool> = Vector3::default_zero();
         for i in 0..3 {
             out[i] = self[i] > other[i];
         }
@@ -105,7 +115,7 @@ where
     }
     // Less than
     pub fn elem_lt(&self, other: &Self) -> Vector3<bool> {
-        let mut out: Vector3<bool> = Vector3::ZERO;
+        let mut out: Vector3<bool> = Vector3::default_zero();
         for i in 0..3 {
             out[i] = self[i] < other[i];
         }
@@ -113,7 +123,7 @@ where
     }
     // Greater than or equals
     pub fn elem_gte(&self, other: &Self) -> Vector3<bool> {
-        let mut out: Vector3<bool> = Vector3::ZERO;
+        let mut out: Vector3<bool> = Vector3::default_zero();
         for i in 0..3 {
             out[i] = self[i] >= other[i];
         }
@@ -121,7 +131,7 @@ where
     }
     // Less than or equals
     pub fn elem_lte(&self, other: &Self) -> Vector3<bool> {
-        let mut out: Vector3<bool> = Vector3::ZERO;
+        let mut out: Vector3<bool> = Vector3::default_zero();
         for i in 0..3 {
             out[i] = self[i] <= other[i];
         }

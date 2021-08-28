@@ -11,7 +11,7 @@ where
     T: DefaultStates + Clone + Copy + Sized,
 {
     fn default() -> Self {
-        Self::IDENTITY
+        Self::default_identity()
     }
 }
 
@@ -20,6 +20,10 @@ impl<T> Quaternion<T>
 where
     T: DefaultStates + Clone + Copy + Sized,
 {
-    // Constants
-    pub const IDENTITY: Quaternion<T> = Quaternion { data: Vector4::<T>::W };
+    // Defaults
+    pub fn default_identity() -> Self {
+        Quaternion {
+            data: Vector4::<T>::default_w(),
+        }
+    }
 }

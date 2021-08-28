@@ -22,8 +22,8 @@ mod tests {
     // Test the element wise comparison
     #[test]
     pub fn comparison() {
-        let y = Vector3::<f32>::Y;
-        let x = Vector3::<f32>::X;
+        let y = Vector3::<f32>::default_y();
+        let x = Vector3::<f32>::default_x();
         let element_wise: Vector3<bool> = x.elem_eq(&y);
         assert_eq!(element_wise, Vector3::<bool>::new(false, false, true));
         let element_wise: Vector3<bool> = x.elem_gt(&y);
@@ -34,27 +34,27 @@ mod tests {
     // Test the operators
     #[test]
     pub fn operators() {
-        let y = Vector3::<f32>::Y;
-        let test = y + Vector3::<f32>::ONE;
+        let y = Vector3::<f32>::default_y();
+        let test = y + Vector3::<f32>::default_one();
         assert_eq!(test, Vector3::<f32>::new(1.0, 2.0, 1.0));
-        let y = Vector3::<f32>::Y;
-        let x = Vector3::<f32>::X;
+        let y = Vector3::<f32>::default_y();
+        let x = Vector3::<f32>::default_x();
         let addition = x + y;
         assert_eq!(addition, Vector3::new(1.0, 1.0, 0.0));
-        assert_eq!(Vector4::<i32>::ONE - Vector4::<i32>::W, Vector4::new(1, 1, 1, 0));
-        assert_eq!(Vector4::<i32>::ONE * Vector4::<i32>::W * 2, Vector4::new(0, 0, 0, 2));
-        assert_eq!(Vector4::<i32>::ONE + Vector4::<i32>::W * 2, Vector4::new(1, 1, 1, 3));
-        assert_eq!(Vector2::<i32>::ONE - Vector2::<i32>::ZERO, Vector2::ONE);
-        assert_eq!(-Vector3::<i32>::ONE, Vector3::new(-1, -1, -1));
-        assert_eq!(-Vector3::<i32>::ONE + Vector3::<i32>::Y * 2, Vector3::new(-1, 1, -1));
-        assert_ne!(-Vector2::<f32>::ONE, Vector2::<f32>::ONE);
-        assert_ne!(-Vector2::<f64>::ONE, Vector2::<f64>::ONE);
+        assert_eq!(Vector4::<i32>::default_one() - Vector4::<i32>::default_w(), Vector4::new(1, 1, 1, 0));
+        assert_eq!(Vector4::<i32>::default_one() * Vector4::<i32>::default_w() * 2, Vector4::new(0, 0, 0, 2));
+        assert_eq!(Vector4::<i32>::default_one() + Vector4::<i32>::default_w() * 2, Vector4::new(1, 1, 1, 3));
+        assert_eq!(Vector2::<i32>::default_one() - Vector2::<i32>::default_zero(), Vector2::default_one());
+        assert_eq!(-Vector3::<i32>::default_one(), Vector3::new(-1, -1, -1));
+        assert_eq!(-Vector3::<i32>::default_one() + Vector3::<i32>::default_y() * 2, Vector3::new(-1, 1, -1));
+        assert_ne!(-Vector2::<f32>::default_one(), Vector2::<f32>::default_one());
+        assert_ne!(-Vector2::<f64>::default_one(), Vector2::<f64>::default_one());
     }
     // Vector arithemtics
     #[test]
     pub fn arithemtics() {
-        let val = Vector3::<f32>::X;
-        let test = val.dot(Vector3::Y);
+        let val = Vector3::<f32>::default_x();
+        let test = val.dot(Vector3::default_y());
         assert_eq!(test, 0.0);
     }
 }

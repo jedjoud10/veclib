@@ -273,7 +273,7 @@ macro_rules! setup_una {
             type Output = $t;
 
             fn neg(self) -> Self::Output {
-                let mut output = <$t>::ZERO;
+                let mut output = <$t>::default_zero();
                 for i in 0..self.data.len() {
                     output[i] = -self[i];
                 }
@@ -315,7 +315,7 @@ macro_rules! setup_vector_arithmatics {
             // Get the normalized value of the current vector without updating it
             pub fn normalized(self) -> Self {
                 let len = self.length();
-                let mut output: Self = Self::ZERO;
+                let mut output: Self = Self::default_zero();
                 for i in 0..self.data.len() {
                     output[i] = self[i] / len;
                 }
@@ -331,7 +331,7 @@ macro_rules! setup_vector_arithmatics {
             }
             // Get the min value between two vec3s
             pub fn min(self, other: Self) -> Self {
-                let mut min = <$t>::ZERO;
+                let mut min = <$t>::default_zero();
                 for i in 0..self.data.len() {
                     min[i] = self[i].min(other[i]);
                 }
@@ -339,7 +339,7 @@ macro_rules! setup_vector_arithmatics {
             }
             // Get the max value between two vec3s
             pub fn max(self, other: Self) -> Self {
-                let mut min = <$t>::ZERO;
+                let mut min = <$t>::default_zero();
                 for i in 0..self.data.len() {
                     min[i] = self[i].max(other[i]);
                 }

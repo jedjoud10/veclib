@@ -25,7 +25,7 @@ where
     T: DefaultStates + Clone + Copy + Sized,
 {
     fn default() -> Self {
-        Self::IDENTITY
+        Self::default_identity()
     }
 }
 
@@ -57,10 +57,12 @@ impl<T> Matrix4x4<T>
 where
     T: DefaultStates + Clone + Copy,
 {
-    // Constants
-    pub const IDENTITY: Self = Matrix4x4 {
-        data: [Vector4::<T>::X, Vector4::<T>::Y, Vector4::<T>::Z, Vector4::<T>::W],
-    };
+    // Defaults
+    pub fn default_identity() -> Self {
+        Matrix4x4 {
+            data: [Vector4::<T>::default_x(), Vector4::<T>::default_y(), Vector4::<T>::default_z(), Vector4::<T>::default_w()],
+        }
+    }
 }
 
 // Creation code for the matrix
@@ -73,30 +75,30 @@ impl Matrix4x4<f32> {
         let first = 1.0_f32 / (aspect_ratio * (y_fov_radians / 2.0).tan());
         let second = 1.0_f32 / (y_fov_radians / 2.0).tan();
         // The output
-        let mut matrix: Self = Self::IDENTITY;
+        let mut matrix: Self = Self::default_identity();
         // Remember, this is collumn major
         // Right now it is using row major but I will switch it to collumn major later
         matrix[0] = Vector4::new(first, 0.0, 0.0, 0.0);
         matrix[1] = Vector4::new(0.0, second, 0.0, 0.0);
         matrix[2] = Vector4::new(0.0, 0.0, (2.0 * far_plane) / (far_plane - near_plane), -(far_plane * near_plane) / (far_plane - near_plane));
-        matrix[3] = Vector4::Z;
+        matrix[3] = Vector4::default_z();
         matrix
     }
     // Create a translation matrix
     pub fn from_translation(position: Vector3<f32>) -> Self {
         // The output
-        let mut matrix: Self = Self::IDENTITY;
+        let mut matrix: Self = Self::default_identity();
         matrix[0] = Vector4::new(1.0, 0.0, 0.0, position[0]);
         matrix[1] = Vector4::new(0.0, 1.0, 0.0, position[1]);
         matrix[2] = Vector4::new(0.0, 0.0, 1.0, position[2]);
-        matrix[3] = Vector4::W;
+        matrix[3] = Vector4::default_w();
         matrix
     }
     // Create a look at matrix
     // https://www.geertarien.com/blog/2017/07/30/breakdown-of-the-lookAt-function-in-OpenGL/
     pub fn look_at(eye: &Vector3<f32>, up: &Vector3<f32>, target: &Vector3<f32>) -> Self {
         // The output
-        let _matrix: Self = Self::IDENTITY;
+        let _matrix: Self = Self::default_identity();
         let zaxis: Vector3<f32> = (*target - *eye).normalized();
         let xaxis: Vector3<f32> = zaxis.cross(*up);
         let _yaxis: Vector3<f32> = xaxis.cross(zaxis);
