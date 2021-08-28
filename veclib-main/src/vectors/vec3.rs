@@ -97,7 +97,7 @@ impl<T> Vector3<T> where T: DefaultStates + Clone + Copy + Sized + PartialEq + P
     }
 }
 
-// Getters
+// Getters and setters
 impl<T> Vector3<T> where T: Copy {
     // Get the X coordinate
     pub fn x(&self) -> T { return self[0]; }
@@ -105,6 +105,12 @@ impl<T> Vector3<T> where T: Copy {
     pub fn y(&self) -> T { return self[1]; } 
     // Get the Z coordinate
     pub fn z(&self) -> T { return self[2]; } 
+    // Set the X coordinate
+    pub fn set_x(&mut self, val: T) { self[0] = val; }
+    // Set the Y coordinate
+    pub fn set_y(&mut self, val: T) { self[1] = val; }
+    // Set the Z coordinate
+    pub fn set_z(&mut self, val: T) { self[2] = val; }
 }
 
 // The comparison logic

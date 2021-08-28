@@ -102,6 +102,10 @@ impl<T> Vector2<T> where T: Copy {
     pub fn x(&self) -> T { return self[0]; }
     // Get the Y coordinate
     pub fn y(&self) -> T { return self[1]; } 
+    // Set the X coordinate
+    pub fn set_x(&mut self, val: T) { self[0] = val; }
+    // Set the Y coordinate
+    pub fn set_y(&mut self, val: T) { self[1] = val; }
 }
 
 // The comparison logic

@@ -63,7 +63,7 @@ impl<T> Swizzable<T> for Vector4<T> where T: DefaultStates + Clone + Copy + Size
     }
 }
 
-// Getters
+// Getters and setters
 impl<T> Vector4<T> where T: Copy {
     // Get the X coordinate
     pub fn x(&self) -> T { return self[0]; }
@@ -73,6 +73,14 @@ impl<T> Vector4<T> where T: Copy {
     pub fn z(&self) -> T { return self[2]; } 
     // Get the W coordinate
     pub fn w(&self) -> T { return self[3]; } 
+    // Set the X coordinate
+    pub fn set_x(&mut self, val: T) { self[0] = val; }
+    // Set the Y coordinate
+    pub fn set_y(&mut self, val: T) { self[1] = val; }
+    // Set the Z coordinate
+    pub fn set_z(&mut self, val: T) { self[2] = val; }
+    // Set the W coordinate
+    pub fn set_w(&mut self, val: T) { self[3] = val; }
 }
 
 // Element wise comparison 
