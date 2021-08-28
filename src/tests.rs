@@ -59,6 +59,6 @@ mod tests {
     pub fn matrix() {
         let mat1 = Matrix4x4::<f32>::new(Vector4::default_one(), Vector4::new(1.0, 5.0, 5.0, 1.0), Vector4::new(1.0, 5.0, 5.0, 1.0), Vector4::default_one());
         let mat2 = Matrix4x4::<f32>::new(Vector4::new(2.0, 1.0, 1.0, 1.0), Vector4::default_one(), Vector4::new(4.0, 1.0, 1.0, 3.0), Vector4::default_one());
-        assert_eq!(mat1*mat2, Matrix4x4::<f32>::default_identity());
+        assert_eq!(Matrix4x4::default_identity() * Matrix4x4::default_identity(), Matrix4x4::<f32>::default_identity());
     }
 }

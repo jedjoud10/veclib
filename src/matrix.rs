@@ -168,12 +168,11 @@ impl Matrix4x4<f32> {
 }
 // Multiply this matrix by another matrix
 impl Mul for Matrix4x4<f32> {
-    type Output = Matrix4x4<f32>;
+    type Output = Self;
 
-    fn mul(self, rhs: Self) -> Self::Output {
+    fn mul(self, rhs: Self) -> Self {
         return self.mul_mat4x4(rhs);
-    }
-        
+    }        
 }
 // Transform a vector by the matrix
 impl Matrix4x4<f32> {
