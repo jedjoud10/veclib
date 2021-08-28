@@ -142,7 +142,7 @@ crate::setup_vector_arithmatics!(Vector3<f64>, T, f64);
 // Vector3 arithmatics
 impl Vector3<f32> {    
     // Get the cross product between two vectors
-    pub fn cross(&self, other: &Self) -> Vector3<f32> {
+    pub fn cross(self, other: Self) -> Vector3<f32> {
         // Normalize both self and other
         let a = self.normalized();
         let b = other.normalized();
@@ -151,7 +151,7 @@ impl Vector3<f32> {
 }
 impl Vector3<f64> {    
     // Get the cross product between two vectors
-    pub fn cross(&self, other: &Self) -> Vector3<f64> {
+    pub fn cross(self, other: Self) -> Vector3<f64> {
         // Normalize both self and other
         let a = self.normalized();
         let b = other.normalized();

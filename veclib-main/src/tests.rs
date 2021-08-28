@@ -51,7 +51,7 @@ mod tests {
     #[test]
     pub fn arithemtics() {
         let val = Vector3::<f32>::X;
-        let test = val.dot(&Vector3::Y);
+        let test = val.dot(Vector3::Y);
         assert_eq!(test, 0.0);
     }
 }
