@@ -76,8 +76,8 @@ impl Matrix4x4<f32> {
         // The output
         let mut matrix: Self = Self::IDENTITY;
         let mut zaxis: Vector3<f32> = (target.clone() - eye.clone()).normalized();    
-        let xaxis: Vector3<f32> = zaxis.cross(up);
-        let yaxis: Vector3<f32> = xaxis.cross(&zaxis);
+        let xaxis: Vector3<f32> = zaxis.cross(*up);
+        let yaxis: Vector3<f32> = xaxis.cross(zaxis);
         /*
         zaxis = zaxis;
 

@@ -11,19 +11,3 @@ pub trait Swizzable<T> {
     // Get vector 2
     fn get2(&self, order: [usize; 2]) -> Vector2<T>;
 }
-
-// Trait that has the actual vector functions
-pub trait Vectorable<T> {
-    // Get the distance from another vector
-    fn distance(&self, other: &Self) -> T;
-    // Get the length of the current vector
-    fn length(&self) -> T;
-    // Get the length square of the current vector (Saves us a sqrt operation)
-    fn length_sqrt(&self) -> T;
-    // Normalize the current vector
-    fn normalize(&mut self);
-    // Get the normalized value of the current vector without updating it
-    fn normalized(&self) -> Self;
-    // Get the dot product between two vectors
-    fn dot(&self, other: &Self) -> T;
-}

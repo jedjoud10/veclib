@@ -1,5 +1,5 @@
 use std::ops::{Add, AddAssign, Neg, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Sub, SubAssign};
-use crate::{types::DefaultStates, vector::{Swizzable, Vectorable}};
+use crate::{types::DefaultStates, vector::{Swizzable}};
 use super::{Vector2, Vector4};
 
 // A simple 3D vector, no simd support what-so-ever

@@ -13,3 +13,4 @@ pub use vectors::Vector3;
 pub use vectors::Vector4;
 pub use matrix::Matrix4x4;
 pub use quaternion::Quaternion;
+pub use vector::Swizzable;
