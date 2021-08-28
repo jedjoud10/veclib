@@ -150,8 +150,7 @@ impl Mul for Matrix4x4<f32> {
                 // Get A
                 let a: Vector4<f32> = a_vectors[y];
                 let b = rhs[x];
-                println!("{:?} x {:?}", a, b);
-                output[x][y] = a.dot(a);
+                output[x][y] = a.dot(b);
             }
         }
         return output;
