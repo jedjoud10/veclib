@@ -10,6 +10,7 @@ mod vectors;
 // Export the types
 pub use matrix::Matrix4x4;
 pub use quaternion::Quaternion;
+pub use quaternion::EulerAnglesOrder;
 pub use vector::Swizzable;
 pub use vectors::Vector2;
 pub use vectors::Vector3;
