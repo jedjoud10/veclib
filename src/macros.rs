@@ -407,7 +407,7 @@ macro_rules! setup_vector_arithmatics {
             //https://limnu.com/sketch-lerp-unlerp-remap/
             // Lerp between two values using T
             pub fn lerp(self, other: Self, t: $f) -> Self {
-                let output = (other + ((self - other) * t));
+                let output = (self + ((other - self) * t));
                 return output;
             }
         }
