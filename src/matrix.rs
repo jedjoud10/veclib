@@ -100,7 +100,7 @@ impl Matrix4x4<f32> {
         matrix[0] = Vector4::new(first, 0.0, 0.0, 0.0);
         matrix[1] = Vector4::new(0.0, second, 0.0, 0.0);
         matrix[2] = Vector4::new(0.0, 0.0, -((far + near) / (far - near)), -((2.0 * far * near) / (far - near)));
-        matrix[3] = Vector4::default_z();
+        matrix[3] = -Vector4::default_z();
         matrix.transpose();
         // Transpose the matrix
         matrix

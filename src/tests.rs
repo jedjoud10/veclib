@@ -71,16 +71,22 @@ mod tests {
             Vector4::new(4.0, 1.0, 1.0, 3.0),
             Vector4::default_one(),
         );
+        let q = Matrix4x4::<f32> {
+            data: [Vector4::new(0.0, 1.0, 2.0, 3.0), Vector4::new(4.0, 5.0, 6.0, 7.0), Vector4::new(8.0, 9.0, 10.0, 11.0), Vector4::new(12.0, 13.0, 14.0, 15.0)]
+        };
+        println!("{:?}", q.transposed());
         assert_eq!(Matrix4x4::default_identity() * Matrix4x4::default_identity(), Matrix4x4::<f32>::default_identity());
         assert_eq!(Matrix4x4::<f32>::default_identity().transposed(), Matrix4x4::<f32>::default_identity().transposed());
+        assert_eq!(Matrix4x4::<f32>::from_scale(Vector3::<f32>::default_one() * 100.0).mul_point(&Vector3::<f32>::default_one()), Vector3::<f32>::default_one() * 100.0);
     }
     // Quaternion tests
     #[test]
     pub fn quaternion() {
         let quaternion = Quaternion::<f32>::from_y_angle(90_f32.to_radians());
-        let quaternion2 = Quaternion::<f32>::from_x_angle(45_f32.to_radians());
+        let quaternion2 = Quaternion::<f32>::from_x_angle(45_f32.to_radians());        
         println!("{:?}", quaternion);
         println!("{:?}", quaternion2 * quaternion);
+        println!("{:?}", Quaternion::<f32>::default_identity().mul_point(Vector3::<f32>::default_y()));
         //assert_eq!(quaternion.mul_point(Vector3::<f32>::new(1.0, 0.0, 0.0)), Vector3::default_z());
     }
 }
