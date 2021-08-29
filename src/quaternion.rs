@@ -79,9 +79,9 @@ where
                     * Self::from_y_angle(euler.y());
             }
             EulerAnglesOrder::YXZ => {
-                output = Self::from_y_angle(euler.y())
+                output = Self::from_z_angle(euler.z())
                     * Self::from_x_angle(euler.x())
-                    * Self::from_z_angle(euler.z());
+                    * Self::from_y_angle(euler.y());
             }
             EulerAnglesOrder::YZX => {
                 output = Self::from_y_angle(euler.y())
