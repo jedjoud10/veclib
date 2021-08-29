@@ -8,7 +8,7 @@ macro_rules! impl_from_vec2 {
                     <$t>::new(val[0] as $a, val[1] as $a)
                 }
             }
-        )*        
+        )*
     };
 }
 // Macro for turning a specific type into another, only for vec3s
@@ -21,7 +21,7 @@ macro_rules! impl_from_vec3 {
                     <$t>::new(val[0] as $a, val[1] as $a, val[2] as $a)
                 }
             }
-        )*        
+        )*
     };
 }
 // Macro for turning a specific type into another, only for vec4s
@@ -34,7 +34,7 @@ macro_rules! impl_from_vec4 {
                     <$t>::new(val[0] as $a, val[1] as $a, val[2] as $a, val[3] as $a)
                 }
             }
-        )*        
+        )*
     };
 }
 
@@ -361,7 +361,7 @@ macro_rules! setup_vector_arithmatics {
                 return self.length_sqrt().sqrt();
             }
             // Normalize the current vector
-            pub fn normalize(mut self) {
+            pub fn normalize(&mut self) {
                 let len = self.length();
                 for i in 0..self.data.len() {
                     self[i] /= len;

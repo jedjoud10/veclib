@@ -1,4 +1,4 @@
-use std::{ops::{Index, IndexMut, Mul}};
+use std::ops::{Index, IndexMut, Mul};
 
 use crate::{
     types::DefaultStates,
@@ -68,9 +68,7 @@ where
 impl Matrix4x4<f32> {
     // Create a matrix from 4 vector4s
     pub fn new(vec1: Vector4<f32>, vec2: Vector4<f32>, vec3: Vector4<f32>, vec4: Vector4<f32>) -> Self {
-        return Matrix4x4 {
-            data: [vec1, vec2, vec3, vec4]
-        }
+        return Matrix4x4 { data: [vec1, vec2, vec3, vec4] };
     }
     // Create a perspective projection matrix
     // Bonk https://www.youtube.com/watch?v=U0_ONQQ5ZNM&ab_channel=BrendanGalea
@@ -105,7 +103,7 @@ impl Matrix4x4<f32> {
         let zaxis: Vector3<f32> = (*target - *eye).normalized();
         let xaxis: Vector3<f32> = zaxis.cross(*up);
         let yaxis: Vector3<f32> = xaxis.cross(zaxis);
-        
+
         let zaxis = -zaxis;
 
         return Matrix4x4::<f32> {
@@ -114,8 +112,8 @@ impl Matrix4x4<f32> {
                 Vector4::<f32>::new(yaxis.x(), yaxis.y(), yaxis.z(), yaxis.dot(*eye)),
                 Vector4::<f32>::new(zaxis.x(), zaxis.y(), zaxis.z(), zaxis.dot(*eye)),
                 Vector4::<f32>::default_x(),
-            ]
-        }
+            ],
+        };
     }
     // Create a rotation matrix
     pub fn from_quaternion(quat: &Quaternion<f32>) -> Self {
@@ -123,9 +121,9 @@ impl Matrix4x4<f32> {
         let qy = quat[1];
         let qz = quat[2];
         let qw = quat[3];
-        let vec1 = Vector4::<f32>::new(1.0 - 2.0*qy*qy - 2.0*qz*qz, 2.0*qx*qy - 2.0*qz*qw, 2.0*qx*qz + 2.0*qy*qw, 0.0);
-        let vec2 = Vector4::<f32>::new(2.0*qx*qy + 2.0*qz*qw, 1.0 - 2.0*qx*qx - 2.0*qz*qz, 2.0*qy*qz - 2.0*qx*qw, 0.0);
-        let vec3 = Vector4::<f32>::new(2.0*qx*qz - 2.0*qy*qw, 2.0*qy*qz + 2.0*qx*qw, 1.0 - 2.0*qx*qx - 2.0*qy*qy, 0.0);
+        let vec1 = Vector4::<f32>::new(1.0 - 2.0 * qy * qy - 2.0 * qz * qz, 2.0 * qx * qy - 2.0 * qz * qw, 2.0 * qx * qz + 2.0 * qy * qw, 0.0);
+        let vec2 = Vector4::<f32>::new(2.0 * qx * qy + 2.0 * qz * qw, 1.0 - 2.0 * qx * qx - 2.0 * qz * qz, 2.0 * qy * qz - 2.0 * qx * qw, 0.0);
+        let vec3 = Vector4::<f32>::new(2.0 * qx * qz - 2.0 * qy * qw, 2.0 * qy * qz + 2.0 * qx * qw, 1.0 - 2.0 * qx * qx - 2.0 * qy * qy, 0.0);
         let vec4 = Vector4::<f32>::default_w();
         return Matrix4x4::new(vec1, vec2, vec3, vec4);
     }
@@ -133,10 +131,11 @@ impl Matrix4x4<f32> {
     pub fn from_scale(scale: Vector3<f32>) -> Self {
         // Too good bro
         return Matrix4x4::new(
-        Vector4::default_x() * scale.x(), 
-        Vector4::default_y() * scale.y(), 
-        Vector4::default_z() * scale.z(), 
-        Vector4::default_w())
+            Vector4::default_x() * scale.x(),
+            Vector4::default_y() * scale.y(),
+            Vector4::default_z() * scale.z(),
+            Vector4::default_w(),
+        );
     }
     // Multiply a matrix by this matrix
     pub fn mul_mat4x4(&self, other: Matrix4x4<f32>) -> Self {
@@ -155,15 +154,15 @@ impl Matrix4x4<f32> {
                 // Collumn major
                 // Y is a
                 // X is b
-                
+
                 // Get A
                 let a: Vector4<f32> = a_vectors[y];
                 let b = other[x];
                 output[x][y] = a.dot(b);
             }
         }
-        return output;    
-    }    
+        return output;
+    }
     // Return the inverse of this matrix
     pub fn inverse(&self) -> Self {
         todo!();
@@ -175,7 +174,7 @@ impl Mul for Matrix4x4<f32> {
 
     fn mul(self, rhs: Self) -> Self {
         return self.mul_mat4x4(rhs);
-    }        
+    }
 }
 // Transform a vector by the matrix
 impl Matrix4x4<f32> {

@@ -1,5 +1,3 @@
-
-
 use crate::vectors::*;
 
 // The swizzable trait

@@ -1,6 +1,9 @@
 use super::{Vector3, Vector4};
 use crate::{types::DefaultStates, vector::Swizzable};
-use std::{hash::Hash, ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub, SubAssign}};
+use std::{
+    hash::Hash,
+    ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub, SubAssign},
+};
 
 // A simple 2D vector, no simd support what-so-ever
 #[derive(PartialEq, Debug, Clone, Copy)]
@@ -26,24 +29,16 @@ where
 {
     // Defaults
     pub fn default_zero() -> Self {
-        Vector2 {
-            data: [T::off(), T::off()],
-        }
+        Vector2 { data: [T::off(), T::off()] }
     }
     pub fn default_x() -> Self {
-        Vector2 {
-            data: [T::on(), T::off()],
-        }
+        Vector2 { data: [T::on(), T::off()] }
     }
     pub fn default_y() -> Self {
-        Vector2 {
-            data: [T::off(), T::on()],
-        }
+        Vector2 { data: [T::off(), T::on()] }
     }
     pub fn default_one() -> Self {
-        Vector2 {
-            data: [T::on(), T::on()],
-        }
+        Vector2 { data: [T::on(), T::on()] }
     }
     // Create a new vec4
     pub fn new(f1: T, f2: T) -> Self {
