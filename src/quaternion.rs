@@ -155,6 +155,10 @@ impl Quaternion<f32> {
         output[2] = new_vector.z();
         return output;
     }
+    // Normalize this quaternion
+    pub fn normalize(&mut self) {
+        self.data.normalize();
+    }
 }
 
 // Operators
@@ -162,6 +166,6 @@ impl Mul for Quaternion<f32> {
     type Output = Quaternion<f32>;
 
     fn mul(self, rhs: Self) -> Self::Output {
-        return self.mul_quaternion(rhs);
+        return rhs.mul_quaternion(self);
     }
 }

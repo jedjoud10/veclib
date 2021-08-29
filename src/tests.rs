@@ -1,10 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use crate::{
-        vector::Swizzable,
-        vectors::{Vector2, Vector3, Vector4},
-        Matrix4x4,
-    };
+    use crate::{Matrix4x4, Quaternion, vector::Swizzable, vectors::{Vector2, Vector3, Vector4}};
 
     // Test if the vector swizzler works
     #[test]
@@ -77,5 +73,13 @@ mod tests {
         );
         assert_eq!(Matrix4x4::default_identity() * Matrix4x4::default_identity(), Matrix4x4::<f32>::default_identity());
         assert_eq!(Matrix4x4::<f32>::default_identity().transposed(), Matrix4x4::<f32>::default_identity().transposed());
+    }
+    // Quaternion tests
+    #[test]
+    pub fn quaternion() {
+        let mut quaternion = Quaternion::<f32>::from_y_angle(90_f32.to_radians());
+        quaternion.normalize();
+        println!("{:?}", quaternion);
+        assert_eq!(quaternion.mul_point(Vector3::<f32>::new(1.0, 0.0, 0.0)), Vector3::default_z());
     }
 }
