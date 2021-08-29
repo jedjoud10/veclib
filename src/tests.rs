@@ -77,9 +77,10 @@ mod tests {
     // Quaternion tests
     #[test]
     pub fn quaternion() {
-        let mut quaternion = Quaternion::<f32>::from_y_angle(90_f32.to_radians());
-        quaternion.normalize();
+        let quaternion = Quaternion::<f32>::from_y_angle(90_f32.to_radians());
+        let quaternion2 = Quaternion::<f32>::from_x_angle(45_f32.to_radians());
         println!("{:?}", quaternion);
-        assert_eq!(quaternion.mul_point(Vector3::<f32>::new(1.0, 0.0, 0.0)), Vector3::default_z());
+        println!("{:?}", quaternion2 * quaternion);
+        //assert_eq!(quaternion.mul_point(Vector3::<f32>::new(1.0, 0.0, 0.0)), Vector3::default_z());
     }
 }

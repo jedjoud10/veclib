@@ -102,15 +102,20 @@ where
         return output;
     }
     // Create a quaternion from an angle and an axis
-    pub fn from_axis_angle(mut axis: Vector3<f32>, angle: f32) -> Quaternion<f32> {
+    pub fn from_axis_angle(axis: Vector3<f32>, angle: f32) -> Quaternion<f32> {
         // Normalize just in case
-        axis.normalize();
+        //axis.normalize();
         let x = (angle / 2.0).sin();
         let mut output: Quaternion<f32> = Quaternion::default_identity();
         output[0] = axis.x() * x;
         output[1] = axis.y() * x;
         output[2] = axis.z() * x;
         output[3] = (angle / 2.0).cos();
+        /*
+        let mut output = Quaternion {
+            data: Vector4::<f32>::new(axis.x(), axis.y(), axis.z(), angle)
+        };
+        */
         return output;
     }
     // Create the quaternion from an angle and the X axis
@@ -166,6 +171,7 @@ impl Mul for Quaternion<f32> {
     type Output = Quaternion<f32>;
 
     fn mul(self, rhs: Self) -> Self::Output {
+        //return self.mul_quaternion(rhs);
         return rhs.mul_quaternion(self);
     }
 }
