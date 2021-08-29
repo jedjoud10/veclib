@@ -1,4 +1,4 @@
-use std::ops::{Index, IndexMut, Mul};
+use std::{iter::Copied, ops::{Index, IndexMut, Mul}};
 
 use crate::{
     types::DefaultStates,
@@ -63,6 +63,17 @@ where
     }
 }
 
+impl<T> Matrix4x4<T> where T: DefaultStates + Clone + Copy {
+    // Transpose the matrix
+    pub fn transpose(&mut self) {
+        for x in 0..4 {
+            for y in 0..4 {
+                self[x][y] = self[y][x];
+            }
+        }
+    }
+}
+
 // Creation code for the matrix
 #[allow(dead_code)]
 impl Matrix4x4<f32> {
@@ -71,29 +82,31 @@ impl Matrix4x4<f32> {
         return Matrix4x4 { data: [vec1, vec2, vec3, vec4] };
     }
     // Create a perspective projection matrix
-    // Bonk https://www.youtube.com/watch?v=U0_ONQQ5ZNM&ab_channel=BrendanGalea
-    pub fn from_perspective(near_plane: f32, far_plane: f32, aspect_ratio: f32, y_fov_radians: f32) -> Self {
+    // Bonk https://gamedev.stackexchange.com/questions/120338/what-does-a-perspective-projection-matrix-look-like-in-opengl
+    pub fn from_perspective(near: f32, far: f32, aspect: f32, fov: f32) -> Self {
         // Math
-        let first = 1.0_f32 / (aspect_ratio * (y_fov_radians / 2.0).tan());
-        let second = 1.0_f32 / (y_fov_radians / 2.0).tan();
+        let first = 1.0_f32 / (aspect * (fov / 2.0).tan());
+        let second = 1.0_f32 / (fov / 2.0).tan();
         // The output
         let mut matrix: Self = Self::default_identity();
-        // Remember, this is collumn major
         // Right now it is using row major but I will switch it to collumn major later
+        // This is row major
         matrix[0] = Vector4::new(first, 0.0, 0.0, 0.0);
         matrix[1] = Vector4::new(0.0, second, 0.0, 0.0);
-        matrix[2] = Vector4::new(0.0, 0.0, (2.0 * far_plane) / (far_plane - near_plane), -(far_plane * near_plane) / (far_plane - near_plane));
+        matrix[2] = Vector4::new(0.0, 0.0, -((far + near) / (far - near)), -((2.0 * far * near) / (far - near)));
         matrix[3] = Vector4::default_z();
+        matrix.transpose();
+        // Transpose the matrix
         matrix
     }
     // Create a translation matrix
     pub fn from_translation(position: Vector3<f32>) -> Self {
         // The output
         let mut matrix: Self = Self::default_identity();
-        matrix[0] = Vector4::new(1.0, 0.0, 0.0, position[0]);
-        matrix[1] = Vector4::new(0.0, 1.0, 0.0, position[1]);
-        matrix[2] = Vector4::new(0.0, 0.0, 1.0, position[2]);
-        matrix[3] = Vector4::default_w();
+        matrix[0] = Vector4::default_x();
+        matrix[1] = Vector4::default_y();
+        matrix[2] = Vector4::default_z();
+        matrix[3] = Vector4::new(position[0], position[1], position[2], 1.0);
         matrix
     }
     // Create a look at matrix
@@ -106,7 +119,7 @@ impl Matrix4x4<f32> {
 
         let zaxis = -zaxis;
 
-        return Matrix4x4::<f32> {
+        let mut output: Matrix4x4<f32> = Matrix4x4::<f32> {
             data: [
                 Vector4::<f32>::new(xaxis.x(), xaxis.y(), xaxis.z(), xaxis.dot(*eye)),
                 Vector4::<f32>::new(yaxis.x(), yaxis.y(), yaxis.z(), yaxis.dot(*eye)),
@@ -114,6 +127,11 @@ impl Matrix4x4<f32> {
                 Vector4::<f32>::default_x(),
             ],
         };
+
+        // Transpose the matrix
+        output.transpose();
+
+        return output;
     }
     // Create a rotation matrix
     pub fn from_quaternion(quat: &Quaternion<f32>) -> Self {
