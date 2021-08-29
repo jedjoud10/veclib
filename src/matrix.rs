@@ -66,15 +66,11 @@ where
 impl<T> Matrix4x4<T> where T: DefaultStates + Clone + Copy {
     // Transpose the matrix
     pub fn transpose(&mut self) {
-        for x in 0..4 {
-            for y in 0..4 {
-                self[x][y] = self[y][x];
-            }
-        }
+        self.data = self.transposed().data;
     }
     // Return the transpose of this matrix
     pub fn transposed(&self) -> Self {
-        let mut output = self.clone();
+        let mut output = Self::default_identity();
         for x in 0..4 {
             for y in 0..4 {
                 output[x][y] = self[y][x];
