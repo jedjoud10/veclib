@@ -121,10 +121,10 @@ impl Matrix4x4<f32> {
 
         let mut output: Matrix4x4<f32> = Matrix4x4::<f32> {
             data: [
-                Vector4::<f32>::new(xaxis.x(), xaxis.y(), xaxis.z(), xaxis.dot(*eye)),
-                Vector4::<f32>::new(yaxis.x(), yaxis.y(), yaxis.z(), yaxis.dot(*eye)),
-                Vector4::<f32>::new(zaxis.x(), zaxis.y(), zaxis.z(), zaxis.dot(*eye)),
-                Vector4::<f32>::default_x(),
+                Vector4::<f32>::new(xaxis.x(), xaxis.y(), xaxis.z(), -xaxis.dot(*eye)),
+                Vector4::<f32>::new(yaxis.x(), yaxis.y(), yaxis.z(), -yaxis.dot(*eye)),
+                Vector4::<f32>::new(zaxis.x(), zaxis.y(), zaxis.z(), -zaxis.dot(*eye)),
+                Vector4::<f32>::default_w(),
             ],
         };
 
