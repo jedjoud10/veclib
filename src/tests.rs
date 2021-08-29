@@ -57,6 +57,8 @@ mod tests {
         let val = Vector3::<f32>::default_x();
         let test = val.dot(Vector3::default_y());
         assert_eq!(test, 0.0);
+        let k = Vector3::<f32>::new(2.0, 3.0, 4.0).cross(Vector3::<f32>::new(5.0, 6.0, 7.0));
+        assert_eq!(k, Vector3::<f32>::new(-3.0, 6.0, -3.0));
     }
     // Matrix multiplication
     #[test]
@@ -74,5 +76,6 @@ mod tests {
             Vector4::default_one(),
         );
         assert_eq!(Matrix4x4::default_identity() * Matrix4x4::default_identity(), Matrix4x4::<f32>::default_identity());
+        assert_eq!(Matrix4x4::<f32>::default_identity().transposed(), Matrix4x4::<f32>::default_identity().transposed());
     }
 }

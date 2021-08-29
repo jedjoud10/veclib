@@ -72,6 +72,16 @@ impl<T> Matrix4x4<T> where T: DefaultStates + Clone + Copy {
             }
         }
     }
+    // Return the transpose of this matrix
+    pub fn transposed(&self) -> Self {
+        let mut output = self.clone();
+        for x in 0..4 {
+            for y in 0..4 {
+                output[x][y] = self[y][x];
+            }
+        }
+        return output;
+    }
 }
 
 // Creation code for the matrix

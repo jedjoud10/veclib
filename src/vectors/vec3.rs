@@ -237,18 +237,16 @@ crate::impl_from_vec3!(Vector3<u128>, u128, i8, i16, i32, i64, i128, u8, u16, u3
 impl Vector3<f32> {
     // Get the cross product between two vectors
     pub fn cross(self, other: Self) -> Vector3<f32> {
-        // Normalize both self and other
-        let a = self.normalized();
-        let b = other.normalized();
-        Vector3::new(a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[1] * b[0] - a[0] * b[1])
+        let a = self;
+        let b = other;
+        Vector3::new(a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0])
     }
 }
 impl Vector3<f64> {
     // Get the cross product between two vectors
     pub fn cross(self, other: Self) -> Vector3<f64> {
-        // Normalize both self and other
-        let a = self.normalized();
-        let b = other.normalized();
-        Vector3::new(a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[1] * b[0] - a[0] * b[1])
+        let a = self;
+        let b = other;
+        Vector3::new(a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0])
     }
 }
