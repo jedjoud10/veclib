@@ -413,6 +413,75 @@ macro_rules! setup_vector_arithmatics {
         }
     };
 }
+// Element wise comparison
+#[macro_export]
+macro_rules! impl_elem_wise_comparison {
+    ($t:ty, $a:tt, $out:ty) => {
+        // Element wise comparison
+        impl<T> $t where
+            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd,
+        {
+            // Equals
+            pub fn elem_eq(&self, other: &Self) -> $out {
+                let mut out: $out = <$out>::default_zero();
+                for i in 0..self.data.len() {
+                    out[i] = self[i] == other[i];
+                }
+                out
+            }
+            // Greater then
+            pub fn elem_gt(&self, other: &Self) -> $out {
+                let mut out: $out = <$out>::default_zero();
+                for i in 0..self.data.len() {
+                    out[i] = self[i] > other[i];
+                }
+                out
+            }
+            // Less than
+            pub fn elem_lt(&self, other: &Self) -> $out {
+                let mut out: $out = <$out>::default_zero();
+                for i in 0..self.data.len() {
+                    out[i] = self[i] < other[i];
+                }
+                out
+            }
+            // Greater than or equals
+            pub fn elem_gte(&self, other: &Self) -> $out {
+                let mut out: $out = <$out>::default_zero();
+                for i in 0..self.data.len() {
+                    out[i] = self[i] >= other[i];
+                }
+                out
+            }
+            // Less than or equals
+            pub fn elem_lte(&self, other: &Self) -> $out {
+                let mut out: $out = <$out>::default_zero();
+                for i in 0..self.data.len() {
+                    out[i] = self[i] <= other[i];
+                }
+                out
+            }            
+        }
+        impl $out {
+            // Return true if all the elements are true
+            pub fn all(&self) -> bool {
+                let mut out: bool = true;
+                for i in 0..self.data.len() {
+                    out &= self[i];
+                }
+                out
+            }
+            // Return true if one or more elements are true
+            pub fn any(&self) -> bool {
+                let mut out: bool = false;
+                for i in 0..self.data.len() {
+                    out |= self[i];
+                }
+                out
+            }
+        }
+    };
+} 
 #[macro_export]
 macro_rules! impl_eq_hash {
     ($t:ty) => {

@@ -197,7 +197,7 @@ impl Mul for Matrix4x4<f32> {
     type Output = Self;
 
     fn mul(self, rhs: Self) -> Self {
-        return self.mul_mat4x4(rhs);
+        return rhs.mul_mat4x4(self);
     }
 }
 // Transform a vector by the matrix

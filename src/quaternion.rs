@@ -69,14 +69,14 @@ where
         let output: Quaternion<f32>;
         match order {
             EulerAnglesOrder::XYZ => {
-                output = Self::from_x_angle(euler.x())
+                output = Self::from_z_angle(euler.z())
                     * Self::from_y_angle(euler.y())
-                    * Self::from_z_angle(euler.z());
+                    * Self::from_x_angle(euler.x());
             }
             EulerAnglesOrder::XZY => {
-                output = Self::from_x_angle(euler.x())
+                output = Self::from_y_angle(euler.y())
                     * Self::from_z_angle(euler.z())
-                    * Self::from_y_angle(euler.y());
+                    * Self::from_x_angle(euler.x());
             }
             EulerAnglesOrder::YXZ => {
                 output = Self::from_z_angle(euler.z())
@@ -84,19 +84,19 @@ where
                     * Self::from_y_angle(euler.y());
             }
             EulerAnglesOrder::YZX => {
-                output = Self::from_y_angle(euler.y())
+                output = Self::from_x_angle(euler.x())
                     * Self::from_z_angle(euler.z())
-                    * Self::from_x_angle(euler.x());
-            }
-            EulerAnglesOrder::ZXY => {
-                output = Self::from_z_angle(euler.z())
-                    * Self::from_x_angle(euler.x())
                     * Self::from_y_angle(euler.y());
             }
+            EulerAnglesOrder::ZXY => {
+                output = Self::from_y_angle(euler.y())
+                    * Self::from_x_angle(euler.x())
+                    * Self::from_z_angle(euler.z());
+            }
             EulerAnglesOrder::ZYX => {
-                output = Self::from_z_angle(euler.z())
+                output = Self::from_x_angle(euler.x())
                     * Self::from_y_angle(euler.y())
-                    * Self::from_x_angle(euler.x());
+                    * Self::from_z_angle(euler.z());
             }
         }
         return output;

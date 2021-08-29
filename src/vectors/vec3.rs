@@ -94,54 +94,6 @@ where
     }
 }
 
-// Element wise comparison
-#[allow(dead_code)]
-impl<T> Vector3<T>
-where
-    T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd,
-{
-    // Equals
-    pub fn elem_eq(&self, other: &Self) -> Vector3<bool> {
-        let mut out: Vector3<bool> = Vector3::default_zero();
-        for i in 0..3 {
-            out[i] = self[i] == other[i];
-        }
-        out
-    }
-    // Greater then
-    pub fn elem_gt(&self, other: &Self) -> Vector3<bool> {
-        let mut out: Vector3<bool> = Vector3::default_zero();
-        for i in 0..3 {
-            out[i] = self[i] > other[i];
-        }
-        out
-    }
-    // Less than
-    pub fn elem_lt(&self, other: &Self) -> Vector3<bool> {
-        let mut out: Vector3<bool> = Vector3::default_zero();
-        for i in 0..3 {
-            out[i] = self[i] < other[i];
-        }
-        out
-    }
-    // Greater than or equals
-    pub fn elem_gte(&self, other: &Self) -> Vector3<bool> {
-        let mut out: Vector3<bool> = Vector3::default_zero();
-        for i in 0..3 {
-            out[i] = self[i] >= other[i];
-        }
-        out
-    }
-    // Less than or equals
-    pub fn elem_lte(&self, other: &Self) -> Vector3<bool> {
-        let mut out: Vector3<bool> = Vector3::default_zero();
-        for i in 0..3 {
-            out[i] = self[i] <= other[i];
-        }
-        out
-    }
-}
-
 // Getters and setters
 impl<T> Vector3<T>
 where
@@ -173,27 +125,6 @@ where
     }
 }
 
-// The comparison logic
-#[allow(dead_code)]
-impl Vector3<bool> {
-    // Return true if all the elements are true
-    pub fn all(&self) -> bool {
-        let mut out: bool = false;
-        for i in 0..3 {
-            out &= self[i];
-        }
-        out
-    }
-    // Return true if one or more elements are true
-    pub fn any(&self) -> bool {
-        let mut out: bool = false;
-        for i in 0..3 {
-            out |= self[i];
-        }
-        out
-    }
-}
-
 // Eq and Hash for int types
 crate::impl_eq_hash!(Vector3<i16>);
 crate::impl_eq_hash!(Vector3<i32>);
@@ -212,6 +143,7 @@ crate::setup_div!(Vector3<T>, T);
 crate::setup_una!(Vector3<T>, T);
 crate::setup_vector_arithmatics!(Vector3<f32>, T, f32);
 crate::setup_vector_arithmatics!(Vector3<f64>, T, f64);
+crate::impl_elem_wise_comparison!(Vector3<T>, T, Vector3<bool>);
 
 // Dear lord
 // I deeply apologize for this
