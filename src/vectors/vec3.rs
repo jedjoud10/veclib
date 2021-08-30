@@ -143,7 +143,7 @@ crate::setup_div!(Vector3<T>, T);
 crate::setup_una!(Vector3<T>, T);
 crate::setup_vector_arithmatics!(Vector3<f32>, T, f32);
 crate::setup_vector_arithmatics!(Vector3<f64>, T, f64);
-crate::impl_elem_wise_comparison!(Vector3<T>, T, Vector3<bool>);
+crate::impl_elem_wise_comparison!(Vector3<T>, T, Vector3::<bool>);
 
 // Dear lord
 // I deeply apologize for this

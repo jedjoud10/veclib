@@ -27,6 +27,8 @@ mod tests {
         assert_eq!(element_wise, Vector3::<bool>::new(true, false, false));
         let element_wise: Vector3<bool> = x.elem_lte(&y);
         assert_eq!(element_wise, Vector3::<bool>::new(false, true, true));
+        let booltest = Vector3::<bool>::new(false, true, true) | Vector3::<bool>::new(true, false, true);
+        assert_eq!(booltest, Vector3::<bool>::new(true, true, true));
     }
     // Test the operators
     #[test]
