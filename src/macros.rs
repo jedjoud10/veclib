@@ -480,6 +480,50 @@ macro_rules! impl_elem_wise_comparison {
                 out
             }
         }
+        impl BitAnd for $out {
+            type Output = $out;
+            // Element wise and
+            fn bitand(self, rhs: Self) -> Self::Output {
+                let mut out: $out = self;
+                for i in 0..self.data.len() {
+                    out[i] &= rhs[i];
+                }
+                return out;
+            }
+        }
+        impl BitOr for $out {
+            type Output = $out;
+            // Element wise or
+            fn bitor(self, rhs: Self) -> Self::Output {
+                let mut out: $out = self;
+                for i in 0..self.data.len() {
+                    out[i] |= rhs[i];
+                }
+                return out;
+            }
+        }
+        impl BitXor for $out {
+            type Output = $out;
+            // Element wise xor
+            fn bitxor(self, rhs: Self) -> Self::Output {
+                let mut out: $out = self;
+                for i in 0..self.data.len() {
+                    out[i] ^= rhs[i];
+                }
+                return out;
+            }
+        }
+        impl Not for $out {
+            type Output = $out;
+            // Element wise not
+            fn not(self) -> Self::Output {
+                let mut out: $out = self;
+                for i in 0..self.data.len() {
+                    out[i] = !self[i];
+                }
+                return out;
+            }
+        }
     };
 } 
 #[macro_export]
