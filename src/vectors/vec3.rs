@@ -2,7 +2,7 @@ use super::{Vector2, Vector4};
 use crate::{types::DefaultStates, vector::Swizzable};
 use std::{
     hash::Hash,
-    ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub, SubAssign, BitAnd, BitOr, BitXor, Not},
+    ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub, SubAssign, BitAnd, BitOr, BitXor, Not, BitAndAssign, BitOrAssign, BitXorAssign},
 };
 
 // A simple 3D vector, no simd support what-so-ever
@@ -143,7 +143,7 @@ crate::setup_div!(Vector3<T>, T);
 crate::setup_una!(Vector3<T>, T);
 crate::setup_vector_arithmatics!(Vector3<f32>, T, f32);
 crate::setup_vector_arithmatics!(Vector3<f64>, T, f64);
-crate::impl_elem_wise_comparison!(Vector3<T>, T, Vector3::<bool>);
+crate::impl_elem_wise_comparison!(Vector3<T>, T, Vector3<bool>);
 
 // Dear lord
 // I deeply apologize for this

@@ -480,44 +480,48 @@ macro_rules! impl_elem_wise_comparison {
                 out
             }
         }
-        impl BitAnd for $out {
-            type Output = $out;
+        impl<T> BitAnd for $t where
+            T: DefaultStates + Clone + Copy + Sized + BitAnd + BitAndAssign {
+            type Output = $t;
             // Element wise and
             fn bitand(self, rhs: Self) -> Self::Output {
-                let mut out: $out = self;
+                let mut out: $t = self;
                 for i in 0..self.data.len() {
                     out[i] &= rhs[i];
                 }
                 return out;
             }
         }
-        impl BitOr for $out {
-            type Output = $out;
+        impl<T> BitOr for $t where
+            T: DefaultStates + Clone + Copy + Sized + BitOr + BitOrAssign {
+            type Output = $t;
             // Element wise or
             fn bitor(self, rhs: Self) -> Self::Output {
-                let mut out: $out = self;
+                let mut out: $t = self;
                 for i in 0..self.data.len() {
                     out[i] |= rhs[i];
                 }
                 return out;
             }
         }
-        impl BitXor for $out {
-            type Output = $out;
+        impl<T> BitXor for $t where
+            T: DefaultStates + Clone + Copy + Sized + BitXor + BitXorAssign {
+            type Output = $t;
             // Element wise xor
             fn bitxor(self, rhs: Self) -> Self::Output {
-                let mut out: $out = self;
+                let mut out: $t = self;
                 for i in 0..self.data.len() {
                     out[i] ^= rhs[i];
                 }
                 return out;
             }
         }
-        impl Not for $out {
-            type Output = $out;
+        impl<T> Not for $t where
+            T: DefaultStates + Clone + Copy + Sized + Not<Output = T> {
+            type Output = $t;
             // Element wise not
             fn not(self) -> Self::Output {
-                let mut out: $out = self;
+                let mut out: $t = self;
                 for i in 0..self.data.len() {
                     out[i] = !self[i];
                 }

@@ -2,7 +2,7 @@ use super::{Vector3, Vector4};
 use crate::{types::DefaultStates, vector::Swizzable};
 use std::{
     hash::Hash,
-    ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub, SubAssign, BitAnd, BitOr, BitXor,  Not},
+    ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub, SubAssign, BitAnd, BitOr, BitXor,  Not, BitAndAssign, BitOrAssign, BitXorAssign},
 };
 
 // A simple 2D vector, no simd support what-so-ever
