@@ -29,6 +29,10 @@ mod tests {
         assert_eq!(element_wise, Vector3::<bool>::new(false, true, true));
         let booltest = Vector3::<bool>::new(false, true, true) | Vector3::<bool>::new(true, false, true);
         assert_eq!(booltest, Vector3::<bool>::new(true, true, true));
+
+        let val1: Vector2<f32> = Vector2::default_one();
+        let val2: Vector2<f32> = Vector2::default_zero();
+        assert_eq!(Vector2::<bool>::new(false, true).select(&val1, &val2), Vector2::new(0.0, 1.0));
     }
     // Test the operators
     #[test]

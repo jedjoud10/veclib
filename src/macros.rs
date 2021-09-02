@@ -478,6 +478,20 @@ macro_rules! impl_elem_wise_comparison {
                     out |= self[i];
                 }
                 out
+            }            
+        }
+        impl $out {
+            // Select between two vectors using the elements of the current bool vector
+            pub fn select<T>(&self, first: &$t, second: &$t) -> $t where T: Clone + Copy {
+                let mut output_vector: $t = first.clone();
+                for i in 0..self.data.len() {
+                    output_vector[i] = if self[i] {
+                        first[i]
+                    } else {
+                        second[i]
+                    }
+                }
+                return output_vector;
             }
         }
         impl<T> BitAnd for $t where
