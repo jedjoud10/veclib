@@ -113,7 +113,7 @@ pub enum Vec2Axis {
 // Get the default axii from the Vec2Axis
 impl<T> Vector2<T> where T: DefaultStates + Clone + Copy + Sized {
     // Get the default value
-    pub fn get_default_axis(axis: Vec2Axis) -> Self {
+    pub fn get_default_axis(axis: &Vec2Axis) -> Self {
         match axis {
             Vec2Axis::X => Self::default_x(),
             Vec2Axis::Y => Self::default_y(),

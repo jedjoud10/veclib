@@ -135,7 +135,7 @@ pub enum Vec3Axis {
 // Get the default axii from the Vec3Axis
 impl<T> Vector3<T> where T: DefaultStates + Clone + Copy + Sized {
     // Get the default value
-    pub fn get_default_axis(axis: Vec3Axis) -> Self {
+    pub fn get_default_axis(axis: &Vec3Axis) -> Self {
         match axis {
             Vec3Axis::X => Self::default_x(),
             Vec3Axis::Y => Self::default_y(),
