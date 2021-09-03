@@ -132,6 +132,18 @@ pub enum Vec3Axis {
     Z,
 }
 
+// Get the default axii from the Vec3Axis
+impl<T> Vector3<T> where T: DefaultStates + Clone + Copy + Sized {
+    // Get the default value
+    pub fn get_default_axis(axis: Vec3Axis) -> Self {
+        match axis {
+            Vec3Axis::X => Self::default_x(),
+            Vec3Axis::Y => Self::default_y(),
+            Vec3Axis::Z => Self::default_z(),
+        }
+    }
+}
+
 // Eq and Hash for int types
 crate::impl_eq_hash!(Vector3<i16>);
 crate::impl_eq_hash!(Vector3<i32>);

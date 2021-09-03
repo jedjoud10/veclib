@@ -146,6 +146,18 @@ pub enum Vec4Axis {
     W,
 }
 
+// Get the default axii from the Vec4Axis
+impl<T> Vector4<T> where T: DefaultStates + Clone + Copy + Sized {
+    // Get the default value
+    pub fn get_default_axis(axis: Vec4Axis) -> Self {
+        match axis {
+            Vec4Axis::X => Self::default_x(),
+            Vec4Axis::Y => Self::default_y(),
+            Vec4Axis::Z => Self::default_z(),
+            Vec4Axis::W => Self::default_w(),
+        }
+    }
+}
 
 // Eq and Hash for int types
 crate::impl_eq_hash!(Vector4<i16>);
