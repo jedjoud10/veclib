@@ -125,6 +125,13 @@ where
     }
 }
 
+// The axii for a vec3
+pub enum Vec3Axis {
+    X,
+    Y,
+    Z,
+}
+
 // Eq and Hash for int types
 crate::impl_eq_hash!(Vector3<i16>);
 crate::impl_eq_hash!(Vector3<i32>);

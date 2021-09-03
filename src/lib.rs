@@ -15,3 +15,6 @@ pub use vector::Swizzable;
 pub use vectors::Vector2;
 pub use vectors::Vector3;
 pub use vectors::Vector4;
+pub use vectors::Vec2Axis;
+pub use vectors::Vec3Axis;
+pub use vectors::Vec4Axis;

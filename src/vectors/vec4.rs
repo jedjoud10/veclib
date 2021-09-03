@@ -138,6 +138,15 @@ where
     }
 }
 
+// The axii for a vec4
+pub enum Vec4Axis {
+    X,
+    Y,
+    Z,
+    W,
+}
+
+
 // Eq and Hash for int types
 crate::impl_eq_hash!(Vector4<i16>);
 crate::impl_eq_hash!(Vector4<i32>);

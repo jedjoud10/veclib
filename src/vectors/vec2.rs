@@ -104,6 +104,12 @@ where
     }
 }
 
+// The axii for a vec2
+pub enum Vec2Axis {
+    X,
+    Y,
+}
+
 // Eq and Hash for int types
 crate::impl_eq_hash!(Vector2<i16>);
 crate::impl_eq_hash!(Vector2<i32>);
