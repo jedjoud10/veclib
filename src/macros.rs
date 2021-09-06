@@ -43,12 +43,8 @@ macro_rules! impl_from_vec4 {
 macro_rules! impl_default_state {
     ($t:ty) => {
         impl DefaultStates for $t {
-            fn off() -> Self {
-                0
-            }
-            fn on() -> Self {
-                1
-            }
+            const OFF: Self = 0;
+            const ON: Self = 1;
         }
     };
 }
@@ -63,7 +59,7 @@ macro_rules! setup_add {
             type Output = $t;
 
             fn add(mut self, rhs: Self) -> Self::Output {
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] = self[i] + rhs[i];
                 }
                 return self;
@@ -75,7 +71,7 @@ macro_rules! setup_add {
 
             fn add(self, rhs: Self) -> Self::Output {
                 let mut output = <$t>::ZERO;
-                for i in 0..self.data.len() { output[i] = self[i] + rhs[i]; }
+                for i in 0..Self::ELEM_COUNT { output[i] = self[i] + rhs[i]; }
                 return output;
             }
         }
@@ -85,7 +81,7 @@ macro_rules! setup_add {
             T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T>,
         {
             fn add_assign(&mut self, rhs: Self) {
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] = self[i] + rhs[i];
                 }
             }
@@ -97,7 +93,7 @@ macro_rules! setup_add {
             type Output = $t;
 
             fn add(mut self, rhs: T) -> Self::Output {
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] = self[i] + rhs;
                 }
                 return self;
@@ -108,7 +104,7 @@ macro_rules! setup_add {
             T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T>,
         {
             fn add_assign(&mut self, rhs: T) {
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] = self[i] + rhs;
                 }
             }
@@ -126,7 +122,7 @@ macro_rules! setup_sub {
             type Output = $t;
 
             fn sub(mut self, rhs: Self) -> Self::Output {
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] = self[i] - rhs[i];
                 }
                 return self;
@@ -138,7 +134,7 @@ macro_rules! setup_sub {
 
             fn sub(self, rhs: Self) -> Self::Output {
                 let mut output = <$t>::ZERO;
-                for i in 0..self.data.len() { output[i] = self[i] - rhs[i]; }
+                for i in 0..Self::ELEM_COUNT { output[i] = self[i] - rhs[i]; }
                 return output;
             }
         }
@@ -148,7 +144,7 @@ macro_rules! setup_sub {
             T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T>,
         {
             fn sub_assign(&mut self, rhs: Self) {
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] = self[i] - rhs[i];
                 }
             }
@@ -160,7 +156,7 @@ macro_rules! setup_sub {
             type Output = $t;
 
             fn sub(mut self, rhs: T) -> Self::Output {
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] = self[i] - rhs;
                 }
                 return self;
@@ -171,7 +167,7 @@ macro_rules! setup_sub {
             T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T>,
         {
             fn sub_assign(&mut self, rhs: T) {
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] = self[i] - rhs;
                 }
             }
@@ -189,7 +185,7 @@ macro_rules! setup_mul {
             type Output = $t;
 
             fn mul(mut self, rhs: Self) -> Self::Output {
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] = self[i] * rhs[i];
                 }
                 return self;
@@ -201,7 +197,7 @@ macro_rules! setup_mul {
 
             fn mul(self, rhs: Self) -> Self::Output {
                 let mut output = <$t>::ZERO;
-                for i in 0..self.data.len() { output[i] = self[i] * rhs[i]; }
+                for i in 0..Self::ELEM_COUNT { output[i] = self[i] * rhs[i]; }
                 return output;
             }
         }
@@ -211,7 +207,7 @@ macro_rules! setup_mul {
             T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T>,
         {
             fn mul_assign(&mut self, rhs: Self) {
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] = self[i] * rhs[i];
                 }
             }
@@ -223,7 +219,7 @@ macro_rules! setup_mul {
             type Output = $t;
 
             fn mul(mut self, rhs: T) -> Self::Output {
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] = self[i] * rhs;
                 }
                 return self;
@@ -234,7 +230,7 @@ macro_rules! setup_mul {
             T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T>,
         {
             fn mul_assign(&mut self, rhs: T) {
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] = self[i] * rhs;
                 }
             }
@@ -252,7 +248,7 @@ macro_rules! setup_div {
             type Output = $t;
 
             fn div(mut self, rhs: Self) -> Self::Output {
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] = self[i] / rhs[i];
                 }
                 return self;
@@ -264,7 +260,7 @@ macro_rules! setup_div {
 
             fn div(self, rhs: Self) -> Self::Output {
                 let mut output = <$t>::ZERO;
-                for i in 0..self.data.len() { output[i] = self[i] / rhs[i]; }
+                for i in 0..Self::ELEM_COUNT { output[i] = self[i] / rhs[i]; }
                 return output;
             }
         }
@@ -274,7 +270,7 @@ macro_rules! setup_div {
             T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T>,
         {
             fn div_assign(&mut self, rhs: Self) {
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] = self[i] / rhs[i];
                 }
             }
@@ -286,7 +282,7 @@ macro_rules! setup_div {
             type Output = $t;
 
             fn div(mut self, rhs: T) -> Self::Output {
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] = self[i] / rhs;
                 }
                 return self;
@@ -297,7 +293,7 @@ macro_rules! setup_div {
             T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T>,
         {
             fn div_assign(&mut self, rhs: T) {
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] = self[i] / rhs;
                 }
             }
@@ -315,7 +311,7 @@ macro_rules! setup_una {
             type Output = $t;
 
             fn neg(mut self) -> Self::Output {
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] = -self[i];
                 }
                 return self;
@@ -328,8 +324,8 @@ macro_rules! setup_una {
             type Output = $t;
 
             fn neg(self) -> Self::Output {
-                let mut output = <$t>::default_zero();
-                for i in 0..self.data.len() {
+                let mut output = <$t>::ZERO;
+                for i in 0..Self::ELEM_COUNT {
                     output[i] = -self[i];
                 }
                 return output;
@@ -351,7 +347,7 @@ macro_rules! setup_vector_arithmatics {
             // Get the length square of the current vector (Saves us a sqrt operation)
             pub fn length_sqrt(self) -> $f {
                 let mut len: $f = 0.0;
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     len += self[i] * self[i];
                 }
                 return len;
@@ -363,15 +359,15 @@ macro_rules! setup_vector_arithmatics {
             // Normalize the current vector
             pub fn normalize(&mut self) {
                 let len = self.length();
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     self[i] /= len;
                 }
             }
             // Get the normalized value of the current vector without updating it
             pub fn normalized(self) -> Self {
                 let len = self.length();
-                let mut output: Self = Self::default_zero();
-                for i in 0..self.data.len() {
+                let mut output: Self = Self::ZERO;
+                for i in 0..Self::ELEM_COUNT {
                     output[i] = self[i] / len;
                 }
                 return output;
@@ -379,23 +375,23 @@ macro_rules! setup_vector_arithmatics {
             // Get the dot product between two vectors
             pub fn dot(self, other: Self) -> $f {
                 let mut dot: $f = 0.0;
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     dot += self[i] * other[i];
                 }
                 return dot;
             }
             // Get the min value between two vec3s
             pub fn min(self, other: Self) -> Self {
-                let mut min = <$t>::default_zero();
-                for i in 0..self.data.len() {
+                let mut min = <$t>::ZERO;
+                for i in 0..Self::ELEM_COUNT {
                     min[i] = self[i].min(other[i]);
                 }
                 return min;
             }
             // Get the max value between two vec3s
             pub fn max(self, other: Self) -> Self {
-                let mut min = <$t>::default_zero();
-                for i in 0..self.data.len() {
+                let mut min = <$t>::ZERO;
+                for i in 0..Self::ELEM_COUNT {
                     min[i] = self[i].max(other[i]);
                 }
                 return min;
@@ -423,40 +419,40 @@ macro_rules! impl_elem_wise_comparison {
         {
             // Equals
             pub fn elem_eq(&self, other: &Self) -> $out {
-                let mut out: $out = <$out>::default_zero();
-                for i in 0..self.data.len() {
+                let mut out: $out = <$out>::ZERO;
+                for i in 0..Self::ELEM_COUNT {
                     out[i] = self[i] == other[i];
                 }
                 out
             }
             // Greater then
             pub fn elem_gt(&self, other: &Self) -> $out {
-                let mut out: $out = <$out>::default_zero();
-                for i in 0..self.data.len() {
+                let mut out: $out = <$out>::ZERO;
+                for i in 0..Self::ELEM_COUNT {
                     out[i] = self[i] > other[i];
                 }
                 out
             }
             // Less than
             pub fn elem_lt(&self, other: &Self) -> $out {
-                let mut out: $out = <$out>::default_zero();
-                for i in 0..self.data.len() {
+                let mut out: $out = <$out>::ZERO;
+                for i in 0..Self::ELEM_COUNT {
                     out[i] = self[i] < other[i];
                 }
                 out
             }
             // Greater than or equals
             pub fn elem_gte(&self, other: &Self) -> $out {
-                let mut out: $out = <$out>::default_zero();
-                for i in 0..self.data.len() {
+                let mut out: $out = <$out>::ZERO;
+                for i in 0..Self::ELEM_COUNT {
                     out[i] = self[i] >= other[i];
                 }
                 out
             }
             // Less than or equals
             pub fn elem_lte(&self, other: &Self) -> $out {
-                let mut out: $out = <$out>::default_zero();
-                for i in 0..self.data.len() {
+                let mut out: $out = <$out>::ZERO;
+                for i in 0..Self::ELEM_COUNT {
                     out[i] = self[i] <= other[i];
                 }
                 out
@@ -466,7 +462,7 @@ macro_rules! impl_elem_wise_comparison {
             // Return true if all the elements are true
             pub fn all(&self) -> bool {
                 let mut out: bool = true;
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     out &= self[i];
                 }
                 out
@@ -474,7 +470,7 @@ macro_rules! impl_elem_wise_comparison {
             // Return true if one or more elements are true
             pub fn any(&self) -> bool {
                 let mut out: bool = false;
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     out |= self[i];
                 }
                 out
@@ -484,7 +480,7 @@ macro_rules! impl_elem_wise_comparison {
             // Select between two vectors using the elements of the current bool vector
             pub fn select<T>(&self, first: &$t, second: &$t) -> $t where T: Clone + Copy {
                 let mut output_vector: $t = first.clone();
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     output_vector[i] = if self[i] {
                         first[i]
                     } else {
@@ -500,7 +496,7 @@ macro_rules! impl_elem_wise_comparison {
             // Element wise and
             fn bitand(self, rhs: Self) -> Self::Output {
                 let mut out: $t = self;
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     out[i] &= rhs[i];
                 }
                 return out;
@@ -512,7 +508,7 @@ macro_rules! impl_elem_wise_comparison {
             // Element wise or
             fn bitor(self, rhs: Self) -> Self::Output {
                 let mut out: $t = self;
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     out[i] |= rhs[i];
                 }
                 return out;
@@ -524,7 +520,7 @@ macro_rules! impl_elem_wise_comparison {
             // Element wise xor
             fn bitxor(self, rhs: Self) -> Self::Output {
                 let mut out: $t = self;
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     out[i] ^= rhs[i];
                 }
                 return out;
@@ -536,7 +532,7 @@ macro_rules! impl_elem_wise_comparison {
             // Element wise not
             fn not(self) -> Self::Output {
                 let mut out: $t = self;
-                for i in 0..self.data.len() {
+                for i in 0..Self::ELEM_COUNT {
                     out[i] = !self[i];
                 }
                 return out;
@@ -550,7 +546,9 @@ macro_rules! impl_eq_hash {
         impl Eq for $t {}
         impl Hash for $t {
             fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-                self.data.hash(state);
+                for i in 0..<$t>::ELEM_COUNT {
+                    self[i].hash(state);
+                }
             }
         }
     };

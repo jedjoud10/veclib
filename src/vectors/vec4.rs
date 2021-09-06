@@ -1,5 +1,5 @@
 use super::{Vector2, Vector3};
-use crate::{types::DefaultStates, vector::Swizzable};
+use crate::{types::DefaultStates, vector::{Swizzable, Vector}};
 use std::{
     hash::Hash,
     ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub, SubAssign, BitAnd, BitOr, BitXor,  Not, BitAndAssign, BitOrAssign, BitXorAssign},
@@ -8,7 +8,19 @@ use std::{
 // A simple 4D vector, no simd support what-so-ever
 #[derive(PartialEq, Debug, Clone, Copy)]
 pub struct Vector4<T> {
-    pub data: [T; 4],
+    pub x: T, 
+    pub y: T, 
+    pub z: T, 
+    pub w: T,
+}
+
+// Vector trait
+impl<T> Vector<T> for Vector4<T> {
+    const ELEM_COUNT: usize = 4;
+}
+
+impl<T> Vector<T> for &Vector4<T> {
+    const ELEM_COUNT: usize = 4;
 }
 
 // Default
@@ -17,7 +29,7 @@ where
     T: DefaultStates + Clone + Copy + Sized,
 {
     fn default() -> Self {
-        Self::default_zero()
+        Self::ZERO
     }
 }
 
@@ -28,39 +40,45 @@ where
     T: DefaultStates + Clone + Copy + Sized,
 {
     // Defaults
-    pub fn default_zero() -> Self {
-        Vector4 {
-            data: [T::off(), T::off(), T::off(), T::off()],
-        }
-    }
-    pub fn default_x() -> Self {
-        Vector4 {
-            data: [T::on(), T::off(), T::off(), T::off()],
-        }
-    }
-    pub fn default_y() -> Self {
-        Vector4 {
-            data: [T::off(), T::on(), T::off(), T::off()],
-        }
-    }
-    pub fn default_z() -> Self {
-        Vector4 {
-            data: [T::off(), T::off(), T::on(), T::off()],
-        }
-    }
-    pub fn default_w() -> Self {
-        Vector4 {
-            data: [T::off(), T::off(), T::off(), T::on()],
-        }
-    }
-    pub fn default_one() -> Self {
-        Vector4 {
-            data: [T::on(), T::on(), T::on(), T::on()],
-        }
-    }
+    pub const ZERO: Self = Self {
+        x: T::OFF,
+        y: T::OFF,
+        z: T::OFF,
+        w: T::OFF
+    };
+    pub const X: Self = Self {
+        x: T::ON,
+        y: T::OFF,
+        z: T::OFF,
+        w: T::OFF
+    };
+    pub const Y: Self = Self {
+        x: T::OFF,
+        y: T::ON,
+        z: T::OFF,
+        w: T::OFF
+    };
+    pub const Z: Self = Self {
+        x: T::OFF,
+        y: T::OFF,
+        z: T::ON,
+        w: T::OFF
+    };
+    pub const W: Self = Self {
+        x: T::OFF,
+        y: T::OFF,
+        z: T::OFF,
+        w: T::ON
+    };
+    pub const ONE: Self = Self {
+        x: T::ON,
+        y: T::ON,
+        z: T::ON,
+        w: T::ON
+    };
     // Create a new vec4
     pub fn new(f1: T, f2: T, f3: T, f4: T) -> Self {
-        Self { data: [f1, f2, f3, f4] }
+        Self { x: f1, y: f2, z: f3, w: f4 }
     }
 }
 
@@ -69,7 +87,13 @@ impl<T> Index<usize> for Vector4<T> {
     type Output = T;
     // Index
     fn index(&self, index: usize) -> &Self::Output {
-        &self.data[index]
+        match index {
+            0 => &self.x,
+            1 => &self.y,
+            2 => &self.z,
+            3 => &self.w,
+            _ => todo!()
+        }
     }
 }
 
@@ -77,7 +101,13 @@ impl<T> Index<usize> for Vector4<T> {
 impl<T> IndexMut<usize> for Vector4<T> {
     // Mut index
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        &mut self.data[index]
+        match index {
+            0 => &mut self.x,
+            1 => &mut self.y,
+            2 => &mut self.z,
+            3 => &mut self.w,
+            _ => todo!()
+        }
     }
 }
 
@@ -99,45 +129,6 @@ where
     }
 }
 
-// Getters and setters
-impl<T> Vector4<T>
-where
-    T: Copy,
-{
-    // Get the X coordinate
-    pub fn x(&self) -> T {
-        self[0]
-    }
-    // Get the Y coordinate
-    pub fn y(&self) -> T {
-        self[1]
-    }
-    // Get the Z coordinate
-    pub fn z(&self) -> T {
-        self[2]
-    }
-    // Get the W coordinate
-    pub fn w(&self) -> T {
-        self[3]
-    }
-    // Set the X coordinate
-    pub fn set_x(&mut self, val: T) {
-        self[0] = val;
-    }
-    // Set the Y coordinate
-    pub fn set_y(&mut self, val: T) {
-        self[1] = val;
-    }
-    // Set the Z coordinate
-    pub fn set_z(&mut self, val: T) {
-        self[2] = val;
-    }
-    // Set the W coordinate
-    pub fn set_w(&mut self, val: T) {
-        self[3] = val;
-    }
-}
-
 // The axii for a vec4
 pub enum Vec4Axis {
     X,
@@ -151,10 +142,10 @@ impl<T> Vector4<T> where T: DefaultStates + Clone + Copy + Sized {
     // Get the default value
     pub fn get_default_axis(axis:& Vec4Axis) -> Self {
         match axis {
-            Vec4Axis::X => Self::default_x(),
-            Vec4Axis::Y => Self::default_y(),
-            Vec4Axis::Z => Self::default_z(),
-            Vec4Axis::W => Self::default_w(),
+            Vec4Axis::X => Self::X,
+            Vec4Axis::Y => Self::Y,
+            Vec4Axis::Z => Self::Z,
+            Vec4Axis::W => Self::W,
         }
     }
 }

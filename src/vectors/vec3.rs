@@ -1,5 +1,5 @@
 use super::{Vector2, Vector4};
-use crate::{types::DefaultStates, vector::Swizzable};
+use crate::{types::DefaultStates, vector::{Swizzable, Vector}};
 use std::{
     hash::Hash,
     ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub, SubAssign, BitAnd, BitOr, BitXor, Not, BitAndAssign, BitOrAssign, BitXorAssign},
@@ -8,7 +8,18 @@ use std::{
 // A simple 3D vector, no simd support what-so-ever
 #[derive(PartialEq, Debug, Clone, Copy)]
 pub struct Vector3<T> {
-    pub data: [T; 3],
+    pub x: T, 
+    pub y: T, 
+    pub z: T,
+}
+
+// Vector trait
+impl<T> Vector<T> for Vector3<T> {
+    const ELEM_COUNT: usize = 3;
+}
+
+impl<T> Vector<T> for &Vector3<T> {
+    const ELEM_COUNT: usize = 3;
 }
 
 // Default
@@ -17,7 +28,7 @@ where
     T: DefaultStates + Clone + Copy + Sized,
 {
     fn default() -> Self {
-        Self::default_zero()
+        Self::ZERO
     }
 }
 
@@ -28,34 +39,34 @@ where
     T: DefaultStates + Clone + Copy + Sized,
 {
     // Defaults
-    pub fn default_zero() -> Self {
-        Vector3 {
-            data: [T::off(), T::off(), T::off()],
-        }
-    }
-    pub fn default_x() -> Self {
-        Vector3 {
-            data: [T::on(), T::off(), T::off()],
-        }
-    }
-    pub fn default_y() -> Self {
-        Vector3 {
-            data: [T::off(), T::on(), T::off()],
-        }
-    }
-    pub fn default_z() -> Self {
-        Vector3 {
-            data: [T::off(), T::off(), T::on()],
-        }
-    }
-    pub fn default_one() -> Self {
-        Vector3 {
-            data: [T::on(), T::on(), T::on()],
-        }
-    }
+    pub const ZERO: Self = Self {
+        x: T::OFF,
+        y: T::OFF,
+        z: T::OFF,
+    };
+    pub const X: Self = Self {
+        x: T::ON,
+        y: T::OFF,
+        z: T::OFF,
+    };
+    pub const Y: Self = Self {
+        x: T::OFF,
+        y: T::ON,
+        z: T::OFF,
+    };
+    pub const Z: Self = Self {
+        x: T::OFF,
+        y: T::OFF,
+        z: T::ON,
+    };
+    pub const ONE: Self = Self {
+        x: T::ON,
+        y: T::ON,
+        z: T::ON,
+    };
     // Create a new vec4
     pub fn new(f1: T, f2: T, f3: T) -> Self {
-        Self { data: [f1, f2, f3] }
+        Self { x: f1, y: f2, z: f3 }
     }
 }
 
@@ -64,7 +75,12 @@ impl<T> Index<usize> for Vector3<T> {
     type Output = T;
     // Index
     fn index(&self, index: usize) -> &Self::Output {
-        &self.data[index]
+        match index {
+            0 => &self.x,
+            1 => &self.y,
+            2 => &self.z,
+            _ => todo!()
+        }
     }
 }
 
@@ -72,7 +88,12 @@ impl<T> Index<usize> for Vector3<T> {
 impl<T> IndexMut<usize> for Vector3<T> {
     // Mut index
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        &mut self.data[index]
+        match index {
+            0 => &mut self.x,
+            1 => &mut self.y,
+            2 => &mut self.z,
+            _ => todo!()
+        }
     }
 }
 
@@ -94,37 +115,6 @@ where
     }
 }
 
-// Getters and setters
-impl<T> Vector3<T>
-where
-    T: Copy,
-{
-    // Get the X coordinate
-    pub fn x(&self) -> T {
-        self[0]
-    }
-    // Get the Y coordinate
-    pub fn y(&self) -> T {
-        self[1]
-    }
-    // Get the Z coordinate
-    pub fn z(&self) -> T {
-        self[2]
-    }
-    // Set the X coordinate
-    pub fn set_x(&mut self, val: T) {
-        self[0] = val;
-    }
-    // Set the Y coordinate
-    pub fn set_y(&mut self, val: T) {
-        self[1] = val;
-    }
-    // Set the Z coordinate
-    pub fn set_z(&mut self, val: T) {
-        self[2] = val;
-    }
-}
-
 // The axii for a vec3
 pub enum Vec3Axis {
     X,
@@ -137,9 +127,9 @@ impl<T> Vector3<T> where T: DefaultStates + Clone + Copy + Sized {
     // Get the default value
     pub fn get_default_axis(axis: &Vec3Axis) -> Self {
         match axis {
-            Vec3Axis::X => Self::default_x(),
-            Vec3Axis::Y => Self::default_y(),
-            Vec3Axis::Z => Self::default_z(),
+            Vec3Axis::X => Self::X,
+            Vec3Axis::Y => Self::Y,
+            Vec3Axis::Z => Self::Z,
         }
     }
 }

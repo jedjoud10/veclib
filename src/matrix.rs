@@ -58,7 +58,7 @@ where
     // Defaults
     pub fn default_identity() -> Self {
         Matrix4x4 {
-            data: [Vector4::<T>::default_x(), Vector4::<T>::default_y(), Vector4::<T>::default_z(), Vector4::<T>::default_w()],
+            data: [Vector4::<T>::X, Vector4::<T>::Y, Vector4::<T>::Z, Vector4::<T>::W],
         }
     }
 }
@@ -100,7 +100,7 @@ impl Matrix4x4<f32> {
         matrix[0] = Vector4::new(first, 0.0, 0.0, 0.0);
         matrix[1] = Vector4::new(0.0, second, 0.0, 0.0);
         matrix[2] = Vector4::new(0.0, 0.0, -((far + near) / (far - near)), -((2.0 * far * near) / (far - near)));
-        matrix[3] = -Vector4::default_z();
+        matrix[3] = -Vector4::Z;
         matrix.transpose();
         // Transpose the matrix
         matrix
@@ -109,9 +109,9 @@ impl Matrix4x4<f32> {
     pub fn from_translation(position: Vector3<f32>) -> Self {
         // The output
         let mut matrix: Self = Self::default_identity();
-        matrix[0] = Vector4::default_x();
-        matrix[1] = Vector4::default_y();
-        matrix[2] = Vector4::default_z();
+        matrix[0] = Vector4::X;
+        matrix[1] = Vector4::Y;
+        matrix[2] = Vector4::Z;
         matrix[3] = Vector4::new(position[0], position[1], position[2], 1.0);
         matrix
     }
@@ -127,10 +127,10 @@ impl Matrix4x4<f32> {
 
         let mut output: Matrix4x4<f32> = Matrix4x4::<f32> {
             data: [
-                Vector4::<f32>::new(xaxis.x(), xaxis.y(), xaxis.z(), -xaxis.dot(*eye)),
-                Vector4::<f32>::new(yaxis.x(), yaxis.y(), yaxis.z(), -yaxis.dot(*eye)),
-                Vector4::<f32>::new(zaxis.x(), zaxis.y(), zaxis.z(), -zaxis.dot(*eye)),
-                Vector4::<f32>::default_w(),
+                Vector4::<f32>::new(xaxis.x, xaxis.y, xaxis.z, -xaxis.dot(*eye)),
+                Vector4::<f32>::new(yaxis.x, yaxis.y, yaxis.z, -yaxis.dot(*eye)),
+                Vector4::<f32>::new(zaxis.x, zaxis.y, zaxis.z, -zaxis.dot(*eye)),
+                Vector4::<f32>::W,
             ],
         };
 
@@ -148,24 +148,24 @@ impl Matrix4x4<f32> {
         let vec1 = Vector4::<f32>::new(1.0 - 2.0 * qy * qy - 2.0 * qz * qz, 2.0 * qx * qy - 2.0 * qz * qw, 2.0 * qx * qz + 2.0 * qy * qw, 0.0);
         let vec2 = Vector4::<f32>::new(2.0 * qx * qy + 2.0 * qz * qw, 1.0 - 2.0 * qx * qx - 2.0 * qz * qz, 2.0 * qy * qz - 2.0 * qx * qw, 0.0);
         let vec3 = Vector4::<f32>::new(2.0 * qx * qz - 2.0 * qy * qw, 2.0 * qy * qz + 2.0 * qx * qw, 1.0 - 2.0 * qx * qx - 2.0 * qy * qy, 0.0);
-        let vec4 = Vector4::<f32>::default_w();
+        let vec4 = Vector4::<f32>::W;
         return Matrix4x4::new(vec1, vec2, vec3, vec4);
     }
     // Create a scale matrix
     pub fn from_scale(scale: Vector3<f32>) -> Self {
         // Too good bro
         return Matrix4x4::new(
-            Vector4::default_x() * scale.x(),
-            Vector4::default_y() * scale.y(),
-            Vector4::default_z() * scale.z(),
-            Vector4::default_w(),
+            Vector4::X * scale.x,
+            Vector4::Y * scale.y,
+            Vector4::Z * scale.z,
+            Vector4::W,
         );
     }
     // Multiply a matrix by this matrix
     pub fn mul_mat4x4(&self, other: Matrix4x4<f32>) -> Self {
         let mut output: Self = Self::default_identity();
         // Get the A vectors
-        let mut a_vectors: [Vector4<f32>; 4] = [Vector4::<f32>::default_zero(); 4];
+        let mut a_vectors: [Vector4<f32>; 4] = [Vector4::<f32>::ZERO; 4];
         for y in 0..4 {
             a_vectors[y][0] = self[0][y];
             a_vectors[y][1] = self[1][y];
@@ -213,6 +213,6 @@ impl Matrix4x4<f32> {
     }
     // Transform a 3D point by the matrix, basically create a 4D vector out of it with the W component being 1.0
     pub fn mul_point(&self, point: &Vector3<f32>) -> Vector3<f32> {
-        self.mul_vector(&Vector4::new(point.x(), point.y(), point.z(), 1.0)).get3([0, 1, 2])
+        self.mul_vector(&Vector4::new(point.x, point.y, point.z, 1.0)).get3([0, 1, 2])
     }
 }
