@@ -12,6 +12,8 @@ pub use matrix::Matrix4x4;
 pub use quaternion::Quaternion;
 pub use quaternion::EulerAnglesOrder;
 pub use vector::Swizzable;
+pub use vector::Vector;
+pub use types::DefaultStates;
 pub use vectors::Vector2;
 pub use vectors::Vector3;
 pub use vectors::Vector4;
