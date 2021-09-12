@@ -178,14 +178,14 @@ crate::impl_from_vec4!(Vector4<f32>, f32, f64);
 // Integers to floating point
 crate::impl_from_vec4!(Vector4<f32>, f32, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128);
 crate::impl_from_vec4!(Vector4<f64>, f64, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128);
-// Integers to integers
-crate::impl_from_vec4!(Vector4<i8>, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128);
-crate::impl_from_vec4!(Vector4<i16>, i16, i8, i32, i64, i128, u8, u16, u32, u64, u128);
-crate::impl_from_vec4!(Vector4<i32>, i32, i8, i16, i64, i128, u8, u16, u32, u64, u128);
-crate::impl_from_vec4!(Vector4<i64>, i64, i8, i16, i32, i128, u8, u16, u32, u64, u128);
-crate::impl_from_vec4!(Vector4<i128>, i128, i8, i16, i32, i64, u8, u16, u32, u64, u128);
-crate::impl_from_vec4!(Vector4<u8>, u8, i8, i16, i32, i64, i128, u16, u32, u64, u128);
-crate::impl_from_vec4!(Vector4<u16>, u16, i8, i16, i32, i64, i128, u8, u32, u64, u128);
-crate::impl_from_vec4!(Vector4<u32>, u32, i8, i16, i32, i64, i128, u8, u16, u64, u128);
-crate::impl_from_vec4!(Vector4<u64>, u64, i8, i16, i32, i64, i128, u8, u16, u32, u128);
-crate::impl_from_vec4!(Vector4<u128>, u128, i8, i16, i32, i64, i128, u8, u16, u32, u64);
+// Integers to integers (And floating point to integer)
+crate::impl_from_vec4!(Vector4<i8>, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64);
+crate::impl_from_vec4!(Vector4<i16>, i16, i8, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64);
+crate::impl_from_vec4!(Vector4<i32>, i32, i8, i16, i64, i128, u8, u16, u32, u64, u128, f32, f64);
+crate::impl_from_vec4!(Vector4<i64>, i64, i8, i16, i32, i128, u8, u16, u32, u64, u128, f32, f64);
+crate::impl_from_vec4!(Vector4<i128>, i128, i8, i16, i32, i64, u8, u16, u32, u64, u128, f32, f64);
+crate::impl_from_vec4!(Vector4<u8>, u8, i8, i16, i32, i64, i128, u16, u32, u64, u128, f32, f64);
+crate::impl_from_vec4!(Vector4<u16>, u16, i8, i16, i32, i64, i128, u8, u32, u64, u128, f32, f64);
+crate::impl_from_vec4!(Vector4<u32>, u32, i8, i16, i32, i64, i128, u8, u16, u64, u128, f32, f64);
+crate::impl_from_vec4!(Vector4<u64>, u64, i8, i16, i32, i64, i128, u8, u16, u32, u128, f32, f64);
+crate::impl_from_vec4!(Vector4<u128>, u128, i8, i16, i32, i64, i128, u8, u16, u32, u64, f32, f64);
