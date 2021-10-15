@@ -1,5 +1,4 @@
 // Math library
-#![feature(const_trait_impl)]
 mod macros;
 mod matrix;
 mod quaternion;

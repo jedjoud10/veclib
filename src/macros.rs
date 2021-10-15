@@ -302,11 +302,11 @@ macro_rules! setup_div {
 }
 
 #[macro_export]
-macro_rules! setup_una {
+macro_rules! setup_neg {
     ($t:ty, $a:tt) => {
         impl<T> Neg for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Neg<Output = T>,
+            T: DefaultStates + Neg<Output = T> + Copy,
         {
             type Output = $t;
 
@@ -319,7 +319,7 @@ macro_rules! setup_una {
         }
         impl<T> Neg for &$t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Neg<Output = T>,
+            T: DefaultStates + Neg<Output = T> + Copy,
         {
             type Output = $t;
 

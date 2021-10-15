@@ -1,9 +1,7 @@
 use super::{Vector2, Vector4};
 use crate::{types::DefaultStates, vector::{Swizzable, Vector}};
-use std::{
-    hash::Hash,
-    ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub, SubAssign, BitAnd, BitOr, BitXor, Not, BitAndAssign, BitOrAssign, BitXorAssign},
-};
+use core::fmt;
+use std::{fmt::Display, hash::Hash, ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub, SubAssign, BitAnd, BitOr, BitXor, Not, BitAndAssign, BitOrAssign, BitXorAssign}};
 
 // A simple 3D vector, no simd support what-so-ever
 #[derive(PartialEq, Debug, Clone, Copy)]
@@ -11,6 +9,13 @@ pub struct Vector3<T> {
     pub x: T, 
     pub y: T, 
     pub z: T,
+}
+
+// Printing
+impl<T> fmt::Display for Vector3<T> where T: fmt::Display {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "[{}, {}, {}]", self.x, self.y, self.z)
+    }
 }
 
 // Vector trait
@@ -149,7 +154,8 @@ crate::setup_add!(Vector3<T>, T);
 crate::setup_sub!(Vector3<T>, T);
 crate::setup_mul!(Vector3<T>, T);
 crate::setup_div!(Vector3<T>, T);
-crate::setup_una!(Vector3<T>, T);
+crate::setup_neg!(Vector3<T>, T);
+
 crate::setup_vector_arithmatics!(Vector3<f32>, T, f32);
 crate::setup_vector_arithmatics!(Vector3<f64>, T, f64);
 crate::impl_elem_wise_comparison!(Vector3<T>, T, Vector3<bool>);
