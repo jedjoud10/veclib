@@ -32,10 +32,13 @@ impl<T> Index<usize> for Matrix4x4<T>
 where
     T: DefaultStates + Clone + Copy,
 {
-    type Output = Vector4<T>;
+    type Output = T;
     // Index
-    fn index(&self, index: usize) -> &Self::Output {
-        &self.data[index]
+    fn index(&self, index: usize) -> &T {
+        let i1 = index / 4;
+        let i2 = index % 4;
+        let vector = &self.data[i1];
+        &vector[i2]
     }
 }
 
@@ -45,8 +48,11 @@ where
     T: DefaultStates + Clone + Copy,
 {
     // Mut index
-    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        &mut self.data[index]
+    fn index_mut(&mut self, index: usize) -> &mut T {
+        let i1 = index / 4;
+        let i2 = index % 4;
+        let vector = &mut self.data[i1];
+        &mut vector[i2]
     }
 }
 
@@ -73,10 +79,19 @@ impl<T> Matrix4x4<T> where T: DefaultStates + Clone + Copy {
         let mut output = Self::default_identity();
         for x in 0..4 {
             for y in 0..4 {
-                output[x][y] = self[y][x];
+                let m: &mut T = &mut output[x+y*4];
+                *m = self[y+x*4];
             }
         }
         return output;
+    }
+    // Get the "n" vector
+    pub fn get_vec(&self, n: usize) -> &Vector4<T> {
+        return &self.data[n];
+    }
+    // Get the "n" vector mutably
+    pub fn get_vec_mut(&mut self, n: usize) -> &mut Vector4<T> {
+        return &mut self.data[n];
     }
 }
 
@@ -97,10 +112,10 @@ impl Matrix4x4<f32> {
         let mut matrix: Self = Self::default_identity();
         // Right now it is using row major but I will switch it to collumn major later
         // This is row major
-        matrix[0] = Vector4::new(first, 0.0, 0.0, 0.0);
-        matrix[1] = Vector4::new(0.0, second, 0.0, 0.0);
-        matrix[2] = Vector4::new(0.0, 0.0, -((far + near) / (far - near)), -((2.0 * far * near) / (far - near)));
-        matrix[3] = -Vector4::Z;
+        *matrix.get_vec_mut(0) = Vector4::new(first, 0.0, 0.0, 0.0);
+        *matrix.get_vec_mut(1) = Vector4::new(0.0, second, 0.0, 0.0);
+        *matrix.get_vec_mut(2) = Vector4::new(0.0, 0.0, -((far + near) / (far - near)), -((2.0 * far * near) / (far - near)));
+        *matrix.get_vec_mut(3) = -Vector4::Z;
         matrix.transpose();
         // Transpose the matrix
         matrix
@@ -109,10 +124,10 @@ impl Matrix4x4<f32> {
     pub fn from_translation(position: Vector3<f32>) -> Self {
         // The output
         let mut matrix: Self = Self::default_identity();
-        matrix[0] = Vector4::X;
-        matrix[1] = Vector4::Y;
-        matrix[2] = Vector4::Z;
-        matrix[3] = Vector4::new(position[0], position[1], position[2], 1.0);
+        *matrix.get_vec_mut(0) = Vector4::X;
+        *matrix.get_vec_mut(1) = Vector4::Y;
+        *matrix.get_vec_mut(2) = Vector4::Z;
+        *matrix.get_vec_mut(3) = Vector4::new(position[0], position[1], position[2], 1.0);
         matrix
     }
     // Create a look at matrix
@@ -167,10 +182,10 @@ impl Matrix4x4<f32> {
         // Get the A vectors
         let mut a_vectors: [Vector4<f32>; 4] = [Vector4::<f32>::ZERO; 4];
         for y in 0..4 {
-            a_vectors[y][0] = self[0][y];
-            a_vectors[y][1] = self[1][y];
-            a_vectors[y][2] = self[2][y];
-            a_vectors[y][3] = self[3][y];
+            a_vectors[y][0] = self.get_vec(0)[y];
+            a_vectors[y][1] = self.get_vec(1)[y];
+            a_vectors[y][2] = self.get_vec(2)[y];
+            a_vectors[y][3] = self.get_vec(3)[y];
         }
         // Get the dot product
         for y in 0..4 {
@@ -181,15 +196,43 @@ impl Matrix4x4<f32> {
 
                 // Get A
                 let a: Vector4<f32> = a_vectors[y];
-                let b = other[x];
-                output[x][y] = a.dot(b);
+                let b = *other.get_vec(x);
+                let h = &mut output.get_vec_mut(x)[y];
+                *h = a.dot(b);
             }
         }
         return output;
     }
     // Return the inverse of this matrix
-    pub fn inverse(&self) -> Self {
-        todo!();
+    // https://stackoverflow.com/questions/1148309/inverting-a-4x4-matrix/44446912#44446912
+    pub fn inverse(&self, inverse: &mut Self) -> bool {
+        let m = self.clone();
+        let mut inv = Self::default();
+
+        inv[0]  =  m[5] * m[10] * m[15] - m[5] * m[11] * m[14] - m[9] * m[6] * m[15] + m[9] * m[7] * m[14] + m[13] * m[6] * m[11] - m[13] * m[7] * m[10];
+        inv[4]  = -m[4] * m[10] * m[15] + m[4] * m[11] * m[14] + m[8] * m[6] * m[15] - m[8] * m[7] * m[14] - m[12] * m[6] * m[11] + m[12] * m[7] * m[10];
+        inv[8]  =  m[4] * m[9]  * m[15] - m[4] * m[11] * m[13] - m[8] * m[5] * m[15] + m[8] * m[7] * m[13] + m[12] * m[5] * m[11] - m[12] * m[7] * m[9];
+        inv[12] = -m[4] * m[9]  * m[14] + m[4] * m[10] * m[13] + m[8] * m[5] * m[14] - m[8] * m[6] * m[13] - m[12] * m[5] * m[10] + m[12] * m[6] * m[9];
+        inv[1]  = -m[1] * m[10] * m[15] + m[1] * m[11] * m[14] + m[9] * m[2] * m[15] - m[9] * m[3] * m[14] - m[13] * m[2] * m[11] + m[13] * m[3] * m[10];
+        inv[5]  =  m[0] * m[10] * m[15] - m[0] * m[11] * m[14] - m[8] * m[2] * m[15] + m[8] * m[3] * m[14] + m[12] * m[2] * m[11] - m[12] * m[3] * m[10];
+        inv[9]  = -m[0] * m[9]  * m[15] + m[0] * m[11] * m[13] + m[8] * m[1] * m[15] - m[8] * m[3] * m[13] - m[12] * m[1] * m[11] + m[12] * m[3] * m[9];
+        inv[13] =  m[0] * m[9]  * m[14] - m[0] * m[10] * m[13] - m[8] * m[1] * m[14] + m[8] * m[2] * m[13] + m[12] * m[1] * m[10] - m[12] * m[2] * m[9];
+        inv[2]  =  m[1] * m[6]  * m[15] - m[1] * m[7]  * m[14] - m[5] * m[2] * m[15] + m[5] * m[3] * m[14] + m[13] * m[2] * m[7]  - m[13] * m[3] * m[6];
+        inv[6]  = -m[0] * m[6]  * m[15] + m[0] * m[7]  * m[14] + m[4] * m[2] * m[15] - m[4] * m[3] * m[14] - m[12] * m[2] * m[7]  + m[12] * m[3] * m[6];
+        inv[10] =  m[0] * m[5]  * m[15] - m[0] * m[7]  * m[13] - m[4] * m[1] * m[15] + m[4] * m[3] * m[13] + m[12] * m[1] * m[7]  - m[12] * m[3] * m[5];
+        inv[14] = -m[0] * m[5]  * m[14] + m[0] * m[6]  * m[13] + m[4] * m[1] * m[14] - m[4] * m[2] * m[13] - m[12] * m[1] * m[6]  + m[12] * m[2] * m[5];
+        inv[3]  = -m[1] * m[6]  * m[11] + m[1] * m[7]  * m[10] + m[5] * m[2] * m[11] - m[5] * m[3] * m[10] - m[9]  * m[2] * m[7]  + m[9]  * m[3] * m[6];
+        inv[7]  =  m[0] * m[6]  * m[11] - m[0] * m[7]  * m[10] - m[4] * m[2] * m[11] + m[4] * m[3] * m[10] + m[8]  * m[2] * m[7]  - m[8]  * m[3] * m[6];
+        inv[11] = -m[0] * m[5]  * m[11] + m[0] * m[7]  * m[9]  + m[4] * m[1] * m[11] - m[4] * m[3] * m[9]  - m[8]  * m[1] * m[7]  + m[8]  * m[3] * m[5];
+        inv[15] =  m[0] * m[5]  * m[10] - m[0] * m[6]  * m[9]  - m[4] * m[1] * m[10] + m[4] * m[2] * m[9]  + m[8]  * m[1] * m[6]  - m[8]  * m[2] * m[5];
+        let det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
+        // Not valid
+        if det == 0.0 { return false; }
+
+        for i in 0..16 {
+            inverse[i] = inv[i] * (1.0 / det);
+        }        
+        true
     }
 }
 // Multiply this matrix by another matrix
@@ -205,10 +248,10 @@ impl Matrix4x4<f32> {
     // Transform a 4D vector by the matrix
     pub fn mul_vector(&self, vector: &Vector4<f32>) -> Vector4<f32> {
         // Multiply the vector by this matrix
-        let x = self[0].dot(*vector);
-        let y = self[1].dot(*vector);
-        let z = self[2].dot(*vector);
-        let w = self[3].dot(*vector);
+        let x = self.get_vec(0).dot(*vector);
+        let y = self.get_vec(1).dot(*vector);
+        let z = self.get_vec(2).dot(*vector);
+        let w = self.get_vec(3).dot(*vector);
         return Vector4::<f32>::new(x, y, z, w);
     }
     // Transform a 3D point by the matrix, basically create a 4D vector out of it with the W component being 1.0
