@@ -65,11 +65,12 @@ mod tests {
     // Matrix multiplication
     #[test]
     pub fn matrix() {
+        // Non inversible matrix
         let mat1 = Matrix4x4::<f32>::new(
-            Vector4::ONE,
-            Vector4::new(1.0, 5.0, 5.0, 1.0),
-            Vector4::new(1.0, 5.0, 5.0, 1.0),
-            Vector4::ONE,
+            Vector4::new(5.0, 5.0, 2.0, 1.0),
+            Vector4::new(2.0, -4.0, -2.0, -3.0),
+            Vector4::new(9.0, 5.0, -11.0, -2.0),
+            Vector4::new(5.0, 5.0, 5.0, -2.0),
         );
         let mat2 = Matrix4x4::<f32>::new(
             Vector4::new(2.0, 1.0, 1.0, 1.0),
@@ -80,10 +81,13 @@ mod tests {
         let q = Matrix4x4::<f32> {
             data: [Vector4::new(0.0, 1.0, 2.0, 3.0), Vector4::new(4.0, 5.0, 6.0, 7.0), Vector4::new(8.0, 9.0, 10.0, 11.0), Vector4::new(12.0, 13.0, 14.0, 15.0)]
         };
-        println!("{:?}", q.transposed());
+        assert_eq!(mat1.get_vec(1).x, mat1[4]);
+        assert_eq!(mat1.get_vec(1).y, mat1[5]);
+        assert_eq!(mat1.get_vec(1).z, mat1[6]);
         assert_eq!(Matrix4x4::default_identity() * Matrix4x4::default_identity(), Matrix4x4::<f32>::default_identity());
         assert_eq!(Matrix4x4::<f32>::default_identity().transposed(), Matrix4x4::<f32>::default_identity().transposed());
         assert_eq!(Matrix4x4::<f32>::from_scale(Vector3::<f32>::ONE * 100.0).mul_point(&Vector3::<f32>::ONE), Vector3::<f32>::ONE * 100.0);
+        assert_eq!(mat1.inversed(), Matrix4x4::<f32>::default_identity().inversed());
     }
     // Quaternion tests
     #[test]
