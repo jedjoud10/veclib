@@ -1,9 +1,6 @@
-use std::{
-    iter::Copied,
-    ops::{Index, IndexMut, Mul},
-};
+use std::ops::{Index, IndexMut, Mul};
 
-use crate::{types::DefaultStates, Matrix4x4, Swizzable, Vector3, Vector4};
+use crate::{types::DefaultStates, Swizzable, Vector3, Vector4};
 
 // A quaternion that represents a rotation
 #[derive(Debug, Clone, Copy)]
@@ -60,46 +57,32 @@ where
     T: DefaultStates + Clone + Copy + Sized,
 {
     // Identity
-    pub const IDENTITY: Self = Self {
-        data: Vector4::<T>::W
-    };
+    pub const IDENTITY: Self = Self { data: Vector4::<T>::W };
     // Create a quaternion from euler angles and the order of the angles operation
     // https://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm
     pub fn from_euler_angles(order: EulerAnglesOrder, euler: Vector3<f32>) -> Quaternion<f32> {
         let output: Quaternion<f32>;
         match order {
             EulerAnglesOrder::XYZ => {
-                output = Self::from_z_angle(euler.z)
-                    * Self::from_y_angle(euler.y)
-                    * Self::from_x_angle(euler.x);
+                output = Self::from_z_angle(euler.z) * Self::from_y_angle(euler.y) * Self::from_x_angle(euler.x);
             }
             EulerAnglesOrder::XZY => {
-                output = Self::from_y_angle(euler.y)
-                    * Self::from_z_angle(euler.z)
-                    * Self::from_x_angle(euler.x);
+                output = Self::from_y_angle(euler.y) * Self::from_z_angle(euler.z) * Self::from_x_angle(euler.x);
             }
             EulerAnglesOrder::YXZ => {
-                output = Self::from_z_angle(euler.z)
-                    * Self::from_x_angle(euler.x)
-                    * Self::from_y_angle(euler.y);
+                output = Self::from_z_angle(euler.z) * Self::from_x_angle(euler.x) * Self::from_y_angle(euler.y);
             }
             EulerAnglesOrder::YZX => {
-                output = Self::from_x_angle(euler.x)
-                    * Self::from_z_angle(euler.z)
-                    * Self::from_y_angle(euler.y);
+                output = Self::from_x_angle(euler.x) * Self::from_z_angle(euler.z) * Self::from_y_angle(euler.y);
             }
             EulerAnglesOrder::ZXY => {
-                output = Self::from_y_angle(euler.y)
-                    * Self::from_x_angle(euler.x)
-                    * Self::from_z_angle(euler.z);
+                output = Self::from_y_angle(euler.y) * Self::from_x_angle(euler.x) * Self::from_z_angle(euler.z);
             }
             EulerAnglesOrder::ZYX => {
-                output = Self::from_x_angle(euler.x)
-                    * Self::from_y_angle(euler.y)
-                    * Self::from_z_angle(euler.z);
+                output = Self::from_x_angle(euler.x) * Self::from_y_angle(euler.y) * Self::from_z_angle(euler.z);
             }
         }
-        return output;
+        output
     }
     // Create a quaternion from an angle and an axis
     pub fn from_axis_angle(axis: Vector3<f32>, angle: f32) -> Quaternion<f32> {
@@ -116,19 +99,19 @@ where
             data: Vector4::<f32>::new(axis.x, axis.y, axis.z, angle)
         };
         */
-        return output;
+        output
     }
     // Create the quaternion from an angle and the X axis
     pub fn from_x_angle(angle: f32) -> Quaternion<f32> {
-        return Self::from_axis_angle(Vector3::X, angle);
+        Self::from_axis_angle(Vector3::X, angle)
     }
     // Create the quaternion from an angle and the Y axis
     pub fn from_y_angle(angle: f32) -> Quaternion<f32> {
-        return Self::from_axis_angle(Vector3::Y, angle);
+        Self::from_axis_angle(Vector3::Y, angle)
     }
     // Create the quaternion from an angle and the Z axis
     pub fn from_z_angle(angle: f32) -> Quaternion<f32> {
-        return Self::from_axis_angle(Vector3::Z, angle);
+        Self::from_axis_angle(Vector3::Z, angle)
     }
 }
 
@@ -145,7 +128,7 @@ impl Quaternion<f32> {
         pure[1] = point[1];
         pure[2] = point[2];
         let vector: Vector3<f32> = self_vector.cross(point);
-        return point + vector * (2.0 * self[3]) + self_vector.cross(vector) * 2.0;
+        point + vector * (2.0 * self[3]) + self_vector.cross(vector) * 2.0
     }
     // Multiply a quaternion by this quaternion
     pub fn mul_quaternion(&self, other: Quaternion<f32>) -> Quaternion<f32> {
@@ -158,7 +141,7 @@ impl Quaternion<f32> {
         output[0] = new_vector.x;
         output[1] = new_vector.y;
         output[2] = new_vector.z;
-        return output;
+        output
     }
     // Normalize this quaternion
     pub fn normalize(&mut self) {
@@ -172,6 +155,6 @@ impl Mul for Quaternion<f32> {
 
     fn mul(self, rhs: Self) -> Self::Output {
         //return self.mul_quaternion(rhs);
-        return rhs.mul_quaternion(self);
+        rhs.mul_quaternion(self)
     }
 }

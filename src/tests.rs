@@ -1,6 +1,10 @@
 #[cfg(test)]
 mod tests {
-    use crate::{Matrix4x4, Quaternion, vector::Swizzable, vectors::{Vector2, Vector3, Vector4}};
+    use crate::{
+        vector::Swizzable,
+        vectors::{Vector2, Vector3, Vector4},
+        Matrix4x4, Quaternion,
+    };
 
     // Test if the vector swizzler works
     #[test]
@@ -72,28 +76,31 @@ mod tests {
             Vector4::new(9.0, 5.0, -11.0, -2.0),
             Vector4::new(5.0, 5.0, 5.0, -2.0),
         );
-        let mat2 = Matrix4x4::<f32>::new(
-            Vector4::new(2.0, 1.0, 1.0, 1.0),
-            Vector4::ONE,
-            Vector4::new(4.0, 1.0, 1.0, 3.0),
-            Vector4::ONE,
-        );
-        let q = Matrix4x4::<f32> {
-            data: [Vector4::new(0.0, 1.0, 2.0, 3.0), Vector4::new(4.0, 5.0, 6.0, 7.0), Vector4::new(8.0, 9.0, 10.0, 11.0), Vector4::new(12.0, 13.0, 14.0, 15.0)]
+        let _mat2 = Matrix4x4::<f32>::new(Vector4::new(2.0, 1.0, 1.0, 1.0), Vector4::ONE, Vector4::new(4.0, 1.0, 1.0, 3.0), Vector4::ONE);
+        let _q = Matrix4x4::<f32> {
+            data: [
+                Vector4::new(0.0, 1.0, 2.0, 3.0),
+                Vector4::new(4.0, 5.0, 6.0, 7.0),
+                Vector4::new(8.0, 9.0, 10.0, 11.0),
+                Vector4::new(12.0, 13.0, 14.0, 15.0),
+            ],
         };
         assert_eq!(mat1.get_vec(1).x, mat1[4]);
         assert_eq!(mat1.get_vec(1).y, mat1[5]);
         assert_eq!(mat1.get_vec(1).z, mat1[6]);
         assert_eq!(Matrix4x4::IDENTITY * Matrix4x4::IDENTITY, Matrix4x4::<f32>::IDENTITY);
         assert_eq!(Matrix4x4::<f32>::IDENTITY.transposed(), Matrix4x4::<f32>::IDENTITY.transposed());
-        assert_eq!(Matrix4x4::<f32>::from_scale(Vector3::<f32>::ONE * 100.0).mul_point(&Vector3::<f32>::ONE), Vector3::<f32>::ONE * 100.0);
+        assert_eq!(
+            Matrix4x4::<f32>::from_scale(Vector3::<f32>::ONE * 100.0).mul_point(&Vector3::<f32>::ONE),
+            Vector3::<f32>::ONE * 100.0
+        );
         assert_eq!(mat1.inversed(), Matrix4x4::<f32>::IDENTITY.inversed());
     }
     // Quaternion tests
     #[test]
     pub fn quaternion() {
         let quaternion = Quaternion::<f32>::from_y_angle(90_f32.to_radians());
-        let quaternion2 = Quaternion::<f32>::from_x_angle(45_f32.to_radians());        
+        let quaternion2 = Quaternion::<f32>::from_x_angle(45_f32.to_radians());
         println!("{:?}", quaternion);
         println!("{:?}", quaternion2 * quaternion);
         println!("{:?}", Quaternion::<f32>::IDENTITY.mul_point(Vector3::<f32>::Y));

@@ -1,16 +1,26 @@
 use super::{Vector3, Vector4};
-use crate::{types::DefaultStates, vector::{Swizzable, Vector}};
-use std::{fmt, hash::Hash, ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub, SubAssign, BitAnd, BitOr, BitXor,  Not, BitAndAssign, BitOrAssign, BitXorAssign}};
+use crate::{
+    types::DefaultStates,
+    vector::{Swizzable, Vector},
+};
+use std::{
+    fmt,
+    hash::Hash,
+    ops::{Add, AddAssign, BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Not, Sub, SubAssign},
+};
 
 // A simple 2D vector, no simd support what-so-ever
 #[derive(PartialEq, Debug, Clone, Copy)]
 pub struct Vector2<T> {
-    pub x: T, 
+    pub x: T,
     pub y: T,
 }
 
 // Printing
-impl<T> fmt::Display for Vector2<T> where T: fmt::Display {
+impl<T> fmt::Display for Vector2<T>
+where
+    T: fmt::Display,
+{
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "[{}, {}]", self.x, self.y)
     }
@@ -42,22 +52,10 @@ where
     T: DefaultStates + Clone + Copy + Sized,
 {
     // Defaults
-    pub const ZERO: Self = Self {
-        x: T::OFF,
-        y: T::OFF,
-    };
-    pub const X: Self = Self {
-        x: T::ON,
-        y: T::OFF,
-    };
-    pub const Y: Self = Self {
-        x: T::OFF,
-        y: T::ON,
-    };
-    pub const ONE: Self = Self {
-        x: T::ON,
-        y: T::ON,
-    };
+    pub const ZERO: Self = Self { x: T::OFF, y: T::OFF };
+    pub const X: Self = Self { x: T::ON, y: T::OFF };
+    pub const Y: Self = Self { x: T::OFF, y: T::ON };
+    pub const ONE: Self = Self { x: T::ON, y: T::ON };
     // Create a new vec4
     pub fn new(f1: T, f2: T) -> Self {
         Self { x: f1, y: f2 }
@@ -72,7 +70,7 @@ impl<T> Index<usize> for Vector2<T> {
         match index {
             0 => &self.x,
             1 => &self.y,
-            _ => todo!()
+            _ => todo!(),
         }
     }
 }
@@ -84,7 +82,7 @@ impl<T> IndexMut<usize> for Vector2<T> {
         match index {
             0 => &mut self.x,
             1 => &mut self.y,
-            _ => todo!()
+            _ => todo!(),
         }
     }
 }
@@ -115,7 +113,10 @@ pub enum Vec2Axis {
 }
 
 // Get the default axii from the Vec2Axis
-impl<T> Vector2<T> where T: DefaultStates + Clone + Copy + Sized {
+impl<T> Vector2<T>
+where
+    T: DefaultStates + Clone + Copy + Sized,
+{
     // Get the default value
     pub fn get_default_axis(axis: &Vec2Axis) -> Self {
         match axis {

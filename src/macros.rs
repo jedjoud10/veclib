@@ -414,7 +414,8 @@ macro_rules! setup_vector_arithmatics {
 macro_rules! impl_elem_wise_comparison {
     ($t:ty, $a:tt, $out:ty) => {
         // Element wise comparison
-        impl<T> $t where
+        impl<T> $t
+        where
             T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd,
         {
             // Equals
@@ -456,7 +457,7 @@ macro_rules! impl_elem_wise_comparison {
                     out[i] = self[i] <= other[i];
                 }
                 out
-            }            
+            }
         }
         impl $out {
             // Return true if all the elements are true
@@ -474,24 +475,25 @@ macro_rules! impl_elem_wise_comparison {
                     out |= self[i];
                 }
                 out
-            }            
+            }
         }
         impl $out {
             // Select between two vectors using the elements of the current bool vector
-            pub fn select<T>(&self, first: &$t, second: &$t) -> $t where T: Clone + Copy {
+            pub fn select<T>(&self, first: &$t, second: &$t) -> $t
+            where
+                T: Clone + Copy,
+            {
                 let mut output_vector: $t = first.clone();
                 for i in 0..Self::ELEM_COUNT {
-                    output_vector[i] = if self[i] {
-                        first[i]
-                    } else {
-                        second[i]
-                    }
+                    output_vector[i] = if self[i] { first[i] } else { second[i] }
                 }
                 return output_vector;
             }
         }
-        impl<T> BitAnd for $t where
-            T: DefaultStates + Clone + Copy + Sized + BitAnd + BitAndAssign {
+        impl<T> BitAnd for $t
+        where
+            T: DefaultStates + Clone + Copy + Sized + BitAnd + BitAndAssign,
+        {
             type Output = $t;
             // Element wise and
             fn bitand(self, rhs: Self) -> Self::Output {
@@ -502,8 +504,10 @@ macro_rules! impl_elem_wise_comparison {
                 return out;
             }
         }
-        impl<T> BitOr for $t where
-            T: DefaultStates + Clone + Copy + Sized + BitOr + BitOrAssign {
+        impl<T> BitOr for $t
+        where
+            T: DefaultStates + Clone + Copy + Sized + BitOr + BitOrAssign,
+        {
             type Output = $t;
             // Element wise or
             fn bitor(self, rhs: Self) -> Self::Output {
@@ -514,8 +518,10 @@ macro_rules! impl_elem_wise_comparison {
                 return out;
             }
         }
-        impl<T> BitXor for $t where
-            T: DefaultStates + Clone + Copy + Sized + BitXor + BitXorAssign {
+        impl<T> BitXor for $t
+        where
+            T: DefaultStates + Clone + Copy + Sized + BitXor + BitXorAssign,
+        {
             type Output = $t;
             // Element wise xor
             fn bitxor(self, rhs: Self) -> Self::Output {
@@ -526,8 +532,10 @@ macro_rules! impl_elem_wise_comparison {
                 return out;
             }
         }
-        impl<T> Not for $t where
-            T: DefaultStates + Clone + Copy + Sized + Not<Output = T> {
+        impl<T> Not for $t
+        where
+            T: DefaultStates + Clone + Copy + Sized + Not<Output = T>,
+        {
             type Output = $t;
             // Element wise not
             fn not(self) -> Self::Output {
@@ -539,7 +547,7 @@ macro_rules! impl_elem_wise_comparison {
             }
         }
     };
-} 
+}
 #[macro_export]
 macro_rules! impl_eq_hash {
     ($t:ty) => {

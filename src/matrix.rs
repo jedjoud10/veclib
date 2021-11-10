@@ -1,4 +1,4 @@
-use std::{iter::Copied, ops::{Index, IndexMut, Mul}};
+use std::ops::{Index, IndexMut, Mul};
 
 use crate::{
     types::DefaultStates,
@@ -67,7 +67,10 @@ where
     };
 }
 
-impl<T> Matrix4x4<T> where T: DefaultStates + Clone + Copy {
+impl<T> Matrix4x4<T>
+where
+    T: DefaultStates + Clone + Copy,
+{
     // Transpose the matrix
     pub fn transpose(&mut self) {
         self.data = self.transposed().data;
@@ -77,19 +80,19 @@ impl<T> Matrix4x4<T> where T: DefaultStates + Clone + Copy {
         let mut output = Self::IDENTITY;
         for x in 0..4 {
             for y in 0..4 {
-                let m: &mut T = &mut output[x+y*4];
-                *m = self[y+x*4];
+                let m: &mut T = &mut output[x + y * 4];
+                *m = self[y + x * 4];
             }
         }
-        return output;
+        output
     }
     // Get the "n" vector
     pub fn get_vec(&self, n: usize) -> &Vector4<T> {
-        return &self.data[n];
+        &self.data[n]
     }
     // Get the "n" vector mutably
     pub fn get_vec_mut(&mut self, n: usize) -> &mut Vector4<T> {
-        return &mut self.data[n];
+        &mut self.data[n]
     }
 }
 
@@ -98,7 +101,7 @@ impl<T> Matrix4x4<T> where T: DefaultStates + Clone + Copy {
 impl Matrix4x4<f32> {
     // Create a matrix from 4 vector4s
     pub fn new(vec1: Vector4<f32>, vec2: Vector4<f32>, vec3: Vector4<f32>, vec4: Vector4<f32>) -> Self {
-        return Matrix4x4 { data: [vec1, vec2, vec3, vec4] };
+        Matrix4x4 { data: [vec1, vec2, vec3, vec4] }
     }
     // Create a perspective projection matrix
     // Bonk https://gamedev.stackexchange.com/questions/120338/what-does-a-perspective-projection-matrix-look-like-in-opengl
@@ -150,7 +153,7 @@ impl Matrix4x4<f32> {
         // Transpose the matrix
         output.transpose();
 
-        return output;
+        output
     }
     // Create a rotation matrix
     pub fn from_quaternion(quat: &Quaternion<f32>) -> Self {
@@ -162,17 +165,12 @@ impl Matrix4x4<f32> {
         let vec2 = Vector4::<f32>::new(2.0 * qx * qy + 2.0 * qz * qw, 1.0 - 2.0 * qx * qx - 2.0 * qz * qz, 2.0 * qy * qz - 2.0 * qx * qw, 0.0);
         let vec3 = Vector4::<f32>::new(2.0 * qx * qz - 2.0 * qy * qw, 2.0 * qy * qz + 2.0 * qx * qw, 1.0 - 2.0 * qx * qx - 2.0 * qy * qy, 0.0);
         let vec4 = Vector4::<f32>::W;
-        return Matrix4x4::new(vec1, vec2, vec3, vec4);
+        Matrix4x4::new(vec1, vec2, vec3, vec4)
     }
     // Create a scale matrix
     pub fn from_scale(scale: Vector3<f32>) -> Self {
         // Too good bro
-        return Matrix4x4::new(
-            Vector4::X * scale.x,
-            Vector4::Y * scale.y,
-            Vector4::Z * scale.z,
-            Vector4::W,
-        );
+        Matrix4x4::new(Vector4::X * scale.x, Vector4::Y * scale.y, Vector4::Z * scale.z, Vector4::W)
     }
     // Multiply a matrix by this matrix
     pub fn mul_mat4x4(&self, other: Matrix4x4<f32>) -> Self {
@@ -199,132 +197,54 @@ impl Matrix4x4<f32> {
                 *h = a.dot(b);
             }
         }
-        return output;
+        output
     }
     // Return the inverse of this matrix
     // https://stackoverflow.com/questions/1148309/inverting-a-4x4-matrix/44446912#44446912
     pub fn inverse(&self, inverse: &mut Self) -> bool {
-        let m = self.clone();
+        let m = *self;
         let mut inv = Self::default();
 
-        inv[0] = m[5]  * m[10] * m[15] - 
-            m[5]  * m[11] * m[14] - 
-            m[9]  * m[6]  * m[15] + 
-            m[9]  * m[7]  * m[14] +
-            m[13] * m[6]  * m[11] - 
-            m[13] * m[7]  * m[10];
+        inv[0] = m[5] * m[10] * m[15] - m[5] * m[11] * m[14] - m[9] * m[6] * m[15] + m[9] * m[7] * m[14] + m[13] * m[6] * m[11] - m[13] * m[7] * m[10];
 
-        inv[4] = -m[4]  * m[10] * m[15] + 
-            m[4]  * m[11] * m[14] + 
-            m[8]  * m[6]  * m[15] - 
-            m[8]  * m[7]  * m[14] - 
-            m[12] * m[6]  * m[11] + 
-            m[12] * m[7]  * m[10];
+        inv[4] = -m[4] * m[10] * m[15] + m[4] * m[11] * m[14] + m[8] * m[6] * m[15] - m[8] * m[7] * m[14] - m[12] * m[6] * m[11] + m[12] * m[7] * m[10];
 
-        inv[8] = m[4]  * m[9] * m[15] - 
-            m[4]  * m[11] * m[13] - 
-            m[8]  * m[5] * m[15] + 
-            m[8]  * m[7] * m[13] + 
-            m[12] * m[5] * m[11] - 
-            m[12] * m[7] * m[9];
+        inv[8] = m[4] * m[9] * m[15] - m[4] * m[11] * m[13] - m[8] * m[5] * m[15] + m[8] * m[7] * m[13] + m[12] * m[5] * m[11] - m[12] * m[7] * m[9];
 
-        inv[12] = -m[4]  * m[9] * m[14] + 
-            m[4]  * m[10] * m[13] +
-            m[8]  * m[5] * m[14] - 
-            m[8]  * m[6] * m[13] - 
-            m[12] * m[5] * m[10] + 
-            m[12] * m[6] * m[9];
+        inv[12] = -m[4] * m[9] * m[14] + m[4] * m[10] * m[13] + m[8] * m[5] * m[14] - m[8] * m[6] * m[13] - m[12] * m[5] * m[10] + m[12] * m[6] * m[9];
 
-        inv[1] = -m[1]  * m[10] * m[15] + 
-            m[1]  * m[11] * m[14] + 
-            m[9]  * m[2] * m[15] - 
-            m[9]  * m[3] * m[14] - 
-            m[13] * m[2] * m[11] + 
-            m[13] * m[3] * m[10];
+        inv[1] = -m[1] * m[10] * m[15] + m[1] * m[11] * m[14] + m[9] * m[2] * m[15] - m[9] * m[3] * m[14] - m[13] * m[2] * m[11] + m[13] * m[3] * m[10];
 
-        inv[5] = m[0]  * m[10] * m[15] - 
-            m[0]  * m[11] * m[14] - 
-            m[8]  * m[2] * m[15] + 
-            m[8]  * m[3] * m[14] + 
-            m[12] * m[2] * m[11] - 
-            m[12] * m[3] * m[10];
+        inv[5] = m[0] * m[10] * m[15] - m[0] * m[11] * m[14] - m[8] * m[2] * m[15] + m[8] * m[3] * m[14] + m[12] * m[2] * m[11] - m[12] * m[3] * m[10];
 
-        inv[9] = -m[0]  * m[9] * m[15] + 
-            m[0]  * m[11] * m[13] + 
-            m[8]  * m[1] * m[15] - 
-            m[8]  * m[3] * m[13] - 
-            m[12] * m[1] * m[11] + 
-            m[12] * m[3] * m[9];
+        inv[9] = -m[0] * m[9] * m[15] + m[0] * m[11] * m[13] + m[8] * m[1] * m[15] - m[8] * m[3] * m[13] - m[12] * m[1] * m[11] + m[12] * m[3] * m[9];
 
-        inv[13] = m[0]  * m[9] * m[14] - 
-            m[0]  * m[10] * m[13] - 
-            m[8]  * m[1] * m[14] + 
-            m[8]  * m[2] * m[13] + 
-            m[12] * m[1] * m[10] - 
-            m[12] * m[2] * m[9];
+        inv[13] = m[0] * m[9] * m[14] - m[0] * m[10] * m[13] - m[8] * m[1] * m[14] + m[8] * m[2] * m[13] + m[12] * m[1] * m[10] - m[12] * m[2] * m[9];
 
-        inv[2] = m[1]  * m[6] * m[15] - 
-            m[1]  * m[7] * m[14] - 
-            m[5]  * m[2] * m[15] + 
-            m[5]  * m[3] * m[14] + 
-            m[13] * m[2] * m[7] - 
-            m[13] * m[3] * m[6];
+        inv[2] = m[1] * m[6] * m[15] - m[1] * m[7] * m[14] - m[5] * m[2] * m[15] + m[5] * m[3] * m[14] + m[13] * m[2] * m[7] - m[13] * m[3] * m[6];
 
-        inv[6] = -m[0]  * m[6] * m[15] + 
-            m[0]  * m[7] * m[14] + 
-            m[4]  * m[2] * m[15] - 
-            m[4]  * m[3] * m[14] - 
-            m[12] * m[2] * m[7] + 
-            m[12] * m[3] * m[6];
+        inv[6] = -m[0] * m[6] * m[15] + m[0] * m[7] * m[14] + m[4] * m[2] * m[15] - m[4] * m[3] * m[14] - m[12] * m[2] * m[7] + m[12] * m[3] * m[6];
 
-        inv[10] = m[0]  * m[5] * m[15] - 
-            m[0]  * m[7] * m[13] - 
-            m[4]  * m[1] * m[15] + 
-            m[4]  * m[3] * m[13] + 
-            m[12] * m[1] * m[7] - 
-            m[12] * m[3] * m[5];
+        inv[10] = m[0] * m[5] * m[15] - m[0] * m[7] * m[13] - m[4] * m[1] * m[15] + m[4] * m[3] * m[13] + m[12] * m[1] * m[7] - m[12] * m[3] * m[5];
 
-        inv[14] = -m[0]  * m[5] * m[14] + 
-            m[0]  * m[6] * m[13] + 
-            m[4]  * m[1] * m[14] - 
-            m[4]  * m[2] * m[13] - 
-            m[12] * m[1] * m[6] + 
-            m[12] * m[2] * m[5];
+        inv[14] = -m[0] * m[5] * m[14] + m[0] * m[6] * m[13] + m[4] * m[1] * m[14] - m[4] * m[2] * m[13] - m[12] * m[1] * m[6] + m[12] * m[2] * m[5];
 
-        inv[3] = -m[1] * m[6] * m[11] + 
-            m[1] * m[7] * m[10] + 
-            m[5] * m[2] * m[11] - 
-            m[5] * m[3] * m[10] - 
-            m[9] * m[2] * m[7] + 
-            m[9] * m[3] * m[6];
+        inv[3] = -m[1] * m[6] * m[11] + m[1] * m[7] * m[10] + m[5] * m[2] * m[11] - m[5] * m[3] * m[10] - m[9] * m[2] * m[7] + m[9] * m[3] * m[6];
 
-        inv[7] = m[0] * m[6] * m[11] - 
-            m[0] * m[7] * m[10] - 
-            m[4] * m[2] * m[11] + 
-            m[4] * m[3] * m[10] + 
-            m[8] * m[2] * m[7] - 
-            m[8] * m[3] * m[6];
+        inv[7] = m[0] * m[6] * m[11] - m[0] * m[7] * m[10] - m[4] * m[2] * m[11] + m[4] * m[3] * m[10] + m[8] * m[2] * m[7] - m[8] * m[3] * m[6];
 
-        inv[11] = -m[0] * m[5] * m[11] + 
-            m[0] * m[7] * m[9] + 
-            m[4] * m[1] * m[11] - 
-            m[4] * m[3] * m[9] - 
-            m[8] * m[1] * m[7] + 
-            m[8] * m[3] * m[5];
+        inv[11] = -m[0] * m[5] * m[11] + m[0] * m[7] * m[9] + m[4] * m[1] * m[11] - m[4] * m[3] * m[9] - m[8] * m[1] * m[7] + m[8] * m[3] * m[5];
 
-        inv[15] = m[0] * m[5] * m[10] - 
-            m[0] * m[6] * m[9] - 
-            m[4] * m[1] * m[10] + 
-            m[4] * m[2] * m[9] + 
-            m[8] * m[1] * m[6] - 
-            m[8] * m[2] * m[5];
+        inv[15] = m[0] * m[5] * m[10] - m[0] * m[6] * m[9] - m[4] * m[1] * m[10] + m[4] * m[2] * m[9] + m[8] * m[1] * m[6] - m[8] * m[2] * m[5];
         let det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
         // Not valid
-        if det == 0.0 { return false; }
+        if det == 0.0 {
+            return false;
+        }
 
         for i in 0..16 {
             inverse[i] = inv[i] * (1.0 / det);
-        }        
+        }
         true
     }
     // Inversed
@@ -339,7 +259,7 @@ impl Mul for Matrix4x4<f32> {
     type Output = Self;
 
     fn mul(self, rhs: Self) -> Self {
-        return self.mul_mat4x4(rhs);
+        self.mul_mat4x4(rhs)
     }
 }
 // Transform a vector by the matrix
@@ -351,7 +271,7 @@ impl Matrix4x4<f32> {
         let y = self.get_vec(1).dot(*vector);
         let z = self.get_vec(2).dot(*vector);
         let w = self.get_vec(3).dot(*vector);
-        return Vector4::<f32>::new(x, y, z, w);
+        Vector4::<f32>::new(x, y, z, w)
     }
     // Transform a 3D point by the matrix, basically create a 4D vector out of it with the W component being 1.0
     pub fn mul_point(&self, point: &Vector3<f32>) -> Vector3<f32> {

@@ -10,7 +10,6 @@ pub trait Swizzable<T> {
     fn get2(&self, order: [usize; 2]) -> Vector2<T>;
 }
 
-
 // The vector trait
 pub trait Vector<T> {
     // Get the amount of elements in the vector
