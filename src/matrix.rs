@@ -176,7 +176,7 @@ impl Matrix4x4<f32> {
     }
     // Multiply a matrix by this matrix
     pub fn mul_mat4x4(&self, other: Matrix4x4<f32>) -> Self {
-        let mut output: Self = Self::default_identity();
+        let mut output: Self = Self::IDENTITY;
         // Get the A vectors
         let mut a_vectors: [Vector4<f32>; 4] = [Vector4::<f32>::ZERO; 4];
         for y in 0..4 {
@@ -329,7 +329,7 @@ impl Matrix4x4<f32> {
     }
     // Inversed
     pub fn inversed(&self) -> Self {
-        let mut output = Matrix4x4::default_identity();
+        let mut output = Self::IDENTITY;
         self.inverse(&mut output);
         output
     }

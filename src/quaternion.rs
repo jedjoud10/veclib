@@ -17,7 +17,7 @@ where
     T: DefaultStates + Clone + Copy + Sized,
 {
     fn default() -> Self {
-        Self::default_identity()
+        Self::IDENTITY
     }
 }
 
@@ -59,10 +59,10 @@ impl<T> Quaternion<T>
 where
     T: DefaultStates + Clone + Copy + Sized,
 {
-    // Defaults
-    pub fn default_identity() -> Self {
-        Quaternion { data: Vector4::<T>::W }
-    }
+    // Identity
+    pub const IDENTITY: Self = Self {
+        data: Vector4::<T>::W
+    };
     // Create a quaternion from euler angles and the order of the angles operation
     // https://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm
     pub fn from_euler_angles(order: EulerAnglesOrder, euler: Vector3<f32>) -> Quaternion<f32> {
@@ -106,7 +106,7 @@ where
         // Normalize just in case
         //axis.normalize();
         let x = (angle / 2.0).sin();
-        let mut output: Quaternion<f32> = Quaternion::default_identity();
+        let mut output: Quaternion<f32> = Quaternion::IDENTITY;
         output[0] = axis.x * x;
         output[1] = axis.y * x;
         output[2] = axis.z * x;
@@ -138,7 +138,7 @@ impl Quaternion<f32> {
     // Transform a point by this quaternion
     pub fn mul_point(&self, point: Vector3<f32>) -> Vector3<f32> {
         // Turn the vector into a pure quaternion
-        let mut pure: Quaternion<f32> = Quaternion::default_identity();
+        let mut pure: Quaternion<f32> = Quaternion::IDENTITY;
         let self_vector = self.data.get3([0, 1, 2]);
         pure[3] = 0.0;
         pure[0] = point[0];
@@ -150,7 +150,7 @@ impl Quaternion<f32> {
     // Multiply a quaternion by this quaternion
     pub fn mul_quaternion(&self, other: Quaternion<f32>) -> Quaternion<f32> {
         // The output
-        let mut output: Self = Self::default_identity();
+        let mut output: Self = Self::IDENTITY;
         let other_vector = other.data.get3([0, 1, 2]);
         let self_vector = self.data.get3([0, 1, 2]);
         output[3] = self[3] * other[3] + self_vector.dot(other_vector);
