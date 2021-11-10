@@ -23,7 +23,7 @@ where
     T: DefaultStates + Clone + Copy + Sized,
 {
     fn default() -> Self {
-        Self::default_identity()
+        Self::IDENTITY
     }
 }
 
@@ -61,12 +61,10 @@ impl<T> Matrix4x4<T>
 where
     T: DefaultStates + Clone + Copy,
 {
-    // Defaults
-    pub fn default_identity() -> Self {
-        Matrix4x4 {
-            data: [Vector4::<T>::X, Vector4::<T>::Y, Vector4::<T>::Z, Vector4::<T>::W],
-        }
-    }
+    // Identity matrix
+    pub const IDENTITY: Self = Matrix4x4 {
+        data: [Vector4::<T>::X, Vector4::<T>::Y, Vector4::<T>::Z, Vector4::<T>::W],
+    };
 }
 
 impl<T> Matrix4x4<T> where T: DefaultStates + Clone + Copy {
@@ -76,7 +74,7 @@ impl<T> Matrix4x4<T> where T: DefaultStates + Clone + Copy {
     }
     // Return the transpose of this matrix
     pub fn transposed(&self) -> Self {
-        let mut output = Self::default_identity();
+        let mut output = Self::IDENTITY;
         for x in 0..4 {
             for y in 0..4 {
                 let m: &mut T = &mut output[x+y*4];
@@ -109,7 +107,7 @@ impl Matrix4x4<f32> {
         let first = 1.0_f32 / (aspect * (fov / 2.0).tan());
         let second = 1.0_f32 / (fov / 2.0).tan();
         // The output
-        let mut matrix: Self = Self::default_identity();
+        let mut matrix: Self = Self::IDENTITY;
         // Right now it is using row major but I will switch it to collumn major later
         // This is row major
         *matrix.get_vec_mut(0) = Vector4::new(first, 0.0, 0.0, 0.0);
@@ -123,7 +121,7 @@ impl Matrix4x4<f32> {
     // Create a translation matrix
     pub fn from_translation(position: Vector3<f32>) -> Self {
         // The output
-        let mut matrix: Self = Self::default_identity();
+        let mut matrix: Self = Self::IDENTITY;
         *matrix.get_vec_mut(0) = Vector4::X;
         *matrix.get_vec_mut(1) = Vector4::Y;
         *matrix.get_vec_mut(2) = Vector4::Z;

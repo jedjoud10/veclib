@@ -121,6 +121,7 @@ where
 }
 
 // The axii for a vec3
+#[derive(Clone, Copy)]
 pub enum Vec3Axis {
     X,
     Y,

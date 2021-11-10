@@ -108,6 +108,7 @@ where
 }
 
 // The axii for a vec2
+#[derive(Clone, Copy)]
 pub enum Vec2Axis {
     X,
     Y,

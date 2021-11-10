@@ -134,6 +134,7 @@ where
 }
 
 // The axii for a vec4
+#[derive(Clone, Copy)]
 pub enum Vec4Axis {
     X,
     Y,
