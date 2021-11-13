@@ -118,10 +118,17 @@ where
     T: DefaultStates + Clone + Copy + Sized,
 {
     // Get the default value
-    pub fn get_default_axis(axis: &Vec2Axis) -> Self {
+    pub fn get_default_axis(axis: Vec2Axis) -> Self {
         match axis {
             Vec2Axis::X => Self::X,
             Vec2Axis::Y => Self::Y,
+        }
+    }
+    // Get the value of the current axis
+    pub fn get_axis(&self, axis: Vec2Axis) -> T {
+        match axis {
+            Vec2Axis::X => self.x,
+            Vec2Axis::Y => self.y,
         }
     }
 }

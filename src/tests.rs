@@ -1,10 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use crate::{
-        vector::Swizzable,
-        vectors::{Vector2, Vector3, Vector4},
-        Matrix4x4, Quaternion,
-    };
+    use crate::{Matrix4x4, Quaternion, Vec3Axis, Vec2Axis, Vec4Axis, vector::Swizzable, vectors::{Vector2, Vector3, Vector4}};
 
     // Test if the vector swizzler works
     #[test]
@@ -94,7 +90,7 @@ mod tests {
             Matrix4x4::<f32>::from_scale(Vector3::<f32>::ONE * 100.0).mul_point(&Vector3::<f32>::ONE),
             Vector3::<f32>::ONE * 100.0
         );
-        assert_eq!(mat1.inversed(), Matrix4x4::<f32>::IDENTITY.inversed());
+        assert_eq!(Matrix4x4::<f32>::IDENTITY, Matrix4x4::<f32>::IDENTITY.inversed());
     }
     // Quaternion tests
     #[test]
@@ -105,5 +101,13 @@ mod tests {
         println!("{:?}", quaternion2 * quaternion);
         println!("{:?}", Quaternion::<f32>::IDENTITY.mul_point(Vector3::<f32>::Y));
         //assert_eq!(quaternion.mul_point(Vector3::<f32>::new(1.0, 0.0, 0.0)), Vector3::default_z());
+    }
+    // Vector axis
+    #[test]
+    pub fn vector_axis() {
+        let v1 = Vector3::<f32>::new(10.0, -5.0, 20.0);
+        assert_eq!(v1.get_axis(Vec3Axis::X), 10.0);
+        assert_eq!(v1.get_axis(Vec3Axis::Y), -5.0);
+        assert_eq!(v1.get_axis(Vec3Axis::Z), 20.0);
     }
 }

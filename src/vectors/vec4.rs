@@ -158,12 +158,21 @@ where
     T: DefaultStates + Clone + Copy + Sized,
 {
     // Get the default value
-    pub fn get_default_axis(axis: &Vec4Axis) -> Self {
+    pub fn get_default_axis(axis: Vec4Axis) -> Self {
         match axis {
             Vec4Axis::X => Self::X,
             Vec4Axis::Y => Self::Y,
             Vec4Axis::Z => Self::Z,
             Vec4Axis::W => Self::W,
+        }
+    }
+    // Get the value of the current axis
+    pub fn get_axis(&self, axis: Vec4Axis) -> T {
+        match axis {
+            Vec4Axis::X => self.x,
+            Vec4Axis::Y => self.y,
+            Vec4Axis::Z => self.z,
+            Vec4Axis::W => self.w,
         }
     }
 }

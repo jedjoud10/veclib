@@ -123,11 +123,19 @@ where
     T: DefaultStates + Clone + Copy + Sized,
 {
     // Get the default value
-    pub fn get_default_axis(axis: &Vec3Axis) -> Self {
+    pub fn get_default_axis(axis: Vec3Axis) -> Self {
         match axis {
             Vec3Axis::X => Self::X,
             Vec3Axis::Y => Self::Y,
             Vec3Axis::Z => Self::Z,
+        }
+    }
+    // Get the value of the current axis
+    pub fn get_axis(&self, axis: Vec3Axis) -> T {
+        match axis {
+            Vec3Axis::X => self.x,
+            Vec3Axis::Y => self.y,
+            Vec3Axis::Z => self.z,
         }
     }
 }
