@@ -1,6 +1,11 @@
 #[cfg(test)]
 mod tests {
-    use crate::{Matrix4x4, Quaternion, Vec3Axis, Vec2Axis, Vec4Axis, vector::Swizzable, vectors::{Vector2, Vector3, Vector4}};
+    use crate::{
+        consts,
+        vector::Swizzable,
+        vectors::{Vector2, Vector3, Vector4},
+        Matrix4x4, Quaternion, Vec2Axis, Vec3Axis, Vec4Axis,
+    };
 
     // Test if the vector swizzler works
     #[test]
@@ -61,6 +66,7 @@ mod tests {
         assert_eq!(test, 0.0);
         let k = Vector3::<f32>::new(2.0, 3.0, 4.0).cross(Vector3::<f32>::new(5.0, 6.0, 7.0));
         assert_eq!(k, Vector3::<f32>::new(-3.0, 6.0, -3.0));
+        assert_eq!(Vector2::ZERO, consts::vec2(0.0, 0.0));
     }
     // Matrix multiplication
     #[test]
