@@ -1,4 +1,4 @@
-use crate::vectors::*;
+use crate::{vectors::*, DefaultStates};
 
 // The swizzable trait
 pub trait Swizzable<T> {
@@ -10,8 +10,41 @@ pub trait Swizzable<T> {
     fn get2(&self, order: [usize; 2]) -> Vector2<T>;
 }
 
-// The vector trait
-pub trait Vector<T> {
-    // Get the amount of elements in the vector
+pub(crate) trait VectorElemCount<T>
+    where T: DefaultStates + Clone + Copy
+{
+    // Get the amount of elements that the self vector has
     const ELEM_COUNT: usize;
+}
+
+// The vector trait
+pub(crate) trait Vector<T>
+    where T: DefaultStates + Clone + Copy
+{
+    // Turn this into an unsized vector
+    fn get_unsized(self) -> UnsizedVector<T>;
+}
+
+// A vector with interchangeable element count
+pub enum UnsizedVector<T> 
+    where T: DefaultStates + Clone + Copy 
+{
+    Scalar(T),
+    Vec2(crate::Vector2::<T>),
+    Vec3(crate::Vector3::<T>),
+    Vec4(crate::Vector4::<T>),
+}
+
+impl<T> UnsizedVector<T>
+where T: DefaultStates + Clone + Copy
+{
+    // Get the amount of elements that each variant has
+    pub fn get_elem_count(&self) -> usize {
+        match self {
+            UnsizedVector::Scalar(_) => 1,
+            UnsizedVector::Vec2(_) => 2,
+            UnsizedVector::Vec3(_) => 3,
+            UnsizedVector::Vec4(_) => 4,
+        }
+    }
 }

@@ -1,7 +1,7 @@
 use super::{Vector2, Vector4};
 use crate::{
     types::DefaultStates,
-    vector::{Swizzable, Vector},
+    vector::{Swizzable, Vector, VectorElemCount},
 };
 use core::fmt;
 use std::{
@@ -28,11 +28,21 @@ where
 }
 
 // Vector trait
-impl<T> Vector<T> for Vector3<T> {
+impl<T> Vector<T> for Vector3<T>
+    where T: DefaultStates + Clone + Copy
+{
+    fn get_unsized(self) -> crate::vector::UnsizedVector<T> {
+        crate::vector::UnsizedVector::Vec3(self)
+    }
+}
+impl<T> VectorElemCount<T> for Vector3<T>
+    where T: DefaultStates + Clone + Copy
+{
     const ELEM_COUNT: usize = 3;
 }
-
-impl<T> Vector<T> for &Vector3<T> {
+impl<T> VectorElemCount<T> for &Vector3<T>
+    where T: DefaultStates + Clone + Copy
+{
     const ELEM_COUNT: usize = 3;
 }
 
