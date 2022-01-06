@@ -1,7 +1,7 @@
 use super::{Vector2, Vector4};
 use crate::{
     types::DefaultStates,
-    vector::{Swizzable, Vector, VectorElemCount},
+    vector::{Swizzable, Vector, VectorDefaults},
 };
 use core::fmt;
 use std::{
@@ -10,7 +10,7 @@ use std::{
 };
 
 // A simple 3D vector, no simd support what-so-ever
-#[derive(PartialEq, Debug, Clone, Copy)]
+#[derive(PartialEq, Eq, Debug, Clone, Copy)]
 pub struct Vector3<T> {
     pub x: T,
     pub y: T,
@@ -29,19 +29,22 @@ where
 
 // Vector trait
 impl<T> Vector<T> for Vector3<T>
-    where T: DefaultStates + Clone + Copy
+where
+    T: DefaultStates + Clone + Copy,
 {
     fn get_unsized(self) -> crate::vector::UnsizedVector<T> {
         crate::vector::UnsizedVector::Vec3(self)
     }
 }
-impl<T> VectorElemCount<T> for Vector3<T>
-    where T: DefaultStates + Clone + Copy
+impl<T> VectorDefaults for Vector3<T>
+where
+    T: DefaultStates + Clone + Copy,
 {
     const ELEM_COUNT: usize = 3;
 }
-impl<T> VectorElemCount<T> for &Vector3<T>
-    where T: DefaultStates + Clone + Copy
+impl<T> VectorDefaults for &Vector3<T>
+where
+    T: DefaultStates + Clone + Copy,
 {
     const ELEM_COUNT: usize = 3;
 }
@@ -149,47 +152,6 @@ where
         }
     }
 }
-
-// Eq and Hash for int types
-crate::impl_eq_hash!(Vector3<i16>);
-crate::impl_eq_hash!(Vector3<i32>);
-crate::impl_eq_hash!(Vector3<i64>);
-crate::impl_eq_hash!(Vector3<i128>);
-crate::impl_eq_hash!(Vector3<u16>);
-crate::impl_eq_hash!(Vector3<u32>);
-crate::impl_eq_hash!(Vector3<u64>);
-crate::impl_eq_hash!(Vector3<u128>);
-
-// Run the macros
-crate::setup_add!(Vector3<T>, T);
-crate::setup_sub!(Vector3<T>, T);
-crate::setup_mul!(Vector3<T>, T);
-crate::setup_div!(Vector3<T>, T);
-crate::setup_neg!(Vector3<T>, T);
-
-crate::setup_vector_arithmatics!(Vector3<f32>, T, f32);
-crate::setup_vector_arithmatics!(Vector3<f64>, T, f64);
-crate::impl_elem_wise_comparison!(Vector3<T>, T, Vector3<bool>);
-
-// Dear lord
-// I deeply apologize for this
-// Floating point to floating point
-crate::impl_from_vec3!(Vector3<f64>, f64, f32);
-crate::impl_from_vec3!(Vector3<f32>, f32, f64);
-// Integers to floating point
-crate::impl_from_vec3!(Vector3<f32>, f32, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128);
-crate::impl_from_vec3!(Vector3<f64>, f64, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128);
-// Integers to integers
-crate::impl_from_vec3!(Vector3<i8>, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<i16>, i16, i8, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<i32>, i32, i8, i16, i64, i128, u8, u16, u32, u64, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<i64>, i64, i8, i16, i32, i128, u8, u16, u32, u64, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<i128>, i128, i8, i16, i32, i64, u8, u16, u32, u64, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<u8>, u8, i8, i16, i32, i64, i128, u16, u32, u64, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<u16>, u16, i8, i16, i32, i64, i128, u8, u32, u64, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<u32>, u32, i8, i16, i32, i64, i128, u8, u16, u64, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<u64>, u64, i8, i16, i32, i64, i128, u8, u16, u32, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<u128>, u128, i8, i16, i32, i64, i128, u8, u16, u32, u64, f32, f64);
 
 // Vector3 arithmatics
 impl Vector3<f32> {
