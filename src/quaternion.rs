@@ -1,6 +1,6 @@
 use std::ops::{Index, IndexMut, Mul};
 
-use crate::{types::DefaultStates, Swizzable, Vector3, Vector4};
+use crate::{Swizzable, Vector3, Vector4};
 
 // A quaternion that represents a rotation
 #[derive(Debug, Clone, Copy)]
@@ -11,7 +11,7 @@ pub struct Quaternion<T> {
 // Default
 impl<T> Default for Quaternion<T>
 where
-    T: DefaultStates + Clone + Copy + Sized,
+    T: num_traits::Num,
 {
     fn default() -> Self {
         Self::IDENTITY
@@ -21,7 +21,7 @@ where
 // Indexer
 impl<T> Index<usize> for Quaternion<T>
 where
-    T: DefaultStates + Clone + Copy,
+    T: num_traits::Num,
 {
     type Output = T;
     // Index
@@ -33,7 +33,7 @@ where
 // Mut indexer
 impl<T> IndexMut<usize> for Quaternion<T>
 where
-    T: DefaultStates + Clone + Copy,
+    T: num_traits::Num,
 {
     // Mut index
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
@@ -54,7 +54,7 @@ pub enum EulerAnglesOrder {
 // Da code
 impl<T> Quaternion<T>
 where
-    T: DefaultStates + Clone + Copy + Sized,
+    T: num_traits::Num,
 {
     // Identity
     pub const IDENTITY: Self = Self { data: Vector4::<T>::W };

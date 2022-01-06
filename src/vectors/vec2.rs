@@ -1,7 +1,6 @@
 use super::{Vector3, Vector4};
 use crate::{
-    types::DefaultStates,
-    vector::{Swizzable, Vector, VectorDefaults},
+    vector::{Swizzable, Vector, VectorDefaults}, consts,
 };
 use std::{
     fmt,
@@ -29,7 +28,7 @@ where
 // Vector trait
 impl<T> Vector<T> for Vector2<T>
 where
-    T: DefaultStates + Clone + Copy,
+    T: num_traits::Num,
 {
     fn get_unsized(self) -> crate::vector::UnsizedVector<T> {
         crate::vector::UnsizedVector::<T>::Vec2(self)
@@ -37,21 +36,17 @@ where
 }
 impl<T> VectorDefaults for Vector2<T>
 where
-    T: DefaultStates + Clone + Copy,
+    T: num_traits::Num,
 {
     const ELEM_COUNT: usize = 2;
-}
-impl<T> VectorDefaults for &Vector2<T>
-where
-    T: DefaultStates + Clone + Copy,
-{
-    const ELEM_COUNT: usize = 2;
+    const ZERO: Self = consts::vec2(T::zero(), T::zero());
+    const ONE: Self = consts::vec2(T::one(), T::one());
 }
 
 // Default
 impl<T> Default for Vector2<T>
 where
-    T: DefaultStates + Clone + Copy + Sized,
+    T: num_traits::Num,
 {
     fn default() -> Self {
         Self::ZERO
@@ -62,10 +57,10 @@ where
 #[allow(dead_code)]
 impl<T> Vector2<T>
 where
-    T: DefaultStates + Clone + Copy + Sized,
+    T: num_traits::Num,
 {
     // Defaults
-    pub const ZERO: Self = Self { x: T::OFF, y: T::OFF };
+    pub const ZERO: Self = Self { x: T::zero(), y: T::OFF };
     pub const X: Self = Self { x: T::ON, y: T::OFF };
     pub const Y: Self = Self { x: T::OFF, y: T::ON };
     pub const ONE: Self = Self { x: T::ON, y: T::ON };
@@ -103,7 +98,7 @@ impl<T> IndexMut<usize> for Vector2<T> {
 // Swizzle a vec2
 impl<T> Swizzable<T> for Vector2<T>
 where
-    T: DefaultStates + Clone + Copy + Sized,
+    T: num_traits::Num,
 {
     fn get4(&self, order: [usize; 4]) -> Vector4<T> {
         Vector4::new(self[order[0]], self[order[1]], self[order[2]], self[order[3]])
@@ -128,7 +123,7 @@ pub enum Vec2Axis {
 // Get the default axii from the Vec2Axis
 impl<T> Vector2<T>
 where
-    T: DefaultStates + Clone + Copy + Sized,
+    T: num_traits::Num,
 {
     // Get the default value
     pub fn get_default_axis(axis: Vec2Axis) -> Self {
