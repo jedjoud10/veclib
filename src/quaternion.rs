@@ -1,17 +1,18 @@
 use std::ops::{Index, IndexMut, Mul};
 
-use crate::{Swizzable, Vector3, Vector4};
+use crate::{Swizzable, Vector3, Vector4, types::{DefaultState, Float}};
 
 // A quaternion that represents a rotation
 #[derive(Debug, Clone, Copy)]
-pub struct Quaternion<T> {
+pub struct Quaternion<T> 
+    where T: DefaultState
+{
     data: Vector4<T>,
 }
 
 // Default
 impl<T> Default for Quaternion<T>
-where
-    T: num_traits::Num,
+    where T: DefaultState,
 {
     fn default() -> Self {
         Self::IDENTITY
@@ -20,8 +21,7 @@ where
 
 // Indexer
 impl<T> Index<usize> for Quaternion<T>
-where
-    T: num_traits::Num,
+    where T: DefaultState,
 {
     type Output = T;
     // Index
@@ -32,8 +32,7 @@ where
 
 // Mut indexer
 impl<T> IndexMut<usize> for Quaternion<T>
-where
-    T: num_traits::Num,
+    where T: DefaultState,
 {
     // Mut index
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
@@ -53,15 +52,14 @@ pub enum EulerAnglesOrder {
 
 // Da code
 impl<T> Quaternion<T>
-where
-    T: num_traits::Num,
+    where T: DefaultState + Float,
 {
     // Identity
     pub const IDENTITY: Self = Self { data: Vector4::<T>::W };
     // Create a quaternion from euler angles and the order of the angles operation
     // https://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm
-    pub fn from_euler_angles(order: EulerAnglesOrder, euler: Vector3<f32>) -> Quaternion<f32> {
-        let output: Quaternion<f32>;
+    pub fn from_euler_angles(order: EulerAnglesOrder, euler: Vector3<T>) -> Quaternion<T> {
+        let output: Quaternion<T>;
         match order {
             EulerAnglesOrder::XYZ => {
                 output = Self::from_z_angle(euler.z) * Self::from_y_angle(euler.y) * Self::from_x_angle(euler.x);
@@ -85,11 +83,11 @@ where
         output
     }
     // Create a quaternion from an angle and an axis
-    pub fn from_axis_angle(axis: Vector3<f32>, angle: f32) -> Quaternion<f32> {
+    pub fn from_axis_angle(axis: Vector3<T>, angle: T) -> Quaternion<T> {
         // Normalize just in case
         //axis.normalize();
         let x = (angle / 2.0).sin();
-        let mut output: Quaternion<f32> = Quaternion::IDENTITY;
+        let mut output: Quaternion<T> = Quaternion::IDENTITY;
         output[0] = axis.x * x;
         output[1] = axis.y * x;
         output[2] = axis.z * x;
@@ -102,26 +100,28 @@ where
         output
     }
     // Create the quaternion from an angle and the X axis
-    pub fn from_x_angle(angle: f32) -> Quaternion<f32> {
+    pub fn from_x_angle(angle: T) -> Quaternion<T> {
         Self::from_axis_angle(Vector3::X, angle)
     }
     // Create the quaternion from an angle and the Y axis
-    pub fn from_y_angle(angle: f32) -> Quaternion<f32> {
+    pub fn from_y_angle(angle: T) -> Quaternion<T> {
         Self::from_axis_angle(Vector3::Y, angle)
     }
     // Create the quaternion from an angle and the Z axis
-    pub fn from_z_angle(angle: f32) -> Quaternion<f32> {
+    pub fn from_z_angle(angle: T) -> Quaternion<T> {
         Self::from_axis_angle(Vector3::Z, angle)
     }
 }
 
 // Transformations
 // https://www.youtube.com/watch?v=Ne3RNhEVSIE&t=451s&ab_channel=JorgeRodriguez
-impl Quaternion<f32> {
+impl<T> Quaternion<T>
+    where T: DefaultState + Float
+{
     // Transform a point by this quaternion
-    pub fn mul_point(&self, point: Vector3<f32>) -> Vector3<f32> {
+    pub fn mul_point(&self, point: Vector3<T>) -> Vector3<T> {
         // Turn the vector into a pure quaternion
-        let mut pure: Quaternion<f32> = Quaternion::IDENTITY;
+        let mut pure: Quaternion<T> = Quaternion::IDENTITY;
         let self_vector = self.data.get3([0, 1, 2]);
         pure[3] = 0.0;
         pure[0] = point[0];
@@ -131,7 +131,7 @@ impl Quaternion<f32> {
         point + vector * (2.0 * self[3]) + self_vector.cross(vector) * 2.0
     }
     // Multiply a quaternion by this quaternion
-    pub fn mul_quaternion(&self, other: Quaternion<f32>) -> Quaternion<f32> {
+    pub fn mul_quaternion(&self, other: Quaternion<T>) -> Quaternion<T> {
         // The output
         let mut output: Self = Self::IDENTITY;
         let other_vector = other.data.get3([0, 1, 2]);
@@ -150,8 +150,10 @@ impl Quaternion<f32> {
 }
 
 // Operators
-impl Mul for Quaternion<f32> {
-    type Output = Quaternion<f32>;
+impl<T> Mul for Quaternion<T>
+    where T: DefaultState + Float
+{
+    type Output = Quaternion<T>;
 
     fn mul(self, rhs: Self) -> Self::Output {
         //return self.mul_quaternion(rhs);

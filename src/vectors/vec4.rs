@@ -1,6 +1,6 @@
 use super::{Vector2, Vector3};
 use crate::{
-    vector::{Swizzable, Vector, VectorDefaults},
+    vector::{Swizzable, Vector, VectorDefaults}, types::DefaultState,
 };
 use std::{
     fmt::{self},
@@ -30,7 +30,7 @@ where
 // Vector trait
 impl<T> Vector<T> for Vector4<T>
 where
-    T: num_traits::Num,
+    T: DefaultState,
 {
     fn get_unsized(self) -> crate::vector::UnsizedVector<T> {
         crate::vector::UnsizedVector::Vec4(self)
@@ -38,13 +38,13 @@ where
 }
 impl<T> VectorDefaults for Vector4<T>
 where
-    T: num_traits::Num,
+    T: DefaultState,
 {
     const ELEM_COUNT: usize = 4;
 }
 impl<T> VectorDefaults for &Vector4<T>
 where
-    T: num_traits::Num,
+    T: DefaultState,
 {
     const ELEM_COUNT: usize = 4;
 }
@@ -52,7 +52,7 @@ where
 // Default
 impl<T> Default for Vector4<T>
 where
-    T: num_traits::Num,
+    T: DefaultState,
 {
     fn default() -> Self {
         Self::ZERO
@@ -63,7 +63,7 @@ where
 #[allow(dead_code)]
 impl<T> Vector4<T>
 where
-    T: num_traits::Num,
+    T: DefaultState,
 {
     // Defaults
     pub const ZERO: Self = Self {
@@ -140,7 +140,7 @@ impl<T> IndexMut<usize> for Vector4<T> {
 // Swizzle a vec4
 impl<T> Swizzable<T> for Vector4<T>
 where
-    T: num_traits::Num,
+    T: DefaultState,
 {
     fn get4(&self, order: [usize; 4]) -> Vector4<T> {
         Vector4::new(self[order[0]], self[order[1]], self[order[2]], self[order[3]])
@@ -167,7 +167,7 @@ pub enum Vec4Axis {
 // Get the default axii from the Vec4Axis
 impl<T> Vector4<T>
 where
-    T: num_traits::Num,
+    T: DefaultState,
 {
     // Get the default value
     pub fn get_default_axis(axis: Vec4Axis) -> Self {

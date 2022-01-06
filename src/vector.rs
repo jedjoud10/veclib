@@ -1,6 +1,6 @@
 use std::ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub, SubAssign};
 
-use crate::{vectors::*};
+use crate::{vectors::*, types::{DefaultState, Float}};
 
 // The swizzable trait
 pub trait Swizzable<T> {
@@ -23,8 +23,7 @@ pub(crate) trait VectorDefaults {
 
 // The vector trait
 pub(crate) trait Vector<T>
-where
-    T: num_traits::Num,
+    where T: DefaultState
 {
     // Turn this into an unsized vector
     fn get_unsized(self) -> UnsizedVector<T>;
@@ -33,7 +32,7 @@ where
 // Some vector arithmetics
 pub(crate) trait VectorArithmetics<T>
 where
-    T: num_traits::Num,
+    T: DefaultState + Float,
     Self: Sized 
         + VectorDefaults
         + Vector<T>
@@ -116,7 +115,7 @@ where
 
 impl<T> AddAssign for dyn Vector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState + AddAssign,
     Self: Sized + Index<usize, Output = T> + IndexMut<usize, Output = T> + VectorDefaults,
 {
     fn add_assign(&mut self, rhs: Self) {
@@ -128,7 +127,7 @@ where
 
 impl<T> Add for dyn Vector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState + AddAssign,
     Self: Sized + Index<usize, Output = T> + IndexMut<usize, Output = T> + VectorDefaults,
 {
     type Output = Self;
@@ -142,7 +141,7 @@ where
 
 impl<T> Add for &dyn Vector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState + AddAssign,
     Self: Sized + Index<usize, Output = T> + IndexMut<usize, Output = T> + VectorDefaults,
 {
     type Output = Self;
@@ -156,7 +155,7 @@ where
 
 impl<T> SubAssign for dyn Vector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState + SubAssign,
     Self: Sized + Index<usize, Output = T> + IndexMut<usize, Output = T> + VectorDefaults,
 {
     fn sub_assign(&mut self, rhs: Self) {
@@ -168,7 +167,7 @@ where
 
 impl<T> Sub for dyn Vector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState + SubAssign,
     Self: Sized + Index<usize, Output = T> + IndexMut<usize, Output = T> + VectorDefaults,
 {
     type Output = Self;
@@ -182,7 +181,7 @@ where
 
 impl<T> Sub for &dyn Vector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState + SubAssign,
     Self: Sized + Index<usize, Output = T> + IndexMut<usize, Output = T> + VectorDefaults,
 {
     type Output = Self;
@@ -196,7 +195,7 @@ where
 
 impl<T> MulAssign for dyn Vector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState + MulAssign,
     Self: Sized + Index<usize, Output = T> + IndexMut<usize, Output = T> + VectorDefaults,
 {
     fn mul_assign(&mut self, rhs: Self) {
@@ -208,7 +207,7 @@ where
 
 impl<T> Mul for dyn Vector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState + MulAssign,
     Self: Sized + Index<usize, Output = T> + IndexMut<usize, Output = T> + VectorDefaults,
 {
     type Output = Self;
@@ -222,7 +221,7 @@ where
 
 impl<T> Mul<T> for dyn Vector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState + MulAssign,
     Self: Sized + Index<usize, Output = T> + IndexMut<usize, Output = T> + VectorDefaults,
 {
     type Output = Self;
@@ -236,7 +235,7 @@ where
 
 impl<T> Mul for &dyn Vector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState + MulAssign,
     Self: Sized + Index<usize, Output = T> + IndexMut<usize, Output = T> + VectorDefaults,
 {
     type Output = Self;
@@ -250,7 +249,7 @@ where
 
 impl<T> Mul<T> for &dyn Vector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState + MulAssign,
     Self: Sized + Index<usize, Output = T> + IndexMut<usize, Output = T> + VectorDefaults,
 {
     type Output = Self;
@@ -264,7 +263,7 @@ where
 
 impl<T> DivAssign for dyn Vector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState + DivAssign,
     Self: Sized + Index<usize, Output = T> + IndexMut<usize, Output = T> + VectorDefaults,
 {
     fn div_assign(&mut self, rhs: Self) {
@@ -276,7 +275,7 @@ where
 
 impl<T> Div for dyn Vector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState + DivAssign,
     Self: Sized + Index<usize, Output = T> + IndexMut<usize, Output = T> + VectorDefaults,
 {
     type Output = Self;
@@ -290,7 +289,7 @@ where
 
 impl<T> Div<T> for dyn Vector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState + DivAssign,
     Self: Sized + Index<usize, Output = T> + IndexMut<usize, Output = T> + VectorDefaults,
 {
     type Output = Self;
@@ -304,7 +303,7 @@ where
 
 impl<T> Div for &dyn Vector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState + DivAssign,
     Self: Sized + Index<usize, Output = T> + IndexMut<usize, Output = T> + VectorDefaults,
 {
     type Output = Self;
@@ -318,7 +317,7 @@ where
 
 impl<T> Div<T> for &dyn Vector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState + DivAssign,
     Self: Sized + Index<usize, Output = T> + IndexMut<usize, Output = T> + VectorDefaults,
 {
     type Output = Self;
@@ -332,7 +331,7 @@ where
 
 impl<T> Neg for dyn Vector<T>
 where
-    T: Neg<Output = T>,
+    T: DefaultState + Neg<Output = T>,
     Self: Sized + Index<usize, Output = T> + IndexMut<usize, Output = T> + VectorDefaults,
 {
     type Output = Self;
@@ -347,7 +346,7 @@ where
 #[derive(Debug, PartialEq, Eq)]
 pub enum UnsizedVector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState,
 {
     Scalar(T),
     Vec2(crate::Vector2<T>),
@@ -357,7 +356,7 @@ where
 
 impl<T> UnsizedVector<T>
 where
-    T: num_traits::Num,
+    T: DefaultState,
 {
     // Get the amount of elements that each variant has
     pub fn get_elem_count(&self) -> usize {

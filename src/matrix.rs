@@ -3,7 +3,7 @@ use std::ops::{Index, IndexMut, Mul};
 use crate::{
     vector::Swizzable,
     vectors::{Vector3, Vector4},
-    Quaternion,
+    Quaternion, types::{DefaultState, Float},
 };
 
 // A simple f32 matrix made of 4 f32/f64 vectors
@@ -11,7 +11,7 @@ use crate::{
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Matrix4x4<T>
 where
-    T: num_traits::Num,
+    T: DefaultState,
 {
     pub data: [Vector4<T>; 4],
 }
@@ -19,7 +19,7 @@ where
 // Default
 impl<T> Default for Matrix4x4<T>
 where
-    T: num_traits::Num,
+    T: DefaultState,
 {
     fn default() -> Self {
         Self::IDENTITY
@@ -29,7 +29,7 @@ where
 // Indexer
 impl<T> Index<usize> for Matrix4x4<T>
 where
-    T: num_traits::Num,
+    T: DefaultState,
 {
     type Output = T;
     // Index
@@ -44,7 +44,7 @@ where
 // Mut indexer
 impl<T> IndexMut<usize> for Matrix4x4<T>
 where
-    T: num_traits::Num,
+    T: DefaultState,
 {
     // Mut index
     fn index_mut(&mut self, index: usize) -> &mut T {
@@ -58,7 +58,7 @@ where
 // Identity matrix available for everyone
 impl<T> Matrix4x4<T>
 where
-    T: num_traits::Num,
+    T: DefaultState,
 {
     // Identity matrix
     pub const IDENTITY: Self = Matrix4x4 {
@@ -68,7 +68,7 @@ where
 
 impl<T> Matrix4x4<T>
 where
-    T: num_traits::Num,
+    T: DefaultState,
 {
     // Transpose the matrix
     pub fn transpose(&mut self) {
@@ -97,17 +97,19 @@ where
 
 // Creation code for the matrix
 #[allow(dead_code)]
-impl Matrix4x4<f32> {
+impl<T> Matrix4x4<T>
+    where T: DefaultState + Float
+{
     // Create a matrix from 4 vector4s
-    pub fn new(vec1: Vector4<f32>, vec2: Vector4<f32>, vec3: Vector4<f32>, vec4: Vector4<f32>) -> Self {
+    pub fn new(vec1: Vector4<T>, vec2: Vector4<T>, vec3: Vector4<T>, vec4: Vector4<T>) -> Self {
         Matrix4x4 { data: [vec1, vec2, vec3, vec4] }
     }
     // Create a perspective projection matrix
     // Bonk https://gamedev.stackexchange.com/questions/120338/what-does-a-perspective-projection-matrix-look-like-in-opengl
-    pub fn from_perspective(near: f32, far: f32, aspect: f32, fov: f32) -> Self {
+    pub fn from_perspective(near: T, far: T, aspect: T, fov: T) -> Self {
         // Math
-        let first = 1.0_f32 / (aspect * (fov / 2.0).tan());
-        let second = 1.0_f32 / (fov / 2.0).tan();
+        let first = T::ON / (aspect * (fov / (T::ON * 2.0)).tan());
+        let second = T::ON / (fov / (T::ON * 2.0)).tan();
         // The output
         let mut matrix: Self = Self::IDENTITY;
         // Right now it is using row major but I will switch it to collumn major later
@@ -155,27 +157,27 @@ impl Matrix4x4<f32> {
         output
     }
     // Create a rotation matrix
-    pub fn from_quaternion(quat: &Quaternion<f32>) -> Self {
+    pub fn from_quaternion(quat: &Quaternion<T>) -> Self {
         let qx = quat[0];
         let qy = quat[1];
         let qz = quat[2];
         let qw = quat[3];
-        let vec1 = Vector4::<f32>::new(1.0 - 2.0 * qy * qy - 2.0 * qz * qz, 2.0 * qx * qy - 2.0 * qz * qw, 2.0 * qx * qz + 2.0 * qy * qw, 0.0);
-        let vec2 = Vector4::<f32>::new(2.0 * qx * qy + 2.0 * qz * qw, 1.0 - 2.0 * qx * qx - 2.0 * qz * qz, 2.0 * qy * qz - 2.0 * qx * qw, 0.0);
-        let vec3 = Vector4::<f32>::new(2.0 * qx * qz - 2.0 * qy * qw, 2.0 * qy * qz + 2.0 * qx * qw, 1.0 - 2.0 * qx * qx - 2.0 * qy * qy, 0.0);
-        let vec4 = Vector4::<f32>::W;
+        let vec1 = Vector4::<T>::new(1.0 - 2.0 * qy * qy - 2.0 * qz * qz, 2.0 * qx * qy - 2.0 * qz * qw, 2.0 * qx * qz + 2.0 * qy * qw, 0.0);
+        let vec2 = Vector4::<T>::new(2.0 * qx * qy + 2.0 * qz * qw, 1.0 - 2.0 * qx * qx - 2.0 * qz * qz, 2.0 * qy * qz - 2.0 * qx * qw, 0.0);
+        let vec3 = Vector4::<T>::new(2.0 * qx * qz - 2.0 * qy * qw, 2.0 * qy * qz + 2.0 * qx * qw, 1.0 - 2.0 * qx * qx - 2.0 * qy * qy, 0.0);
+        let vec4 = Vector4::<T>::W;
         Matrix4x4::new(vec1, vec2, vec3, vec4)
     }
     // Create a scale matrix
-    pub fn from_scale(scale: Vector3<f32>) -> Self {
+    pub fn from_scale(scale: Vector3<T>) -> Self {
         // Too good bro
         Matrix4x4::new(Vector4::X * scale.x, Vector4::Y * scale.y, Vector4::Z * scale.z, Vector4::W)
     }
     // Multiply a matrix by this matrix
-    pub fn mul_mat4x4(&self, other: Matrix4x4<f32>) -> Self {
+    pub fn mul_mat4x4(&self, other: Matrix4x4<T>) -> Self {
         let mut output: Self = Self::IDENTITY;
         // Get the A vectors
-        let mut a_vectors: [Vector4<f32>; 4] = [Vector4::<f32>::ZERO; 4];
+        let mut a_vectors: [Vector4<T>; 4] = [Vector4::<T>::ZERO; 4];
         for y in 0..4 {
             a_vectors[y][0] = self.get_vec(0)[y];
             a_vectors[y][1] = self.get_vec(1)[y];
@@ -254,7 +256,9 @@ impl Matrix4x4<f32> {
     }
 }
 // Multiply this matrix by another matrix
-impl Mul for Matrix4x4<f32> {
+impl<T> Mul for Matrix4x4<T>
+    where T: DefaultState + Float
+{
     type Output = Self;
 
     fn mul(self, rhs: Self) -> Self {
@@ -262,7 +266,9 @@ impl Mul for Matrix4x4<f32> {
     }
 }
 // Transform a vector by the matrix
-impl Matrix4x4<f32> {
+impl<T> Matrix4x4<T>
+    where T: DefaultState + Float
+{
     // Transform a 4D vector by the matrix
     pub fn mul_vector(&self, vector: &Vector4<f32>) -> Vector4<f32> {
         // Multiply the vector by this matrix

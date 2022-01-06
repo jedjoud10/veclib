@@ -6,6 +6,7 @@ mod quaternion;
 mod tests;
 mod vector;
 mod vectors;
+mod types;
 // Export the types
 pub use matrix::Matrix4x4;
 pub use quaternion::EulerAnglesOrder;
