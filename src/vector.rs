@@ -34,17 +34,3 @@ pub enum UnsizedVector<T>
     Vec3(crate::Vector3::<T>),
     Vec4(crate::Vector4::<T>),
 }
-
-impl<T> UnsizedVector<T>
-where T: DefaultStates + Clone + Copy
-{
-    // Get the amount of elements that each variant has
-    pub fn get_elem_count(&self) -> usize {
-        match self {
-            UnsizedVector::Scalar(_) => 1,
-            UnsizedVector::Vec2(_) => 2,
-            UnsizedVector::Vec3(_) => 3,
-            UnsizedVector::Vec4(_) => 4,
-        }
-    }
-}
