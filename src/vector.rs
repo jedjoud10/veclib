@@ -16,7 +16,7 @@ pub(crate) trait VectorElemCount {
 }
 
 // The vector trait
-pub(crate) trait Vector<T> {
+pub trait Vector<T> {
     // Turn this into an unsized vector
     fn get_unsized(self) -> UnsizedVector<T>
     where
