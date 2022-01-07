@@ -1,6 +1,6 @@
 use super::{Vector2, Vector3};
 use crate::{
-    types::DefaultStates,
+    types::SupportedValue,
     vector::{Swizzable, Vector, VectorElemCount},
 };
 use std::{
@@ -29,81 +29,74 @@ where
 }
 
 // Vector trait
-impl<T> Vector<T> for Vector4<T>
-    where T: DefaultStates + Clone + Copy
-{
-    fn get_unsized(self) -> crate::vector::UnsizedVector<T> where T: PartialEq {
+impl<T> Vector<T> for Vector4<T> {
+    fn get_unsized(self) -> crate::vector::UnsizedVector<T> where T: PartialEq + SupportedValue {
         crate::vector::UnsizedVector::Vec4(self)
     }
 }
-impl<T> VectorElemCount<T> for Vector4<T>
-    where T: DefaultStates + Clone + Copy
-{
-    const ELEM_COUNT: usize = 4;
-}
-impl<T> VectorElemCount<T> for &Vector4<T>
-    where T: DefaultStates + Clone + Copy
-{
+impl<T> VectorElemCount for Vector4<T> {
     const ELEM_COUNT: usize = 4;
 }
 
 // Default
-impl<T> Default for Vector4<T>
-where
-    T: DefaultStates + Clone + Copy + Sized,
-{
+impl<T: Default> Default for Vector4<T> {
     fn default() -> Self {
-        Self::ZERO
+        Self {
+            x: T::default(),
+            y: T::default(),
+            z: T::default(),
+            w: T::default(),
+        }
+    }
+}
+
+impl<T> Vector4<T> {
+    // Create a new vec4
+    pub const fn new(f1: T, f2: T, f3: T, f4: T) -> Self {
+        Self { x: f1, y: f2, z: f3, w: f4 }
     }
 }
 
 // Implement the vec4 code
 #[allow(dead_code)]
-impl<T> Vector4<T>
-where
-    T: DefaultStates + Clone + Copy + Sized,
-{
+impl<T: SupportedValue> Vector4<T> {
     // Defaults
     pub const ZERO: Self = Self {
-        x: T::OFF,
-        y: T::OFF,
-        z: T::OFF,
-        w: T::OFF,
+        x: T::ZERO,
+        y: T::ZERO,
+        z: T::ZERO,
+        w: T::ZERO,
     };
     pub const X: Self = Self {
-        x: T::ON,
-        y: T::OFF,
-        z: T::OFF,
-        w: T::OFF,
+        x: T::ONE,
+        y: T::ZERO,
+        z: T::ZERO,
+        w: T::ZERO,
     };
     pub const Y: Self = Self {
-        x: T::OFF,
-        y: T::ON,
-        z: T::OFF,
-        w: T::OFF,
+        x: T::ZERO,
+        y: T::ONE,
+        z: T::ZERO,
+        w: T::ZERO,
     };
     pub const Z: Self = Self {
-        x: T::OFF,
-        y: T::OFF,
-        z: T::ON,
-        w: T::OFF,
+        x: T::ZERO,
+        y: T::ZERO,
+        z: T::ONE,
+        w: T::ZERO,
     };
     pub const W: Self = Self {
-        x: T::OFF,
-        y: T::OFF,
-        z: T::OFF,
-        w: T::ON,
+        x: T::ZERO,
+        y: T::ZERO,
+        z: T::ZERO,
+        w: T::ONE,
     };
     pub const ONE: Self = Self {
-        x: T::ON,
-        y: T::ON,
-        z: T::ON,
-        w: T::ON,
-    };
-    // Create a new vec4
-    pub fn new(f1: T, f2: T, f3: T, f4: T) -> Self {
-        Self { x: f1, y: f2, z: f3, w: f4 }
-    }
+        x: T::ONE,
+        y: T::ONE,
+        z: T::ONE,
+        w: T::ONE,
+    };    
 }
 
 // Indexer
@@ -136,10 +129,7 @@ impl<T> IndexMut<usize> for Vector4<T> {
 }
 
 // Swizzle a vec4
-impl<T> Swizzable<T> for Vector4<T>
-where
-    T: DefaultStates + Clone + Copy + Sized,
-{
+impl<T: Clone + Copy> Swizzable<T> for Vector4<T> {
     fn get4(&self, order: [usize; 4]) -> Vector4<T> {
         Vector4::new(self[order[0]], self[order[1]], self[order[2]], self[order[3]])
     }
@@ -163,10 +153,7 @@ pub enum Vec4Axis {
 }
 
 // Get the default axii from the Vec4Axis
-impl<T> Vector4<T>
-where
-    T: DefaultStates + Clone + Copy + Sized,
-{
+impl<T: SupportedValue> Vector4<T> {
     // Get the default value
     pub fn get_default_axis(axis: Vec4Axis) -> Self {
         match axis {
@@ -203,8 +190,8 @@ crate::setup_sub!(Vector4<T>, T);
 crate::setup_mul!(Vector4<T>, T);
 crate::setup_div!(Vector4<T>, T);
 crate::setup_neg!(Vector4<T>, T);
-crate::setup_vector_arithmatics!(Vector4<f32>, T, f32);
-crate::setup_vector_arithmatics!(Vector4<f64>, T, f64);
+crate::setup_vector_operations!(Vector4<f32>, T, f32);
+crate::setup_vector_operations!(Vector4<f64>, T, f64);
 crate::impl_elem_wise_comparison!(Vector4<T>, T, Vector4<bool>);
 
 // Dear lord

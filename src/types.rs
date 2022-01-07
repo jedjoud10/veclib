@@ -1,7 +1,7 @@
-// Implement the default "ON" state for each primitive type
-pub trait DefaultStates: PartialEq {
-    const OFF: Self;
-    const ON: Self;
+// Implement the default "ONE" and "ZERO" values
+pub trait SupportedValue: PartialEq + Clone + Copy {
+    const ZERO: Self;
+    const ONE: Self;
 }
 
 // Integer types
@@ -17,19 +17,19 @@ crate::impl_default_state!(i64);
 crate::impl_default_state!(i128);
 
 // F32
-impl DefaultStates for f32 {
-    const OFF: Self = 0.0;
-    const ON: Self = 1.0;
+impl SupportedValue for f32 {
+    const ZERO: Self = 0.0;
+    const ONE: Self = 1.0;
 }
 
 // F64
-impl DefaultStates for f64 {
-    const OFF: Self = 0.0;
-    const ON: Self = 1.0;
+impl SupportedValue for f64 {
+    const ZERO: Self = 0.0;
+    const ONE: Self = 1.0;
 }
 
 // BOOL
-impl DefaultStates for bool {
-    const OFF: Self = false;
-    const ON: Self = true;
+impl SupportedValue for bool {
+    const ZERO: Self = false;
+    const ONE: Self = true;
 }

@@ -1,6 +1,6 @@
 use super::{Vector3, Vector4};
 use crate::{
-    types::DefaultStates,
+    types::SupportedValue,
     vector::{Swizzable, Vector, VectorElemCount},
 };
 use std::{
@@ -11,7 +11,8 @@ use std::{
 
 // A simple 2D vector, no simd support what-so-ever
 #[derive(PartialEq, Debug, Clone, Copy)]
-pub struct Vector2<T> {
+pub struct Vector2<T> 
+{
     pub x: T,
     pub y: T,
 }
@@ -27,50 +28,40 @@ where
 }
 
 // Vector trait
-impl<T> Vector<T> for Vector2<T> 
-    where T: DefaultStates + Clone + Copy
-{
-    fn get_unsized(self) -> crate::vector::UnsizedVector<T> where T: PartialEq {
+impl<T> Vector<T> for Vector2<T> {
+    fn get_unsized(self) -> crate::vector::UnsizedVector<T> where T: PartialEq + SupportedValue {
         crate::vector::UnsizedVector::<T>::Vec2(self)
     }
 }
-impl<T> VectorElemCount<T> for Vector2<T>
-    where T: DefaultStates + Clone + Copy
-{
+impl<T> VectorElemCount for Vector2<T> {
     const ELEM_COUNT: usize = 2;
 }
-impl<T> VectorElemCount<T> for &Vector2<T>
-    where T: DefaultStates + Clone + Copy
-{
-    const ELEM_COUNT: usize = 2;
-}
-
 
 // Default
-impl<T> Default for Vector2<T>
-where
-    T: DefaultStates + Clone + Copy + Sized,
-{
+impl<T: Default> Default for Vector2<T> {
     fn default() -> Self {
-        Self::ZERO
+        Self {
+            x: T::default(),
+            y: T::default(),
+        }
+    }
+}
+
+impl<T> Vector2<T> {
+    // Create a new vec2
+    pub const fn new(f1: T, f2: T) -> Self {
+        Self { x: f1, y: f2 }
     }
 }
 
 // Implement the vec3 code
 #[allow(dead_code)]
-impl<T> Vector2<T>
-where
-    T: DefaultStates + Clone + Copy + Sized,
-{
+impl<T: SupportedValue> Vector2<T> {
     // Defaults
-    pub const ZERO: Self = Self { x: T::OFF, y: T::OFF };
-    pub const X: Self = Self { x: T::ON, y: T::OFF };
-    pub const Y: Self = Self { x: T::OFF, y: T::ON };
-    pub const ONE: Self = Self { x: T::ON, y: T::ON };
-    // Create a new vec4
-    pub fn new(f1: T, f2: T) -> Self {
-        Self { x: f1, y: f2 }
-    }
+    pub const ZERO: Self = Self { x: T::ZERO, y: T::ZERO };
+    pub const X: Self = Self { x: T::ONE, y: T::ZERO };
+    pub const Y: Self = Self { x: T::ZERO, y: T::ONE };
+    pub const ONE: Self = Self { x: T::ONE, y: T::ONE };
 }
 
 // Indexer
@@ -99,10 +90,7 @@ impl<T> IndexMut<usize> for Vector2<T> {
 }
 
 // Swizzle a vec2
-impl<T> Swizzable<T> for Vector2<T>
-where
-    T: DefaultStates + Clone + Copy + Sized,
-{
+impl<T: Clone + Copy> Swizzable<T> for Vector2<T> {
     fn get4(&self, order: [usize; 4]) -> Vector4<T> {
         Vector4::new(self[order[0]], self[order[1]], self[order[2]], self[order[3]])
     }
@@ -124,10 +112,7 @@ pub enum Vec2Axis {
 }
 
 // Get the default axii from the Vec2Axis
-impl<T> Vector2<T>
-where
-    T: DefaultStates + Clone + Copy + Sized,
-{
+impl<T: SupportedValue> Vector2<T> {
     // Get the default value
     pub fn get_default_axis(axis: Vec2Axis) -> Self {
         match axis {
@@ -160,9 +145,10 @@ crate::setup_sub!(Vector2<T>, T);
 crate::setup_mul!(Vector2<T>, T);
 crate::setup_div!(Vector2<T>, T);
 crate::setup_neg!(Vector2<T>, T);
-crate::setup_vector_arithmatics!(Vector2<f32>, T, f32);
-crate::setup_vector_arithmatics!(Vector2<f64>, T, f64);
+crate::setup_vector_operations!(Vector2<f32>, T, f32);
+crate::setup_vector_operations!(Vector2<f64>, T, f64);
 crate::impl_elem_wise_comparison!(Vector2<T>, T, Vector2<bool>);
+
 
 // Dear lord
 // I deeply apologize for this

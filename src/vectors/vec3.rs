@@ -1,6 +1,6 @@
 use super::{Vector2, Vector4};
 use crate::{
-    types::DefaultStates,
+    types::SupportedValue,
     vector::{Swizzable, Vector, VectorElemCount},
 };
 use core::fmt;
@@ -29,30 +29,31 @@ where
 
 // Vector trait
 impl<T> Vector<T> for Vector3<T>
-    where T: DefaultStates + Clone + Copy
 {
-    fn get_unsized(self) -> crate::vector::UnsizedVector<T> where T: PartialEq {
+    fn get_unsized(self) -> crate::vector::UnsizedVector<T> where T: PartialEq + SupportedValue {
         crate::vector::UnsizedVector::Vec3(self)
     }
 }
-impl<T> VectorElemCount<T> for Vector3<T>
-    where T: DefaultStates + Clone + Copy
-{
-    const ELEM_COUNT: usize = 3;
-}
-impl<T> VectorElemCount<T> for &Vector3<T>
-    where T: DefaultStates + Clone + Copy
+impl<T> VectorElemCount for Vector3<T>
 {
     const ELEM_COUNT: usize = 3;
 }
 
 // Default
-impl<T> Default for Vector3<T>
-where
-    T: DefaultStates + Clone + Copy + Sized,
-{
+impl<T: Default> Default for Vector3<T> {
     fn default() -> Self {
-        Self::ZERO
+        Self {
+            x: T::default(),
+            y: T::default(),
+            z: T::default(),
+        }
+    }
+}
+
+impl<T> Vector3<T> {
+    // Create a new vec3
+    pub const fn new(f1: T, f2: T, f3: T) -> Self {
+        Self { x: f1, y: f2, z: f3 }
     }
 }
 
@@ -60,18 +61,14 @@ where
 #[allow(dead_code)]
 impl<T> Vector3<T>
 where
-    T: DefaultStates + Clone + Copy + Sized,
+    T: SupportedValue + Sized,
 {
     // Defaults
-    pub const ZERO: Self = Self { x: T::OFF, y: T::OFF, z: T::OFF };
-    pub const X: Self = Self { x: T::ON, y: T::OFF, z: T::OFF };
-    pub const Y: Self = Self { x: T::OFF, y: T::ON, z: T::OFF };
-    pub const Z: Self = Self { x: T::OFF, y: T::OFF, z: T::ON };
-    pub const ONE: Self = Self { x: T::ON, y: T::ON, z: T::ON };
-    // Create a new vec4
-    pub fn new(f1: T, f2: T, f3: T) -> Self {
-        Self { x: f1, y: f2, z: f3 }
-    }
+    pub const ZERO: Self = Self { x: T::ZERO, y: T::ZERO, z: T::ZERO };
+    pub const X: Self = Self { x: T::ONE, y: T::ZERO, z: T::ZERO };
+    pub const Y: Self = Self { x: T::ZERO, y: T::ONE, z: T::ZERO };
+    pub const Z: Self = Self { x: T::ZERO, y: T::ZERO, z: T::ONE };
+    pub const ONE: Self = Self { x: T::ONE, y: T::ONE, z: T::ONE };
 }
 
 // Indexer
@@ -102,10 +99,7 @@ impl<T> IndexMut<usize> for Vector3<T> {
 }
 
 // Swizzle a vec3
-impl<T> Swizzable<T> for Vector3<T>
-where
-    T: DefaultStates + Clone + Copy + Sized,
-{
+impl<T: Clone + Copy> Swizzable<T> for Vector3<T> {
     fn get4(&self, order: [usize; 4]) -> Vector4<T> {
         Vector4::new(self[order[0]], self[order[1]], self[order[2]], self[order[3]])
     }
@@ -128,10 +122,7 @@ pub enum Vec3Axis {
 }
 
 // Get the default axii from the Vec3Axis
-impl<T> Vector3<T>
-where
-    T: DefaultStates + Clone + Copy + Sized,
-{
+impl<T: SupportedValue> Vector3<T> {
     // Get the default value
     pub fn get_default_axis(axis: Vec3Axis) -> Self {
         match axis {
@@ -167,8 +158,8 @@ crate::setup_mul!(Vector3<T>, T);
 crate::setup_div!(Vector3<T>, T);
 crate::setup_neg!(Vector3<T>, T);
 
-crate::setup_vector_arithmatics!(Vector3<f32>, T, f32);
-crate::setup_vector_arithmatics!(Vector3<f64>, T, f64);
+crate::setup_vector_operations!(Vector3<f32>, T, f32);
+crate::setup_vector_operations!(Vector3<f64>, T, f64);
 crate::impl_elem_wise_comparison!(Vector3<T>, T, Vector3<bool>);
 
 // Dear lord
@@ -191,7 +182,7 @@ crate::impl_from_vec3!(Vector3<u32>, u32, i8, i16, i32, i64, i128, u8, u16, u64,
 crate::impl_from_vec3!(Vector3<u64>, u64, i8, i16, i32, i64, i128, u8, u16, u32, u128, f32, f64);
 crate::impl_from_vec3!(Vector3<u128>, u128, i8, i16, i32, i64, i128, u8, u16, u32, u64, f32, f64);
 
-// Vector3 arithmatics
+// Vector3 operations
 impl Vector3<f32> {
     // Get the cross product between two vectors
     pub fn cross(self, other: Self) -> Vector3<f32> {

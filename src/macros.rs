@@ -42,9 +42,9 @@ macro_rules! impl_from_vec4 {
 #[macro_export]
 macro_rules! impl_default_state {
     ($t:ty) => {
-        impl DefaultStates for $t {
-            const OFF: Self = 0;
-            const ON: Self = 1;
+        impl SupportedValue for $t {
+            const ZERO: Self = 0;
+            const ONE: Self = 1;
         }
     };
 }
@@ -54,7 +54,7 @@ macro_rules! setup_add {
     ($t:ty, $a:tt) => {
         impl<T> Add for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T>,
+            T: SupportedValue + PartialEq + PartialOrd + Add<Output = T>,
         {
             type Output = $t;
 
@@ -66,7 +66,7 @@ macro_rules! setup_add {
             }
         }
         /*
-        impl<T> Add for &$t where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T> {
+        impl<T> Add for &$t where T: SupportedValue + PartialEq + PartialOrd + Add<Output = T> {
             type Output = $t;
 
             fn add(self, rhs: Self) -> Self::Output {
@@ -78,7 +78,7 @@ macro_rules! setup_add {
         */
         impl<T> AddAssign for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T>,
+            T: SupportedValue + PartialEq + PartialOrd + Add<Output = T>,
         {
             fn add_assign(&mut self, rhs: Self) {
                 for i in 0..Self::ELEM_COUNT {
@@ -88,7 +88,7 @@ macro_rules! setup_add {
         }
         impl<T> Add<T> for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T>,
+            T: SupportedValue + PartialEq + PartialOrd + Add<Output = T>,
         {
             type Output = $t;
 
@@ -101,7 +101,7 @@ macro_rules! setup_add {
         }
         impl<T> AddAssign<T> for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Add<Output = T>,
+            T: SupportedValue + PartialEq + PartialOrd + Add<Output = T>,
         {
             fn add_assign(&mut self, rhs: T) {
                 for i in 0..Self::ELEM_COUNT {
@@ -117,7 +117,7 @@ macro_rules! setup_sub {
     ($t:ty, $a:tt) => {
         impl<T> Sub for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T>,
+            T: SupportedValue + PartialEq + PartialOrd + Sub<Output = T>,
         {
             type Output = $t;
 
@@ -129,7 +129,7 @@ macro_rules! setup_sub {
             }
         }
         /*
-        impl<T> Sub for &$t where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T> {
+        impl<T> Sub for &$t where T: SupportedValue + PartialEq + PartialOrd + Sub<Output = T> {
             type Output = $t;
 
             fn sub(self, rhs: Self) -> Self::Output {
@@ -141,7 +141,7 @@ macro_rules! setup_sub {
         */
         impl<T> SubAssign for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T>,
+            T: SupportedValue + PartialEq + PartialOrd + Sub<Output = T>,
         {
             fn sub_assign(&mut self, rhs: Self) {
                 for i in 0..Self::ELEM_COUNT {
@@ -151,7 +151,7 @@ macro_rules! setup_sub {
         }
         impl<T> Sub<T> for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T>,
+            T: SupportedValue + PartialEq + PartialOrd + Sub<Output = T>,
         {
             type Output = $t;
 
@@ -164,7 +164,7 @@ macro_rules! setup_sub {
         }
         impl<T> SubAssign<T> for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Sub<Output = T>,
+            T: SupportedValue + PartialEq + PartialOrd + Sub<Output = T>,
         {
             fn sub_assign(&mut self, rhs: T) {
                 for i in 0..Self::ELEM_COUNT {
@@ -180,7 +180,7 @@ macro_rules! setup_mul {
     ($t:ty, $a:tt) => {
         impl<T> Mul for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T>,
+            T: SupportedValue + PartialEq + PartialOrd + Mul<Output = T>,
         {
             type Output = $t;
 
@@ -192,7 +192,7 @@ macro_rules! setup_mul {
             }
         }
         /*
-        impl<T> Mul for &$t where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T> {
+        impl<T> Mul for &$t where T: SupportedValue + PartialEq + PartialOrd + Mul<Output = T> {
             type Output = $t;
 
             fn mul(self, rhs: Self) -> Self::Output {
@@ -204,7 +204,7 @@ macro_rules! setup_mul {
         */
         impl<T> MulAssign for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T>,
+            T: SupportedValue + PartialEq + PartialOrd + Mul<Output = T>,
         {
             fn mul_assign(&mut self, rhs: Self) {
                 for i in 0..Self::ELEM_COUNT {
@@ -214,7 +214,7 @@ macro_rules! setup_mul {
         }
         impl<T> Mul<T> for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T>,
+            T: SupportedValue + PartialEq + PartialOrd + Mul<Output = T>,
         {
             type Output = $t;
 
@@ -227,7 +227,7 @@ macro_rules! setup_mul {
         }
         impl<T> MulAssign<T> for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Mul<Output = T>,
+            T: SupportedValue + PartialEq + PartialOrd + Mul<Output = T>,
         {
             fn mul_assign(&mut self, rhs: T) {
                 for i in 0..Self::ELEM_COUNT {
@@ -243,7 +243,7 @@ macro_rules! setup_div {
     ($t:ty, $a:tt) => {
         impl<T> Div for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T>,
+            T: SupportedValue + PartialEq + PartialOrd + Div<Output = T>,
         {
             type Output = $t;
 
@@ -255,7 +255,7 @@ macro_rules! setup_div {
             }
         }
         /*
-        impl<T> Div for &$t where T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T> {
+        impl<T> Div for &$t where T: SupportedValue + PartialEq + PartialOrd + Div<Output = T> {
             type Output = $t;
 
             fn div(self, rhs: Self) -> Self::Output {
@@ -267,7 +267,7 @@ macro_rules! setup_div {
         */
         impl<T> DivAssign for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T>,
+            T: SupportedValue + PartialEq + PartialOrd + Div<Output = T>,
         {
             fn div_assign(&mut self, rhs: Self) {
                 for i in 0..Self::ELEM_COUNT {
@@ -277,7 +277,7 @@ macro_rules! setup_div {
         }
         impl<T> Div<T> for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T>,
+            T: SupportedValue + PartialEq + PartialOrd + Div<Output = T>,
         {
             type Output = $t;
 
@@ -290,7 +290,7 @@ macro_rules! setup_div {
         }
         impl<T> DivAssign<T> for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd + Div<Output = T>,
+            T: SupportedValue + PartialEq + PartialOrd + Div<Output = T>,
         {
             fn div_assign(&mut self, rhs: T) {
                 for i in 0..Self::ELEM_COUNT {
@@ -306,7 +306,7 @@ macro_rules! setup_neg {
     ($t:ty, $a:tt) => {
         impl<T> Neg for $t
         where
-            T: DefaultStates + Neg<Output = T> + Copy,
+            T: SupportedValue + Neg<Output = T> + Copy,
         {
             type Output = $t;
 
@@ -319,13 +319,13 @@ macro_rules! setup_neg {
         }
         impl<T> Neg for &$t
         where
-            T: DefaultStates + Neg<Output = T> + Copy,
+            T: SupportedValue + Neg<Output = T> + Copy,
         {
             type Output = $t;
 
             fn neg(self) -> Self::Output {
                 let mut output = <$t>::ZERO;
-                for i in 0..Self::ELEM_COUNT {
+                for i in 0..(<$t>::ELEM_COUNT) {
                     output[i] = -self[i];
                 }
                 return output;
@@ -335,9 +335,9 @@ macro_rules! setup_neg {
 }
 
 #[macro_export]
-macro_rules! setup_vector_arithmatics {
+macro_rules! setup_vector_operations {
     ($t:ty, $a:tt, $f: ty) => {
-        // Setup the shared vector arithmatics
+        // Setup the shared vector operations
         impl $t {
             // Get the distance from another vector
             pub fn distance(self, other: Self) -> $f {
@@ -416,7 +416,7 @@ macro_rules! impl_elem_wise_comparison {
         // Element wise comparison
         impl<T> $t
         where
-            T: DefaultStates + Clone + Copy + Sized + PartialEq + PartialOrd,
+            T: SupportedValue + PartialEq + PartialOrd
         {
             // Equals
             pub fn elem_eq(&self, other: &Self) -> $out {
@@ -479,11 +479,8 @@ macro_rules! impl_elem_wise_comparison {
         }
         impl $out {
             // Select between two vectors using the elements of the current bool vector
-            pub fn select<T>(&self, first: &$t, second: &$t) -> $t
-            where
-                T: Clone + Copy,
-            {
-                let mut output_vector: $t = first.clone();
+            pub fn select<T: Clone + Copy>(&self, first: &$t, second: &$t) -> $t {
+                let mut output_vector: $t = (*first).clone();
                 for i in 0..Self::ELEM_COUNT {
                     output_vector[i] = if self[i] { first[i] } else { second[i] }
                 }
@@ -492,7 +489,7 @@ macro_rules! impl_elem_wise_comparison {
         }
         impl<T> BitAnd for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + BitAnd + BitAndAssign,
+            T: SupportedValue + BitAnd + BitAndAssign,
         {
             type Output = $t;
             // Element wise and
@@ -506,7 +503,7 @@ macro_rules! impl_elem_wise_comparison {
         }
         impl<T> BitOr for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + BitOr + BitOrAssign,
+            T: SupportedValue + BitOr + BitOrAssign,
         {
             type Output = $t;
             // Element wise or
@@ -520,7 +517,7 @@ macro_rules! impl_elem_wise_comparison {
         }
         impl<T> BitXor for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + BitXor + BitXorAssign,
+            T: SupportedValue + BitXor + BitXorAssign,
         {
             type Output = $t;
             // Element wise xor
@@ -534,7 +531,7 @@ macro_rules! impl_elem_wise_comparison {
         }
         impl<T> Not for $t
         where
-            T: DefaultStates + Clone + Copy + Sized + Not<Output = T>,
+            T: SupportedValue + Not<Output = T>,
         {
             type Output = $t;
             // Element wise not
@@ -717,6 +714,110 @@ macro_rules! impl_matrix {
                 let mut output = Self::IDENTITY;
                 self.inverse(&mut output);
                 output
+            }
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! impl_quaternion {
+    ($t: ty, $f: ty) => {
+        // Da code
+        impl Quaternion<$f> {
+            // Create a quaternion from euler angles and the order of the angles operation
+            // https://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm
+            pub fn from_euler_angles(order: EulerAnglesOrder, euler: Vector3<$f>) -> Quaternion<$f> {
+                let output: Quaternion<$f>;
+                match order {
+                    EulerAnglesOrder::XYZ => {
+                        output = Self::from_z_angle(euler.z) * Self::from_y_angle(euler.y) * Self::from_x_angle(euler.x);
+                    }
+                    EulerAnglesOrder::XZY => {
+                        output = Self::from_y_angle(euler.y) * Self::from_z_angle(euler.z) * Self::from_x_angle(euler.x);
+                    }
+                    EulerAnglesOrder::YXZ => {
+                        output = Self::from_z_angle(euler.z) * Self::from_x_angle(euler.x) * Self::from_y_angle(euler.y);
+                    }
+                    EulerAnglesOrder::YZX => {
+                        output = Self::from_x_angle(euler.x) * Self::from_z_angle(euler.z) * Self::from_y_angle(euler.y);
+                    }
+                    EulerAnglesOrder::ZXY => {
+                        output = Self::from_y_angle(euler.y) * Self::from_x_angle(euler.x) * Self::from_z_angle(euler.z);
+                    }
+                    EulerAnglesOrder::ZYX => {
+                        output = Self::from_x_angle(euler.x) * Self::from_y_angle(euler.y) * Self::from_z_angle(euler.z);
+                    }
+                }
+                output
+            }
+            // Create a quaternion from an angle and an axis
+            pub fn from_axis_angle(axis: Vector3<$f>, angle: $f) -> Quaternion<$f> {
+                // Normalize just in case
+                //axis.normalize();
+                let x = (angle / 2.0).sin();
+                let mut output: Quaternion<$f> = Self::IDENTITY;
+                output[0] = axis.x * x;
+                output[1] = axis.y * x;
+                output[2] = axis.z * x;
+                output[3] = (angle / 2.0).cos();
+                /*
+                let mut output = Quaternion {
+                    data: Vector4::<f32>::new(axis.x, axis.y, axis.z, angle)
+                };
+                */
+                output
+            }
+            // Create the quaternion from an angle and the X axis
+            pub fn from_x_angle(angle: $f) -> Quaternion<$f> {
+                Self::from_axis_angle(Vector3::X, angle)
+            }
+            // Create the quaternion from an angle and the Y axis
+            pub fn from_y_angle(angle: $f) -> Quaternion<$f> {
+                Self::from_axis_angle(Vector3::Y, angle)
+            }
+            // Create the quaternion from an angle and the Z axis
+            pub fn from_z_angle(angle: $f) -> Quaternion<$f> {
+                Self::from_axis_angle(Vector3::Z, angle)
+            }
+        
+            // Transform a point by this quaternion
+            pub fn mul_point(&self, point: Vector3<$f>) -> Vector3<$f> {
+                // Turn the vector into a pure quaternion
+                let mut pure: Quaternion<$f> = Self::IDENTITY;
+                let self_vector = self.data.get3([0, 1, 2]);
+                pure[3] = 0.0;
+                pure[0] = point[0];
+                pure[1] = point[1];
+                pure[2] = point[2];
+                let vector: Vector3<$f> = self_vector.cross(point);
+                point + vector * (2.0 * self[3]) + self_vector.cross(vector) * 2.0
+            }
+            // Multiply a quaternion by this quaternion
+            pub fn mul_quaternion(&self, other: Quaternion<$f>) -> Quaternion<$f> {
+                // The output
+                let mut output: Self = Self::IDENTITY;
+                let other_vector = other.data.get3([0, 1, 2]);
+                let self_vector = self.data.get3([0, 1, 2]);
+                output[3] = self[3] * other[3] + self_vector.dot(other_vector);
+                let new_vector: Vector3<$f> = self_vector * other[3] + other_vector * self[3] + self_vector.cross(other_vector);
+                output[0] = new_vector.x;
+                output[1] = new_vector.y;
+                output[2] = new_vector.z;
+                output
+            }
+            // Normalize this quaternion
+            pub fn normalize(&mut self) {
+                self.data.normalize();
+            }
+        }
+
+        // Operators
+        impl Mul for Quaternion<$f> {
+            type Output = Quaternion<$f>;
+        
+            fn mul(self, rhs: Self) -> Self::Output {
+                //return self.mul_quaternion(rhs);
+                rhs.mul_quaternion(self)
             }
         }
     };

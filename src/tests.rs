@@ -1,7 +1,6 @@
 #[cfg(test)]
 mod tests {
     use crate::{
-        consts,
         vector::{Swizzable, UnsizedVector, Vector},
         vectors::{Vector2, Vector3, Vector4},
         Matrix4x4, Quaternion, Vec2Axis, Vec3Axis, Vec4Axis,
@@ -58,15 +57,15 @@ mod tests {
         assert_ne!(-Vector2::<f32>::ONE, Vector2::<f32>::ONE);
         assert_ne!(-Vector2::<f64>::ONE, Vector2::<f64>::ONE);
     }
-    // Vector arithemtics
+    // Vector operations
     #[test]
-    pub fn arithemtics() {
+    pub fn operations() {
         let val = Vector3::<f32>::X;
         let test = val.dot(Vector3::Y);
         assert_eq!(test, 0.0);
         let k = Vector3::<f32>::new(2.0, 3.0, 4.0).cross(Vector3::<f32>::new(5.0, 6.0, 7.0));
         assert_eq!(k, Vector3::<f32>::new(-3.0, 6.0, -3.0));
-        assert_eq!(Vector2::ZERO, consts::vec2(0.0, 0.0));
+        assert_eq!(Vector2::ZERO, Vector2::new(0.0, 0.0));
     }
     // Matrix multiplication
     #[test]
