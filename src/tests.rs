@@ -3,7 +3,7 @@ mod tests {
     use crate::{
         vector::{Swizzable, UnsizedVector, Vector},
         vectors::{Vector2, Vector3, Vector4},
-        Matrix4x4, Quaternion, Vec2Axis, Vec3Axis, Vec4Axis,
+        Matrix4x4, Quaternion, Vec3Axis,
     };
 
     // Test if the vector swizzler works
