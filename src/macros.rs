@@ -561,3 +561,163 @@ macro_rules! impl_eq_hash {
         }
     };
 }
+#[macro_export]
+macro_rules! impl_matrix {
+    ($t: ty, $f: ty) => {
+        // Creation code for the matrix
+        #[allow(dead_code)]
+        impl $t {
+            // Create a matrix from 4 vector4s
+            pub fn new(vec1: Vector4<$f>, vec2: Vector4<$f>, vec3: Vector4<$f>, vec4: Vector4<$f>) -> Self {
+                Matrix4x4 { data: [vec1, vec2, vec3, vec4] }
+            }
+            // Create a perspective projection matrix
+            // Bonk https://gamedev.stackexchange.com/questions/120338/what-does-a-perspective-projection-matrix-look-like-in-opengl
+            pub fn from_perspective(near: $f, far: $f, aspect: $f, fov: $f) -> Self {
+                // Math
+                let first = 1.0 / (aspect * (fov / 2.0).tan());
+                let second = 1.0 / (fov / 2.0).tan();
+                // The output
+                let mut matrix: Self = Self::IDENTITY;
+                // Right now it is using row major but I will switch it to collumn major later
+                // This is row major
+                *matrix.get_vec_mut(0) = Vector4::new(first, 0.0, 0.0, 0.0);
+                *matrix.get_vec_mut(1) = Vector4::new(0.0, second, 0.0, 0.0);
+                *matrix.get_vec_mut(2) = Vector4::new(0.0, 0.0, -((far + near) / (far - near)), -((2.0 * far * near) / (far - near)));
+                *matrix.get_vec_mut(3) = -Vector4::Z;
+                matrix.transpose();
+                // Transpose the matrix
+                matrix
+            }
+            // Create a translation matrix
+            pub fn from_translation(position: Vector3<$f>) -> Self {
+                // The output
+                let mut matrix: Self = Self::IDENTITY;
+                *matrix.get_vec_mut(0) = Vector4::X;
+                *matrix.get_vec_mut(1) = Vector4::Y;
+                *matrix.get_vec_mut(2) = Vector4::Z;
+                *matrix.get_vec_mut(3) = Vector4::new(position[0], position[1], position[2], 1.0);
+                matrix
+            }
+            // Create a look at matrix
+            // https://www.geertarien.com/blog/2017/07/30/breakdown-of-the-lookAt-function-in-OpenGL/
+            pub fn look_at(eye: &Vector3<$f>, up: &Vector3<$f>, target: &Vector3<$f>) -> Self {
+                // The output
+                let zaxis: Vector3<$f> = (*target - *eye).normalized();
+                let xaxis: Vector3<$f> = zaxis.cross(*up);
+                    let yaxis: Vector3<$f> = xaxis.cross(zaxis);
+
+                    let zaxis = -zaxis;
+
+                let mut output: Matrix4x4<$f> = Matrix4x4::<$f> {
+                    data: [
+                        Vector4::<$f>::new(xaxis.x, xaxis.y, xaxis.z, -xaxis.dot(*eye)),
+                        Vector4::<$f>::new(yaxis.x, yaxis.y, yaxis.z, -yaxis.dot(*eye)),
+                        Vector4::<$f>::new(zaxis.x, zaxis.y, zaxis.z, -zaxis.dot(*eye)),
+                        Vector4::<$f>::W,
+                    ],
+                    };
+
+                // Transpose the matrix
+                    output.transpose();
+
+                output
+            }
+            // Create a rotation matrix
+            pub fn from_quaternion(quat: &Quaternion<$f>) -> Self {
+                let qx = quat[0];
+                let qy = quat[1];
+                let qz = quat[2];
+                let qw = quat[3];
+                let vec1 = Vector4::<$f>::new(1.0 - 2.0 * qy * qy - 2.0 * qz * qz, 2.0 * qx * qy - 2.0 * qz * qw, 2.0 * qx * qz + 2.0 * qy * qw, 0.0);
+                let vec2 = Vector4::<$f>::new(2.0 * qx * qy + 2.0 * qz * qw, 1.0 - 2.0 * qx * qx - 2.0 * qz * qz, 2.0 * qy * qz - 2.0 * qx * qw, 0.0);
+                let vec3 = Vector4::<$f>::new(2.0 * qx * qz - 2.0 * qy * qw, 2.0 * qy * qz + 2.0 * qx * qw, 1.0 - 2.0 * qx * qx - 2.0 * qy * qy, 0.0);
+                let vec4 = Vector4::<$f>::W;
+                Matrix4x4::<$f>::new(vec1, vec2, vec3, vec4)
+            }
+            // Create a scale matrix
+            pub fn from_scale(scale: Vector3<$f>) -> Self {
+                // Too good bro
+                Matrix4x4::<$f>::new(Vector4::X * scale.x, Vector4::Y * scale.y, Vector4::Z * scale.z, Vector4::W)
+            }
+            // Multiply a matrix by this matrix
+            pub fn mul_mat4x4(&self, other: Matrix4x4<$f>) -> Self {
+                let mut output: Self = Self::IDENTITY;
+                // Get the A vectors
+                let mut a_vectors: [Vector4<$f>; 4] = [Vector4::<$f>::ZERO; 4];
+                for y in 0..4 {
+                    a_vectors[y][0] = self.get_vec(0)[y];
+                    a_vectors[y][1] = self.get_vec(1)[y];
+                    a_vectors[y][2] = self.get_vec(2)[y];
+                    a_vectors[y][3] = self.get_vec(3)[y];
+                }
+                // Get the dot product
+                for y in 0..4 {
+                    for x in 0..4 {
+                        // Collumn major
+                        // Get A
+                        let a: Vector4<$f> = a_vectors[y];
+                        let b = *other.get_vec(x);
+                        let h = &mut output.get_vec_mut(x)[y];
+                        *h = a.dot(b);
+                    }
+                }
+                output
+            }
+            // Return the inverse of this matrix
+            // https://stackoverflow.com/questions/1148309/inverting-a-4x4-matrix/44446912#44446912
+            pub fn inverse(&self, inverse: &mut Self) -> bool {
+                let m = *self;
+                    let mut inv = Self::default();
+
+                    inv[0] = m[5] * m[10] * m[15] - m[5] * m[11] * m[14] - m[9] * m[6] * m[15] + m[9] * m[7] * m[14] + m[13] * m[6] * m[11] - m[13] * m[7] * m[10];
+
+                    inv[4] = -m[4] * m[10] * m[15] + m[4] * m[11] * m[14] + m[8] * m[6] * m[15] - m[8] * m[7] * m[14] - m[12] * m[6] * m[11] + m[12] * m[7] * m[10];
+
+                    inv[8] = m[4] * m[9] * m[15] - m[4] * m[11] * m[13] - m[8] * m[5] * m[15] + m[8] * m[7] * m[13] + m[12] * m[5] * m[11] - m[12] * m[7] * m[9];
+
+                    inv[12] = -m[4] * m[9] * m[14] + m[4] * m[10] * m[13] + m[8] * m[5] * m[14] - m[8] * m[6] * m[13] - m[12] * m[5] * m[10] + m[12] * m[6] * m[9];
+
+                    inv[1] = -m[1] * m[10] * m[15] + m[1] * m[11] * m[14] + m[9] * m[2] * m[15] - m[9] * m[3] * m[14] - m[13] * m[2] * m[11] + m[13] * m[3] * m[10];
+
+                    inv[5] = m[0] * m[10] * m[15] - m[0] * m[11] * m[14] - m[8] * m[2] * m[15] + m[8] * m[3] * m[14] + m[12] * m[2] * m[11] - m[12] * m[3] * m[10];
+
+                    inv[9] = -m[0] * m[9] * m[15] + m[0] * m[11] * m[13] + m[8] * m[1] * m[15] - m[8] * m[3] * m[13] - m[12] * m[1] * m[11] + m[12] * m[3] * m[9];
+
+                    inv[13] = m[0] * m[9] * m[14] - m[0] * m[10] * m[13] - m[8] * m[1] * m[14] + m[8] * m[2] * m[13] + m[12] * m[1] * m[10] - m[12] * m[2] * m[9];
+
+                    inv[2] = m[1] * m[6] * m[15] - m[1] * m[7] * m[14] - m[5] * m[2] * m[15] + m[5] * m[3] * m[14] + m[13] * m[2] * m[7] - m[13] * m[3] * m[6];
+
+                    inv[6] = -m[0] * m[6] * m[15] + m[0] * m[7] * m[14] + m[4] * m[2] * m[15] - m[4] * m[3] * m[14] - m[12] * m[2] * m[7] + m[12] * m[3] * m[6];
+
+                    inv[10] = m[0] * m[5] * m[15] - m[0] * m[7] * m[13] - m[4] * m[1] * m[15] + m[4] * m[3] * m[13] + m[12] * m[1] * m[7] - m[12] * m[3] * m[5];
+
+                    inv[14] = -m[0] * m[5] * m[14] + m[0] * m[6] * m[13] + m[4] * m[1] * m[14] - m[4] * m[2] * m[13] - m[12] * m[1] * m[6] + m[12] * m[2] * m[5];
+
+                    inv[3] = -m[1] * m[6] * m[11] + m[1] * m[7] * m[10] + m[5] * m[2] * m[11] - m[5] * m[3] * m[10] - m[9] * m[2] * m[7] + m[9] * m[3] * m[6];
+
+                    inv[7] = m[0] * m[6] * m[11] - m[0] * m[7] * m[10] - m[4] * m[2] * m[11] + m[4] * m[3] * m[10] + m[8] * m[2] * m[7] - m[8] * m[3] * m[6];
+
+                    inv[11] = -m[0] * m[5] * m[11] + m[0] * m[7] * m[9] + m[4] * m[1] * m[11] - m[4] * m[3] * m[9] - m[8] * m[1] * m[7] + m[8] * m[3] * m[5];
+
+                inv[15] = m[0] * m[5] * m[10] - m[0] * m[6] * m[9] - m[4] * m[1] * m[10] + m[4] * m[2] * m[9] + m[8] * m[1] * m[6] - m[8] * m[2] * m[5];
+                let det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
+                // Not valid
+                if det == 0.0 {
+                    return false;
+                    }
+
+                for i in 0..16 {
+                    inverse[i] = inv[i] * (1.0 / det);
+                }
+                true
+            }
+            // Inversed
+            pub fn inversed(&self) -> Self {
+                let mut output = Self::IDENTITY;
+                self.inverse(&mut output);
+                output
+            }
+        }
+    };
+}

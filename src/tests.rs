@@ -116,4 +116,5 @@ mod tests {
         assert_eq!(v1.get_axis(Vec3Axis::Y), -5.0);
         assert_eq!(v1.get_axis(Vec3Axis::Z), 20.0);
     }
+    
 }
