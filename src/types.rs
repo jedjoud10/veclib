@@ -1,5 +1,5 @@
 // Implement the default "ON" state for each primitive type
-pub trait DefaultStates {
+pub trait DefaultStates: PartialEq {
     const OFF: Self;
     const ON: Self;
 }

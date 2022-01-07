@@ -2,7 +2,7 @@
 mod tests {
     use crate::{
         consts,
-        vector::Swizzable,
+        vector::{Swizzable, UnsizedVector, Vector},
         vectors::{Vector2, Vector3, Vector4},
         Matrix4x4, Quaternion, Vec2Axis, Vec3Axis, Vec4Axis,
     };
@@ -116,5 +116,14 @@ mod tests {
         assert_eq!(v1.get_axis(Vec3Axis::Y), -5.0);
         assert_eq!(v1.get_axis(Vec3Axis::Z), 20.0);
     }
-    
+    // Test the unsized vector
+    #[test]
+    pub fn unsized_vector() {
+        let scalar = 0.0_f64;
+        let v1 = Vector3::<f64>::new(10.0, -5.0, 20.0);
+        let u1 = scalar.get_unsized();
+        let u2 = v1.get_unsized();
+        assert_eq!(u1, UnsizedVector::Scalar(0.0));
+        assert_eq!(u2, UnsizedVector::Vec3(Vector3::<f64>::new(10.0, -5.0, 20.0)));
+    }
 }

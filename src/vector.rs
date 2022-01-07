@@ -22,12 +22,13 @@ pub(crate) trait Vector<T>
     where T: DefaultStates + Clone + Copy
 {
     // Turn this into an unsized vector
-    fn get_unsized(self) -> UnsizedVector<T>;
+    fn get_unsized(self) -> UnsizedVector<T> where T: PartialEq;
 }
 
 // A vector with interchangeable element count
+#[derive(Debug, PartialEq)]
 pub enum UnsizedVector<T> 
-    where T: DefaultStates + Clone + Copy 
+    where T: DefaultStates + Clone + Copy + PartialEq
 {
     Scalar(T),
     Vec2(crate::Vector2::<T>),

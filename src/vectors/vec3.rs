@@ -31,7 +31,7 @@ where
 impl<T> Vector<T> for Vector3<T>
     where T: DefaultStates + Clone + Copy
 {
-    fn get_unsized(self) -> crate::vector::UnsizedVector<T> {
+    fn get_unsized(self) -> crate::vector::UnsizedVector<T> where T: PartialEq {
         crate::vector::UnsizedVector::Vec3(self)
     }
 }
