@@ -1,10 +1,11 @@
 use std::ops::{Index, IndexMut, Mul};
 
 use crate::{
+    impl_matrix,
     types::SupportedValue,
     vector::Swizzable,
     vectors::{Vector3, Vector4},
-    Quaternion, impl_matrix,
+    Quaternion,
 };
 
 // A simple f32 matrix made of 4 f32/f64 vectors

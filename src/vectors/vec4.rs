@@ -30,7 +30,10 @@ where
 
 // Vector trait
 impl<T> Vector<T> for Vector4<T> {
-    fn get_unsized(self) -> crate::vector::UnsizedVector<T> where T: PartialEq + SupportedValue {
+    fn get_unsized(self) -> crate::vector::UnsizedVector<T>
+    where
+        T: PartialEq + SupportedValue,
+    {
         crate::vector::UnsizedVector::Vec4(self)
     }
 }
@@ -96,7 +99,7 @@ impl<T: SupportedValue> Vector4<T> {
         y: T::ONE,
         z: T::ONE,
         w: T::ONE,
-    };    
+    };
 }
 
 // Indexer

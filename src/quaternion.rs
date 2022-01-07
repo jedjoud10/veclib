@@ -1,6 +1,6 @@
 use std::ops::{Index, IndexMut, Mul};
 
-use crate::{types::SupportedValue, Swizzable, Vector3, Vector4, impl_quaternion};
+use crate::{impl_quaternion, types::SupportedValue, Swizzable, Vector3, Vector4};
 
 // A quaternion that represents a rotation
 #[derive(Debug, Clone, Copy)]
@@ -52,8 +52,9 @@ pub enum EulerAnglesOrder {
 }
 
 impl<T> Quaternion<T>
-    where T: SupportedValue
-{    
+where
+    T: SupportedValue,
+{
     // Identity
     pub const IDENTITY: Self = Self { data: Vector4::<T>::W };
 }

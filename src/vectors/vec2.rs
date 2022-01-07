@@ -11,8 +11,7 @@ use std::{
 
 // A simple 2D vector, no simd support what-so-ever
 #[derive(PartialEq, Debug, Clone, Copy)]
-pub struct Vector2<T> 
-{
+pub struct Vector2<T> {
     pub x: T,
     pub y: T,
 }
@@ -29,7 +28,10 @@ where
 
 // Vector trait
 impl<T> Vector<T> for Vector2<T> {
-    fn get_unsized(self) -> crate::vector::UnsizedVector<T> where T: PartialEq + SupportedValue {
+    fn get_unsized(self) -> crate::vector::UnsizedVector<T>
+    where
+        T: PartialEq + SupportedValue,
+    {
         crate::vector::UnsizedVector::<T>::Vec2(self)
     }
 }
@@ -40,10 +42,7 @@ impl<T> VectorElemCount for Vector2<T> {
 // Default
 impl<T: Default> Default for Vector2<T> {
     fn default() -> Self {
-        Self {
-            x: T::default(),
-            y: T::default(),
-        }
+        Self { x: T::default(), y: T::default() }
     }
 }
 
@@ -148,7 +147,6 @@ crate::setup_neg!(Vector2<T>, T);
 crate::setup_vector_operations!(Vector2<f32>, T, f32);
 crate::setup_vector_operations!(Vector2<f64>, T, f64);
 crate::impl_elem_wise_comparison!(Vector2<T>, T, Vector2<bool>);
-
 
 // Dear lord
 // I deeply apologize for this

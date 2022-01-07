@@ -28,14 +28,15 @@ where
 }
 
 // Vector trait
-impl<T> Vector<T> for Vector3<T>
-{
-    fn get_unsized(self) -> crate::vector::UnsizedVector<T> where T: PartialEq + SupportedValue {
+impl<T> Vector<T> for Vector3<T> {
+    fn get_unsized(self) -> crate::vector::UnsizedVector<T>
+    where
+        T: PartialEq + SupportedValue,
+    {
         crate::vector::UnsizedVector::Vec3(self)
     }
 }
-impl<T> VectorElemCount for Vector3<T>
-{
+impl<T> VectorElemCount for Vector3<T> {
     const ELEM_COUNT: usize = 3;
 }
 
@@ -64,10 +65,26 @@ where
     T: SupportedValue + Sized,
 {
     // Defaults
-    pub const ZERO: Self = Self { x: T::ZERO, y: T::ZERO, z: T::ZERO };
-    pub const X: Self = Self { x: T::ONE, y: T::ZERO, z: T::ZERO };
-    pub const Y: Self = Self { x: T::ZERO, y: T::ONE, z: T::ZERO };
-    pub const Z: Self = Self { x: T::ZERO, y: T::ZERO, z: T::ONE };
+    pub const ZERO: Self = Self {
+        x: T::ZERO,
+        y: T::ZERO,
+        z: T::ZERO,
+    };
+    pub const X: Self = Self {
+        x: T::ONE,
+        y: T::ZERO,
+        z: T::ZERO,
+    };
+    pub const Y: Self = Self {
+        x: T::ZERO,
+        y: T::ONE,
+        z: T::ZERO,
+    };
+    pub const Z: Self = Self {
+        x: T::ZERO,
+        y: T::ZERO,
+        z: T::ONE,
+    };
     pub const ONE: Self = Self { x: T::ONE, y: T::ONE, z: T::ONE };
 }
 
