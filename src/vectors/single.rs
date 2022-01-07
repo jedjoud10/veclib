@@ -1,13 +1,10 @@
 use crate::{vector::Vector, SupportedValue};
 
-impl<T> Vector<T> for T
-where
-    T: SupportedValue,
-{
+impl<T: SupportedValue> Vector<T> for T {
     fn get_unsized(self) -> crate::vector::UnsizedVector<T>
     where
         T: PartialEq,
     {
-        crate::vector::UnsizedVector::Scalar(self)
+        crate::vector::UnsizedVector::Single(self)
     }
 }

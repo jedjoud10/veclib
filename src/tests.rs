@@ -122,7 +122,7 @@ mod tests {
         let v1 = Vector3::<f64>::new(10.0, -5.0, 20.0);
         let u1 = scalar.get_unsized();
         let u2 = v1.get_unsized();
-        assert_eq!(u1, UnsizedVector::Scalar(0.0));
+        assert_eq!(u1, UnsizedVector::Single(0.0));
         assert_eq!(u2, UnsizedVector::Vec3(Vector3::<f64>::new(10.0, -5.0, 20.0)));
     }
 }

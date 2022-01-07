@@ -8,7 +8,7 @@ mod vector;
 mod vectors;
 // Export the types
 pub use types::SupportedValue;
-pub use vector::Swizzable;
+pub use vector::*;
 pub use matrix::*;
 pub use quaternion::*;
 pub use vectors::*;
