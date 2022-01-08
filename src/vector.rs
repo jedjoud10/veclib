@@ -24,7 +24,7 @@ pub trait Vector<T> {
 }
 
 // A vector with interchangeable element count
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum UnsizedVector<T: SupportedValue + PartialEq> {
     Single(T),
     Vec2(crate::Vector2<T>),
