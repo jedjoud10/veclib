@@ -53,6 +53,10 @@ impl<T: Default> Default for Vector4<T> {
     }
 }
 
+pub const fn vec4<T>(f1: T, f2: T, f3: T, f4: T) -> Vector4<T> {
+    Vector4::new(f1, f2, f3, f4)
+}
+
 impl<T> Vector4<T> {
     // Create a new vec4
     pub const fn new(f1: T, f2: T, f3: T, f4: T) -> Self {
