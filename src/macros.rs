@@ -71,7 +71,7 @@ macro_rules! setup_add {
         {
             type Output = $t;
 
-            fn add(mut self, rhs: Self) -> Self::Output {
+            fn add(self, rhs: Self) -> Self::Output {
                 let mut me = *self;
                 let rhs = *rhs;
                 for i in 0..Self::ELEM_COUNT {
@@ -86,7 +86,7 @@ macro_rules! setup_add {
         {
             type Output = $t;
 
-            fn add(mut self, rhs: T) -> Self::Output {
+            fn add(self, rhs: T) -> Self::Output {
                 let mut me = *self;
                 let rhs = rhs;
                 for i in 0..Self::ELEM_COUNT {
@@ -153,7 +153,7 @@ macro_rules! setup_sub {
         {
             type Output = $t;
 
-            fn sub(mut self, rhs: Self) -> Self::Output {
+            fn sub(self, rhs: Self) -> Self::Output {
                 let mut me = *self;
                 let rhs = *rhs;
                 for i in 0..Self::ELEM_COUNT {
@@ -168,7 +168,7 @@ macro_rules! setup_sub {
         {
             type Output = $t;
 
-            fn sub(mut self, rhs: T) -> Self::Output {
+            fn sub(self, rhs: T) -> Self::Output {
                 let mut me = *self;
                 let rhs = rhs;
                 for i in 0..Self::ELEM_COUNT {
@@ -235,7 +235,7 @@ macro_rules! setup_mul {
         {
             type Output = $t;
 
-            fn mul(mut self, rhs: Self) -> Self::Output {
+            fn mul(self, rhs: Self) -> Self::Output {
                 let mut me = *self;
                 let rhs = *rhs;
                 for i in 0..Self::ELEM_COUNT {
@@ -250,7 +250,7 @@ macro_rules! setup_mul {
         {
             type Output = $t;
 
-            fn mul(mut self, rhs: T) -> Self::Output {
+            fn mul(self, rhs: T) -> Self::Output {
                 let mut me = *self;
                 let rhs = rhs;
                 for i in 0..Self::ELEM_COUNT {
@@ -317,7 +317,7 @@ macro_rules! setup_div {
         {
             type Output = $t;
 
-            fn div(mut self, rhs: Self) -> Self::Output {
+            fn div(self, rhs: Self) -> Self::Output {
                 let mut me = *self;
                 let rhs = *rhs;
                 for i in 0..Self::ELEM_COUNT {
@@ -332,7 +332,7 @@ macro_rules! setup_div {
         {
             type Output = $t;
 
-            fn div(mut self, rhs: T) -> Self::Output {
+            fn div(self, rhs: T) -> Self::Output {
                 let mut me = *self;
                 let rhs = rhs;
                 for i in 0..Self::ELEM_COUNT {
