@@ -39,6 +39,10 @@ impl<T> VectorElemCount for Vector2<T> {
     const ELEM_COUNT: usize = 2;
 }
 
+impl<T> VectorElemCount for &Vector2<T> {
+    const ELEM_COUNT: usize = 2;
+}
+
 // Default
 impl<T: Default> Default for Vector2<T> {
     fn default() -> Self {

@@ -40,6 +40,9 @@ impl<T> Vector<T> for Vector4<T> {
 impl<T> VectorElemCount for Vector4<T> {
     const ELEM_COUNT: usize = 4;
 }
+impl<T> VectorElemCount for &Vector4<T> {
+    const ELEM_COUNT: usize = 4;
+}
 
 // Default
 impl<T: Default> Default for Vector4<T> {

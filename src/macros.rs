@@ -65,17 +65,36 @@ macro_rules! setup_add {
                 return self;
             }
         }
-        /*
-        impl<T> Add for &$t where T: SupportedValue + PartialEq + PartialOrd + Add<Output = T> {
+        impl<T> Add for &$t
+        where
+            T: SupportedValue + PartialEq + PartialOrd + Add<Output = T>,
+        {
             type Output = $t;
 
-            fn add(self, rhs: Self) -> Self::Output {
-                let mut output = <$t>::ZERO;
-                for i in 0..Self::ELEM_COUNT { output[i] = self[i] + rhs[i]; }
-                return output;
+            fn add(mut self, rhs: Self) -> Self::Output {
+                let mut me = *self;
+                let rhs = *rhs;
+                for i in 0..Self::ELEM_COUNT {
+                    me[i] = me[i] + rhs[i];
+                }
+                return me;
             }
         }
-        */
+        impl<T> Add<T> for &$t
+        where
+            T: SupportedValue + PartialEq + PartialOrd + Add<Output = T>,
+        {
+            type Output = $t;
+
+            fn add(mut self, rhs: T) -> Self::Output {
+                let mut me = *self;
+                let rhs = rhs;
+                for i in 0..Self::ELEM_COUNT {
+                    me[i] = me[i] + rhs;
+                }
+                return me;
+            }
+        }
         impl<T> AddAssign for $t
         where
             T: SupportedValue + PartialEq + PartialOrd + Add<Output = T>,
@@ -128,17 +147,36 @@ macro_rules! setup_sub {
                 return self;
             }
         }
-        /*
-        impl<T> Sub for &$t where T: SupportedValue + PartialEq + PartialOrd + Sub<Output = T> {
+        impl<T> Sub for &$t
+        where
+            T: SupportedValue + PartialEq + PartialOrd + Sub<Output = T>,
+        {
             type Output = $t;
 
-            fn sub(self, rhs: Self) -> Self::Output {
-                let mut output = <$t>::ZERO;
-                for i in 0..Self::ELEM_COUNT { output[i] = self[i] - rhs[i]; }
-                return output;
+            fn sub(mut self, rhs: Self) -> Self::Output {
+                let mut me = *self;
+                let rhs = *rhs;
+                for i in 0..Self::ELEM_COUNT {
+                    me[i] = me[i] - rhs[i];
+                }
+                return me;
             }
         }
-        */
+        impl<T> Sub<T> for &$t
+        where
+            T: SupportedValue + PartialEq + PartialOrd + Sub<Output = T>,
+        {
+            type Output = $t;
+
+            fn sub(mut self, rhs: T) -> Self::Output {
+                let mut me = *self;
+                let rhs = rhs;
+                for i in 0..Self::ELEM_COUNT {
+                    me[i] = me[i] - rhs;
+                }
+                return me;
+            }
+        }
         impl<T> SubAssign for $t
         where
             T: SupportedValue + PartialEq + PartialOrd + Sub<Output = T>,
@@ -191,17 +229,36 @@ macro_rules! setup_mul {
                 return self;
             }
         }
-        /*
-        impl<T> Mul for &$t where T: SupportedValue + PartialEq + PartialOrd + Mul<Output = T> {
+        impl<T> Mul for &$t
+        where
+            T: SupportedValue + PartialEq + PartialOrd + Mul<Output = T>,
+        {
             type Output = $t;
 
-            fn mul(self, rhs: Self) -> Self::Output {
-                let mut output = <$t>::ZERO;
-                for i in 0..Self::ELEM_COUNT { output[i] = self[i] * rhs[i]; }
-                return output;
+            fn mul(mut self, rhs: Self) -> Self::Output {
+                let mut me = *self;
+                let rhs = *rhs;
+                for i in 0..Self::ELEM_COUNT {
+                    me[i] = me[i] * rhs[i];
+                }
+                return me;
             }
         }
-        */
+        impl<T> Mul<T> for &$t
+        where
+            T: SupportedValue + PartialEq + PartialOrd + Mul<Output = T>,
+        {
+            type Output = $t;
+
+            fn mul(mut self, rhs: T) -> Self::Output {
+                let mut me = *self;
+                let rhs = rhs;
+                for i in 0..Self::ELEM_COUNT {
+                    me[i] = me[i] * rhs;
+                }
+                return me;
+            }
+        }
         impl<T> MulAssign for $t
         where
             T: SupportedValue + PartialEq + PartialOrd + Mul<Output = T>,
@@ -254,17 +311,36 @@ macro_rules! setup_div {
                 return self;
             }
         }
-        /*
-        impl<T> Div for &$t where T: SupportedValue + PartialEq + PartialOrd + Div<Output = T> {
+        impl<T> Div for &$t
+        where
+            T: SupportedValue + PartialEq + PartialOrd + Div<Output = T>,
+        {
             type Output = $t;
 
-            fn div(self, rhs: Self) -> Self::Output {
-                let mut output = <$t>::ZERO;
-                for i in 0..Self::ELEM_COUNT { output[i] = self[i] / rhs[i]; }
-                return output;
+            fn div(mut self, rhs: Self) -> Self::Output {
+                let mut me = *self;
+                let rhs = *rhs;
+                for i in 0..Self::ELEM_COUNT {
+                    me[i] = me[i] / rhs[i];
+                }
+                return me;
             }
         }
-        */
+        impl<T> Div<T> for &$t
+        where
+            T: SupportedValue + PartialEq + PartialOrd + Div<Output = T>,
+        {
+            type Output = $t;
+
+            fn div(mut self, rhs: T) -> Self::Output {
+                let mut me = *self;
+                let rhs = rhs;
+                for i in 0..Self::ELEM_COUNT {
+                    me[i] = me[i] / rhs;
+                }
+                return me;
+            }
+        }
         impl<T> DivAssign for $t
         where
             T: SupportedValue + PartialEq + PartialOrd + Div<Output = T>,

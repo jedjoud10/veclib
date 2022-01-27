@@ -39,6 +39,9 @@ impl<T> Vector<T> for Vector3<T> {
 impl<T> VectorElemCount for Vector3<T> {
     const ELEM_COUNT: usize = 3;
 }
+impl<T> VectorElemCount for &Vector3<T> {
+    const ELEM_COUNT: usize = 3;
+}
 
 // Default
 impl<T: Default> Default for Vector3<T> {
