@@ -21,6 +21,9 @@ pub trait Vector<T> {
     fn get_unsized(self) -> UnsizedVector<T>
     where
         T: PartialEq + SupportedValue;
+    // Get the pointer of this vector
+    fn as_ptr(&self) -> *const T;
+    fn as_ptr_mut(&mut self) -> *mut T;
 }
 
 // A vector with interchangeable element count

@@ -125,4 +125,25 @@ mod tests {
         assert_eq!(u1, UnsizedVector::Single(0.0));
         assert_eq!(u2, UnsizedVector::Vec3(Vector3::<f64>::new(10.0, -5.0, 20.0)));
     }
+    // Byte ptr test
+    #[test]
+    pub fn vector_ptr() {
+        let vector = Vector3::<f32>::ZERO;
+        let borrow = &vector;
+        let ptr1 = &borrow.x as *const f32;
+        let ptr2 = &borrow.y as *const f32;
+        let ptr3 = &borrow.z as *const f32;
+        dbg!(ptr1);
+        dbg!(ptr2);
+        dbg!(ptr3);
+
+        let sub1 = unsafe { ptr2.sub(1) };
+        let sub2 = unsafe { ptr3.sub(1) };
+        dbg!(sub1);
+        dbg!(sub2);
+
+        assert_eq!(sub1, ptr1);
+        assert_eq!(sub2, ptr2);
+        assert_eq!(borrow.as_ptr(), ptr1);
+    }
 }

@@ -13,4 +13,12 @@ impl<T: SupportedValue> Vector<T> for T {
     {
         crate::vector::UnsizedVector::Single(self)
     }
+
+    fn as_ptr(&self) -> *const T {
+        self
+    }
+
+    fn as_ptr_mut(&mut self) -> *mut T {
+        self
+    }
 }

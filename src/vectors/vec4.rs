@@ -11,6 +11,7 @@ use std::{
 
 // A simple 4D vector, no simd support what-so-ever
 #[derive(PartialEq, Debug, Clone, Copy)]
+#[repr(C)]
 pub struct Vector4<T> {
     pub x: T,
     pub y: T,
@@ -35,6 +36,14 @@ impl<T> Vector<T> for Vector4<T> {
         T: PartialEq + SupportedValue,
     {
         crate::vector::UnsizedVector::Vec4(self)
+    }
+
+    fn as_ptr(&self) -> *const T {
+        &self.x
+    }
+
+    fn as_ptr_mut(&mut self) -> *mut T {
+        &mut self.x
     }
 }
 impl<T> VectorElemCount for Vector4<T> {
