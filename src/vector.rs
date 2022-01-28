@@ -26,8 +26,11 @@ pub trait Vector<T> {
     fn as_ptr(&self) -> *const T;
     fn as_ptr_mut(&mut self) -> *mut T;
     // Read the bytes of this vector using native endianness
-    unsafe fn to_native_bytes(&self) -> &[u8] {
-        slice::from_raw_parts(self.as_ptr() as *const u8, size_of::<u8>())
+    unsafe fn to_native_bytes(&self) -> &[u8] 
+    where 
+        Self: Sized
+    {
+        slice::from_raw_parts(self.as_ptr() as *const u8, size_of::<Self>())
     } 
 }
 
