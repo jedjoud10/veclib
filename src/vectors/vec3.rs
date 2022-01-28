@@ -1,7 +1,7 @@
 use super::{Vector2, Vector4};
 use crate::{
     types::SupportedValue,
-    vector::{Swizzable, Vector, VectorElemCount},
+    vector::{Swizzable, Vector}, VectorElemCount,
 };
 use core::fmt;
 use std::{

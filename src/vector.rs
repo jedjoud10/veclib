@@ -10,7 +10,7 @@ pub trait Swizzable<T> {
     fn get2(&self, order: [usize; 2]) -> Vector2<T>;
 }
 
-pub(crate) trait VectorElemCount {
+pub trait VectorElemCount {
     // Get the amount of elements that the self vector has
     const ELEM_COUNT: usize;
 }
