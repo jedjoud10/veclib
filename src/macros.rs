@@ -54,7 +54,7 @@ macro_rules! setup_add {
     ($t:ty, $a:tt) => {
         impl<T> Add for $t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Add<Output = T>,
+            T: Copy + Add<Output = T>,
         {
             type Output = $t;
 
@@ -67,7 +67,7 @@ macro_rules! setup_add {
         }
         impl<T> Add for &$t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Add<Output = T>,
+            T: Copy + Add<Output = T>,
         {
             type Output = $t;
 
@@ -82,7 +82,7 @@ macro_rules! setup_add {
         }
         impl<T> Add<T> for &$t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Add<Output = T>,
+            T: Copy + Add<Output = T>,
         {
             type Output = $t;
 
@@ -97,7 +97,7 @@ macro_rules! setup_add {
         }
         impl<T> AddAssign for $t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Add<Output = T>,
+            T: Copy + Add<Output = T>,
         {
             fn add_assign(&mut self, rhs: Self) {
                 for i in 0..Self::ELEM_COUNT {
@@ -107,7 +107,7 @@ macro_rules! setup_add {
         }
         impl<T> Add<T> for $t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Add<Output = T>,
+            T: Copy + Add<Output = T>,
         {
             type Output = $t;
 
@@ -120,7 +120,7 @@ macro_rules! setup_add {
         }
         impl<T> AddAssign<T> for $t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Add<Output = T>,
+            T: Copy + Add<Output = T>,
         {
             fn add_assign(&mut self, rhs: T) {
                 for i in 0..Self::ELEM_COUNT {
@@ -136,7 +136,7 @@ macro_rules! setup_sub {
     ($t:ty, $a:tt) => {
         impl<T> Sub for $t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Sub<Output = T>,
+            T: Copy + Sub<Output = T>,
         {
             type Output = $t;
 
@@ -149,7 +149,7 @@ macro_rules! setup_sub {
         }
         impl<T> Sub for &$t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Sub<Output = T>,
+            T: Copy + Sub<Output = T>,
         {
             type Output = $t;
 
@@ -164,7 +164,7 @@ macro_rules! setup_sub {
         }
         impl<T> Sub<T> for &$t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Sub<Output = T>,
+            T: Copy + Sub<Output = T>,
         {
             type Output = $t;
 
@@ -179,7 +179,7 @@ macro_rules! setup_sub {
         }
         impl<T> SubAssign for $t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Sub<Output = T>,
+            T: Copy + Sub<Output = T>,
         {
             fn sub_assign(&mut self, rhs: Self) {
                 for i in 0..Self::ELEM_COUNT {
@@ -189,7 +189,7 @@ macro_rules! setup_sub {
         }
         impl<T> Sub<T> for $t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Sub<Output = T>,
+            T: Copy + Sub<Output = T>,
         {
             type Output = $t;
 
@@ -202,7 +202,7 @@ macro_rules! setup_sub {
         }
         impl<T> SubAssign<T> for $t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Sub<Output = T>,
+            T: Copy + Sub<Output = T>,
         {
             fn sub_assign(&mut self, rhs: T) {
                 for i in 0..Self::ELEM_COUNT {
@@ -218,7 +218,7 @@ macro_rules! setup_mul {
     ($t:ty, $a:tt) => {
         impl<T> Mul for $t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Mul<Output = T>,
+            T: Copy + Mul<Output = T>,
         {
             type Output = $t;
 
@@ -231,7 +231,7 @@ macro_rules! setup_mul {
         }
         impl<T> Mul for &$t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Mul<Output = T>,
+            T: Copy + Mul<Output = T>,
         {
             type Output = $t;
 
@@ -246,7 +246,7 @@ macro_rules! setup_mul {
         }
         impl<T> Mul<T> for &$t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Mul<Output = T>,
+            T: Copy + Mul<Output = T>,
         {
             type Output = $t;
 
@@ -261,7 +261,7 @@ macro_rules! setup_mul {
         }
         impl<T> MulAssign for $t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Mul<Output = T>,
+            T: Copy + Mul<Output = T>,
         {
             fn mul_assign(&mut self, rhs: Self) {
                 for i in 0..Self::ELEM_COUNT {
@@ -271,7 +271,7 @@ macro_rules! setup_mul {
         }
         impl<T> Mul<T> for $t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Mul<Output = T>,
+            T: Copy + Mul<Output = T>,
         {
             type Output = $t;
 
@@ -284,7 +284,7 @@ macro_rules! setup_mul {
         }
         impl<T> MulAssign<T> for $t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Mul<Output = T>,
+            T: Copy + Mul<Output = T>,
         {
             fn mul_assign(&mut self, rhs: T) {
                 for i in 0..Self::ELEM_COUNT {
@@ -300,7 +300,7 @@ macro_rules! setup_div {
     ($t:ty, $a:tt) => {
         impl<T> Div for $t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Div<Output = T>,
+            T: Copy + Div<Output = T>,
         {
             type Output = $t;
 
@@ -313,7 +313,7 @@ macro_rules! setup_div {
         }
         impl<T> Div for &$t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Div<Output = T>,
+            T: Copy + Div<Output = T>,
         {
             type Output = $t;
 
@@ -328,7 +328,7 @@ macro_rules! setup_div {
         }
         impl<T> Div<T> for &$t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Div<Output = T>,
+            T: Copy + Div<Output = T>,
         {
             type Output = $t;
 
@@ -343,7 +343,7 @@ macro_rules! setup_div {
         }
         impl<T> DivAssign for $t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Div<Output = T>,
+            T: Copy + Div<Output = T>,
         {
             fn div_assign(&mut self, rhs: Self) {
                 for i in 0..Self::ELEM_COUNT {
@@ -353,7 +353,7 @@ macro_rules! setup_div {
         }
         impl<T> Div<T> for $t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Div<Output = T>,
+            T: Copy + Div<Output = T>,
         {
             type Output = $t;
 
@@ -366,7 +366,7 @@ macro_rules! setup_div {
         }
         impl<T> DivAssign<T> for $t
         where
-            T: SupportedValue + PartialEq + PartialOrd + Div<Output = T>,
+            T: Copy + Div<Output = T>,
         {
             fn div_assign(&mut self, rhs: T) {
                 for i in 0..Self::ELEM_COUNT {
@@ -492,7 +492,7 @@ macro_rules! impl_elem_wise_comparison {
         // Element wise comparison
         impl<T> $t
         where
-            T: SupportedValue + PartialEq + PartialOrd,
+            T: Copy + PartialEq + PartialOrd,
         {
             // Equals
             pub fn elem_eq(&self, other: &Self) -> $out {
