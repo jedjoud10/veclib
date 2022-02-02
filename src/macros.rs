@@ -411,7 +411,35 @@ macro_rules! setup_neg {
 }
 
 #[macro_export]
-macro_rules! setup_vector_operations {
+macro_rules! setup_any_vector_operations {
+    ($t:ty, $a:tt, $f: ty) => {
+        impl $t {
+            // Get the min value between two vec3s
+            pub fn min(self, other: Self) -> Self {
+                let mut min = <$t>::ZERO;
+                for i in 0..Self::ELEM_COUNT {
+                    min[i] = self[i].min(other[i]);
+                }
+                return min;
+            }
+            // Get the max value between two vec3s
+            pub fn max(self, other: Self) -> Self {
+                let mut min = <$t>::ZERO;
+                for i in 0..Self::ELEM_COUNT {
+                    min[i] = self[i].max(other[i]);
+                }
+                return min;
+            }
+            // Clamp the current value between some bounds and return it
+            pub fn clamp(self, min: Self, max: Self) -> Self {
+                return self.min(max).max(min);
+            }
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! setup_floating_vector_operations {
     ($t:ty, $a:tt, $f: ty) => {
         // Setup the shared vector operations
         impl $t {
@@ -456,26 +484,27 @@ macro_rules! setup_vector_operations {
                 }
                 return dot;
             }
-            // Get the min value between two vec3s
-            pub fn min(self, other: Self) -> Self {
-                let mut min = <$t>::ZERO;
+            // Floor
+            pub fn floor(mut self) -> Self {
                 for i in 0..Self::ELEM_COUNT {
-                    min[i] = self[i].min(other[i]);
+                    self[i] = self[i].floor();
                 }
-                return min;
+                self
             }
-            // Get the max value between two vec3s
-            pub fn max(self, other: Self) -> Self {
-                let mut min = <$t>::ZERO;
+            // Round
+            pub fn round(mut self) -> Self {
                 for i in 0..Self::ELEM_COUNT {
-                    min[i] = self[i].max(other[i]);
+                    self[i] = self[i].round();
                 }
-                return min;
+                self
             }
-            // Clamp the current value between some bounds and return it
-            pub fn clamp(self, min: Self, max: Self) -> Self {
-                return self.min(max).max(min);
-            }
+            // Ceil  
+            pub fn ceil(mut self) -> Self {
+                for i in 0..Self::ELEM_COUNT {
+                    self[i] = self[i].ceil();
+                }
+                self
+            }        
             //https://limnu.com/sketch-lerp-unlerp-remap/
             // Lerp between two values using T
             pub fn lerp(self, other: Self, t: $f) -> Self {

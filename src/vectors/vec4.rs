@@ -209,8 +209,22 @@ crate::setup_sub!(Vector4<T>, T);
 crate::setup_mul!(Vector4<T>, T);
 crate::setup_div!(Vector4<T>, T);
 crate::setup_neg!(Vector4<T>, T);
-crate::setup_vector_operations!(Vector4<f32>, T, f32);
-crate::setup_vector_operations!(Vector4<f64>, T, f64);
+
+crate::setup_floating_vector_operations!(Vector4<f32>, T, f32);
+crate::setup_floating_vector_operations!(Vector4<f64>, T, f64);
+crate::setup_any_vector_operations!(Vector4<u8>, T, u8);
+crate::setup_any_vector_operations!(Vector4<u16>, T, u16);
+crate::setup_any_vector_operations!(Vector4<u32>, T, u32);
+crate::setup_any_vector_operations!(Vector4<u64>, T, u64);
+crate::setup_any_vector_operations!(Vector4<u128>, T, u128);
+crate::setup_any_vector_operations!(Vector4<i8>, T, i8);
+crate::setup_any_vector_operations!(Vector4<i16>, T, i16);
+crate::setup_any_vector_operations!(Vector4<i32>, T, i32);
+crate::setup_any_vector_operations!(Vector4<i64>, T, i64);
+crate::setup_any_vector_operations!(Vector4<i128>, T, i128);
+crate::setup_any_vector_operations!(Vector4<f32>, T, f32);
+crate::setup_any_vector_operations!(Vector4<f64>, T, f64);
+
 crate::impl_elem_wise_comparison!(Vector4<T>, T, Vector4<bool>);
 
 // Dear lord
