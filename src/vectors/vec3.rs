@@ -175,14 +175,18 @@ impl<T: SupportedValue> Vector3<T> {
 }
 
 // Eq and Hash for int types
+crate::impl_eq_hash!(Vector3<i8>);
 crate::impl_eq_hash!(Vector3<i16>);
 crate::impl_eq_hash!(Vector3<i32>);
 crate::impl_eq_hash!(Vector3<i64>);
 crate::impl_eq_hash!(Vector3<i128>);
+crate::impl_eq_hash!(Vector3<u8>);
 crate::impl_eq_hash!(Vector3<u16>);
 crate::impl_eq_hash!(Vector3<u32>);
 crate::impl_eq_hash!(Vector3<u64>);
 crate::impl_eq_hash!(Vector3<u128>);
+crate::impl_eq_hash!(Vector3<usize>);
+crate::impl_eq_hash!(Vector3<isize>);
 
 // Run the macros
 crate::setup_add!(Vector3<T>, T);
@@ -203,6 +207,8 @@ crate::setup_any_vector_operations!(Vector3<i64>, T, i64);
 crate::setup_any_vector_operations!(Vector3<i128>, T, i128);
 crate::setup_any_vector_operations!(Vector3<f32>, T, f32);
 crate::setup_any_vector_operations!(Vector3<f64>, T, f64);
+crate::setup_any_vector_operations!(Vector3<usize>, T, usize);
+crate::setup_any_vector_operations!(Vector3<isize>, T, isize);
 
 crate::setup_floating_vector_operations!(Vector3<f32>, T, f32);
 crate::setup_floating_vector_operations!(Vector3<f64>, T, f64);
@@ -214,19 +220,21 @@ crate::impl_elem_wise_comparison!(Vector3<T>, T, Vector3<bool>);
 crate::impl_from_vec3!(Vector3<f64>, f64, f32);
 crate::impl_from_vec3!(Vector3<f32>, f32, f64);
 // Integers to floating point
-crate::impl_from_vec3!(Vector3<f32>, f32, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128);
-crate::impl_from_vec3!(Vector3<f64>, f64, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128);
+crate::impl_from_vec3!(Vector3<f32>, f32, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, usize, isize);
+crate::impl_from_vec3!(Vector3<f64>, f64, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, usize, isize);
 // Integers to integers
-crate::impl_from_vec3!(Vector3<i8>, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<i16>, i16, i8, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<i32>, i32, i8, i16, i64, i128, u8, u16, u32, u64, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<i64>, i64, i8, i16, i32, i128, u8, u16, u32, u64, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<i128>, i128, i8, i16, i32, i64, u8, u16, u32, u64, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<u8>, u8, i8, i16, i32, i64, i128, u16, u32, u64, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<u16>, u16, i8, i16, i32, i64, i128, u8, u32, u64, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<u32>, u32, i8, i16, i32, i64, i128, u8, u16, u64, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<u64>, u64, i8, i16, i32, i64, i128, u8, u16, u32, u128, f32, f64);
-crate::impl_from_vec3!(Vector3<u128>, u128, i8, i16, i32, i64, i128, u8, u16, u32, u64, f32, f64);
+crate::impl_from_vec3!(Vector3<i8>, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64, usize, isize);
+crate::impl_from_vec3!(Vector3<i16>, i16, i8, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64, usize, isize);
+crate::impl_from_vec3!(Vector3<i32>, i32, i8, i16, i64, i128, u8, u16, u32, u64, u128, f32, f64, usize, isize);
+crate::impl_from_vec3!(Vector3<i64>, i64, i8, i16, i32, i128, u8, u16, u32, u64, u128, f32, f64, usize, isize);
+crate::impl_from_vec3!(Vector3<i128>, i128, i8, i16, i32, i64, u8, u16, u32, u64, u128, f32, f64, usize, isize);
+crate::impl_from_vec3!(Vector3<u8>, u8, i8, i16, i32, i64, i128, u16, u32, u64, u128, f32, f64, usize, isize);
+crate::impl_from_vec3!(Vector3<u16>, u16, i8, i16, i32, i64, i128, u8, u32, u64, u128, f32, f64, usize, isize);
+crate::impl_from_vec3!(Vector3<u32>, u32, i8, i16, i32, i64, i128, u8, u16, u64, u128, f32, f64, usize, isize);
+crate::impl_from_vec3!(Vector3<u64>, u64, i8, i16, i32, i64, i128, u8, u16, u32, u128, f32, f64, usize, isize);
+crate::impl_from_vec3!(Vector3<u128>, u128, i8, i16, i32, i64, i128, u8, u16, u32, u64, f32, f64, usize, isize);
+crate::impl_from_vec3!(Vector3<isize>, isize, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64, usize);
+crate::impl_from_vec3!(Vector3<usize>, usize, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64, isize);
 
 // Vector3 operations
 impl Vector3<f32> {

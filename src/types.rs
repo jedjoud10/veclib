@@ -5,6 +5,8 @@ pub trait SupportedValue: PartialEq + Clone + Copy {
 }
 
 // Integer types
+crate::impl_default_state!(usize);
+crate::impl_default_state!(isize);
 crate::impl_default_state!(u8);
 crate::impl_default_state!(u16);
 crate::impl_default_state!(u32);
