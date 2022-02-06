@@ -687,8 +687,21 @@ macro_rules! impl_matrix {
                 *matrix.get_vec_mut(1) = Vector4::new(0.0, second, 0.0, 0.0);
                 *matrix.get_vec_mut(2) = Vector4::new(0.0, 0.0, -((far + near) / (far - near)), -((2.0 * far * near) / (far - near)));
                 *matrix.get_vec_mut(3) = -Vector4::Z;
-                matrix.transpose();
                 // Transpose the matrix
+                matrix.transpose();
+                matrix
+            }
+            // Bonk v2 https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/orthographic-projection-matrix
+            pub fn from_orthographic(bottom: $f, top: $f, left: $f, right: $f, far: $f, near: $f) -> Self {
+                // The output
+                let mut matrix: Self = Self::IDENTITY;
+                // This is row major
+                *matrix.get_vec_mut(0) = Vector4::new(2.0 / (right - left), 0.0, 0.0, -((right + left) / (right-left)));
+                *matrix.get_vec_mut(1) = Vector4::new(0.0, 2.0 / (top - bottom), 0.0, -((top + bottom) / (top - bottom)));
+                *matrix.get_vec_mut(2) = Vector4::new(0.0, 0.0, -2.0 / (far - near), -((far + near) / (far - near)));
+                *matrix.get_vec_mut(3) = Vector4::W;
+                // Transpose the matrix
+                matrix.transpose();
                 matrix
             }
             // Create a translation matrix
@@ -819,6 +832,19 @@ macro_rules! impl_matrix {
                 let mut output = Self::IDENTITY;
                 self.inverse(&mut output);
                 output
+            }
+            // Transform a 4D vector by the matrix
+            pub fn mul_vector(&self, vector: &Vector4<$f>) -> Vector4<$f> {
+                // Multiply the vector by this matrix
+                let x = self.get_vec(0).dot(*vector);
+                let y = self.get_vec(1).dot(*vector);
+                let z = self.get_vec(2).dot(*vector);
+                let w = self.get_vec(3).dot(*vector);
+                Vector4::<$f>::new(x, y, z, w)
+            }
+            // Transform a 3D point by the matrix, basically create a 4D vector out of it with the W component being 1.0
+            pub fn mul_point(&self, point: &Vector3<$f>) -> Vector3<$f> {
+                self.mul_vector(&Vector4::new(point.x, point.y, point.z, 1.0)).get3([0, 1, 2])
             }
         }
     };

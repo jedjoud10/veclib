@@ -108,19 +108,3 @@ impl Mul for Matrix4x4<f32> {
         self.mul_mat4x4(rhs)
     }
 }
-// Transform a vector by the matrix
-impl Matrix4x4<f32> {
-    // Transform a 4D vector by the matrix
-    pub fn mul_vector(&self, vector: &Vector4<f32>) -> Vector4<f32> {
-        // Multiply the vector by this matrix
-        let x = self.get_vec(0).dot(*vector);
-        let y = self.get_vec(1).dot(*vector);
-        let z = self.get_vec(2).dot(*vector);
-        let w = self.get_vec(3).dot(*vector);
-        Vector4::<f32>::new(x, y, z, w)
-    }
-    // Transform a 3D point by the matrix, basically create a 4D vector out of it with the W component being 1.0
-    pub fn mul_point(&self, point: &Vector3<f32>) -> Vector3<f32> {
-        self.mul_vector(&Vector4::new(point.x, point.y, point.z, 1.0)).get3([0, 1, 2])
-    }
-}
