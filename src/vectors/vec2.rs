@@ -29,13 +29,6 @@ where
 
 // Vector trait
 impl<T> Vector<T> for Vector2<T> {
-    fn get_unsized(self) -> crate::vector::UnsizedVector<T>
-    where
-        T: PartialEq + SupportedValue,
-    {
-        crate::vector::UnsizedVector::<T>::Vec2(self)
-    }
-
     fn as_ptr(&self) -> *const T {
         &self.x
     }
@@ -167,11 +160,13 @@ crate::setup_any_vector_operations!(Vector2<u16>, T, u16);
 crate::setup_any_vector_operations!(Vector2<u32>, T, u32);
 crate::setup_any_vector_operations!(Vector2<u64>, T, u64);
 crate::setup_any_vector_operations!(Vector2<u128>, T, u128);
+crate::setup_any_vector_operations!(Vector2<usize>, T, usize);
 crate::setup_any_vector_operations!(Vector2<i8>, T, i8);
 crate::setup_any_vector_operations!(Vector2<i16>, T, i16);
 crate::setup_any_vector_operations!(Vector2<i32>, T, i32);
 crate::setup_any_vector_operations!(Vector2<i64>, T, i64);
 crate::setup_any_vector_operations!(Vector2<i128>, T, i128);
+crate::setup_any_vector_operations!(Vector2<isize>, T, isize);
 crate::setup_any_vector_operations!(Vector2<f32>, T, f32);
 crate::setup_any_vector_operations!(Vector2<f64>, T, f64);
 
@@ -188,15 +183,15 @@ crate::impl_from_vec2!(Vector2<f32>, f32, f64);
 crate::impl_from_vec2!(Vector2<f32>, f32, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, usize, isize);
 crate::impl_from_vec2!(Vector2<f64>, f64, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, usize, isize);
 // Integers to integers
-crate::impl_from_vec2!(Vector2<i8>, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64, usize, isize);
-crate::impl_from_vec2!(Vector2<i16>, i16, i8, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64, usize, isize);
-crate::impl_from_vec2!(Vector2<i32>, i32, i8, i16, i64, i128, u8, u16, u32, u64, u128, f32, f64, usize, isize);
-crate::impl_from_vec2!(Vector2<i64>, i64, i8, i16, i32, i128, u8, u16, u32, u64, u128, f32, f64, usize, isize);
-crate::impl_from_vec2!(Vector2<i128>, i128, i8, i16, i32, i64, u8, u16, u32, u64, u128, f32, f64, usize, isize);
-crate::impl_from_vec2!(Vector2<u8>, u8, i8, i16, i32, i64, i128, u16, u32, u64, u128, f32, f64, usize, isize);
-crate::impl_from_vec2!(Vector2<u16>, u16, i8, i16, i32, i64, i128, u8, u32, u64, u128, f32, f64, usize, isize);
-crate::impl_from_vec2!(Vector2<u32>, u32, i8, i16, i32, i64, i128, u8, u16, u64, u128, f32, f64, usize, isize);
-crate::impl_from_vec2!(Vector2<u64>, u64, i8, i16, i32, i64, i128, u8, u16, u32, u128, f32, f64, usize, isize);
-crate::impl_from_vec2!(Vector2<u128>, u128, i8, i16, i32, i64, i128, u8, u16, u32, u64, f32, f64, usize, isize);
-crate::impl_from_vec2!(Vector2<isize>, isize, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64, usize);
-crate::impl_from_vec2!(Vector2<usize>, usize, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64, isize);
+crate::impl_from_vec2!(Vector2<i8>, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64, usize, bool, isize);
+crate::impl_from_vec2!(Vector2<i16>, i16, i8, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64, usize, bool, isize);
+crate::impl_from_vec2!(Vector2<i32>, i32, i8, i16, i64, i128, u8, u16, u32, u64, u128, f32, f64, usize, bool, isize);
+crate::impl_from_vec2!(Vector2<i64>, i64, i8, i16, i32, i128, u8, u16, u32, u64, u128, f32, f64, usize, bool, isize);
+crate::impl_from_vec2!(Vector2<i128>, i128, i8, i16, i32, i64, u8, u16, u32, u64, u128, f32, f64, usize, bool, isize);
+crate::impl_from_vec2!(Vector2<u8>, u8, i8, i16, i32, i64, i128, u16, u32, u64, u128, f32, f64, usize, bool, isize);
+crate::impl_from_vec2!(Vector2<u16>, u16, i8, i16, i32, i64, i128, u8, u32, u64, u128, f32, f64, usize, bool, isize);
+crate::impl_from_vec2!(Vector2<u32>, u32, i8, i16, i32, i64, i128, u8, u16, u64, u128, f32, f64, usize, bool, isize);
+crate::impl_from_vec2!(Vector2<u64>, u64, i8, i16, i32, i64, i128, u8, u16, u32, u128, f32, f64, usize, bool, isize);
+crate::impl_from_vec2!(Vector2<u128>, u128, i8, i16, i32, i64, i128, u8, u16, u32, u64, f32, f64, usize, bool, isize);
+crate::impl_from_vec2!(Vector2<isize>, isize, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64, bool, usize);
+crate::impl_from_vec2!(Vector2<usize>, usize, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64, bool, isize);

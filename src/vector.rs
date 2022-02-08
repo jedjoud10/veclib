@@ -1,5 +1,5 @@
 use std::{mem::size_of, slice};
-use crate::{vectors::*, SupportedValue};
+use crate::{vectors::*};
 
 // The swizzable trait
 pub trait Swizzable<T> {
@@ -18,10 +18,6 @@ pub trait VectorElemCount {
 
 // The vector trait
 pub trait Vector<T> {
-    // Turn this into an unsized vector
-    fn get_unsized(self) -> UnsizedVector<T>
-    where
-        T: SupportedValue;
     // Get the pointer of this vector
     fn as_ptr(&self) -> *const T;
     fn as_ptr_mut(&mut self) -> *mut T;
@@ -32,13 +28,4 @@ pub trait Vector<T> {
     {
         slice::from_raw_parts(self.as_ptr() as *const u8, size_of::<Self>())
     } 
-}
-
-// A vector with interchangeable element count
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub enum UnsizedVector<T: SupportedValue> {
-    Single(T),
-    Vec2(crate::Vector2<T>),
-    Vec3(crate::Vector3<T>),
-    Vec4(crate::Vector4<T>),
 }
