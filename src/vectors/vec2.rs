@@ -1,197 +1,388 @@
-use super::{Vector3, Vector4};
-use crate::{
-    types::SupportedValue,
-    vector::{Swizzable, Vector, VectorElemCount},
-};
-use std::{
-    fmt,
-    hash::Hash,
-    ops::{Add, AddAssign, BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Not, Sub, SubAssign},
-};
+use std::ops::{Add, AddAssign, Sub, SubAssign, Mul, MulAssign, DivAssign, Div, Neg, Rem, RemAssign};
 
-// A simple 2D vector, no simd support what-so-ever
-#[derive(PartialEq, Debug, Clone, Copy)]
-#[repr(C)]
+use num::{One, Zero, Float, traits::{NumAssign, NumAssignOps}};
+// A simple 2D vector
+#[derive(Default, Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct Vector2<T> {
-    pub x: T,
-    pub y: T,
+    pub(crate) inner: [T; 2]
 }
 
-// Printing
-impl<T> fmt::Display for Vector2<T>
-where
-    T: fmt::Display,
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "[{}, {}]", self.x, self.y)
+impl<Real: num::Float + NumAssign + NumAssignOps> Vector2<Real> {
+    // Get the distance from another vector
+    pub fn distance(self, other: Self) -> Real {
+        let test: Self = self - other;
+        return test.length();
+    }
+    // Get the length square of the current vector (Saves us a sqrt operation)
+    pub fn length_sqrt(self) -> Real {
+        let mut len: Real = Zero::zero();
+        for val in self.inner {
+            len += val.powi(2);
+        }
+        return len;
+    }
+    // Get the length of the current vector
+    pub fn length(self) -> Real {
+        return self.length_sqrt().sqrt();
+    }
+    // Normalize the current vector
+    pub fn normalize(&mut self) {
+        let len = self.length();
+        *self /= len;
+    }
+    // Get the dot product between two vectors
+    pub fn dot(self, other: Self) -> Real {
+        let mut dot: Real = Zero::zero();
+        for val in (self - other).inner.into_iter() {
+            dot += val
+        }
+        dot
+    }
+    // Floor
+    pub fn floor(mut self) -> Self {
+        for val in self.inner.iter_mut() {
+            *val = val.floor();
+        }
+        self
+    }
+    // Round
+    pub fn round(mut self) -> Self {
+        for val in self.inner.iter_mut() {
+            *val = val.round();
+        }
+        self
+    }
+    // Ceil  
+    pub fn ceil(mut self) -> Self {
+        for val in self.inner.iter_mut() {
+            *val = val.ceil();
+        }
+        self
+    }        
+    //https://limnu.com/sketch-lerp-unlerp-remap/
+    // Lerp between two values using T
+    pub fn lerp(self, other: Self, t: Real) -> Self {
+        let output = self + ((other - self) * t);
+        return output;
     }
 }
 
-// Vector trait
-impl<T> Vector<T> for Vector2<T> {
-    fn as_ptr(&self) -> *const T {
-        &self.x
-    }
 
-    fn as_ptr_mut(&mut self) -> *mut T {
-        &mut self.x
-    }
-}
-impl<T> VectorElemCount for Vector2<T> {
-    const ELEM_COUNT: usize = 2;
-}
-
-impl<T> VectorElemCount for &Vector2<T> {
-    const ELEM_COUNT: usize = 2;
-}
-
-// Default
-impl<T: Default> Default for Vector2<T> {
-    fn default() -> Self {
-        Self { x: T::default(), y: T::default() }
-    }
-}
-
-pub const fn vec2<T>(f1: T, f2: T) -> Vector2<T> {
-    Vector2::new(f1, f2)
-}
-
-impl<T> Vector2<T> {
-    // Create a new vec2
-    pub const fn new(f1: T, f2: T) -> Self {
-        Self { x: f1, y: f2 }
-    }
-}
-
-// Implement the vec3 code
-#[allow(dead_code)]
-impl<T: SupportedValue> Vector2<T> {
-    // Defaults
-    pub const ZERO: Self = Self { x: T::ZERO, y: T::ZERO };
-    pub const X: Self = Self { x: T::ONE, y: T::ZERO };
-    pub const Y: Self = Self { x: T::ZERO, y: T::ONE };
-    pub const ONE: Self = Self { x: T::ONE, y: T::ONE };
-}
-
-// Indexer
-impl<T> Index<usize> for Vector2<T> {
-    type Output = T;
-    // Index
-    fn index(&self, index: usize) -> &Self::Output {
-        match index {
-            0 => &self.x,
-            1 => &self.y,
-            _ => todo!(),
+// Operators
+impl<T: AddAssign + Copy> Add for Vector2<T> {
+    type Output = Self;
+    fn add(mut self, rhs: Self) -> Self::Output {
+        Self {
+            inner: {
+                for (i, val) in self.inner.iter_mut().enumerate() {
+                    *val += rhs.inner[i];
+                }
+                self.inner
+            }
         }
     }
 }
-
-// Mut indexer
-impl<T> IndexMut<usize> for Vector2<T> {
-    // Mut index
-    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        match index {
-            0 => &mut self.x,
-            1 => &mut self.y,
-            _ => todo!(),
+impl<T: AddAssign + Copy> Add<T> for Vector2<T> {
+    type Output = Self;
+    fn add(mut self, rhs: T) -> Self::Output {
+        Self {
+            inner: {
+                for val in self.inner.iter_mut() {
+                    *val += rhs;
+                }
+                self.inner
+            }
         }
     }
 }
-
-// Swizzle a vec2
-impl<T: Clone + Copy> Swizzable<T> for Vector2<T> {
-    fn get4(&self, order: [usize; 4]) -> Vector4<T> {
-        Vector4::new(self[order[0]], self[order[1]], self[order[2]], self[order[3]])
-    }
-
-    fn get3(&self, order: [usize; 3]) -> Vector3<T> {
-        Vector3::new(self[order[0]], self[order[1]], self[order[2]])
-    }
-
-    fn get2(&self, order: [usize; 2]) -> Vector2<T> {
-        Vector2::new(self[order[0]], self[order[1]])
-    }
-}
-
-// The axii for a vec2
-#[derive(Clone, Copy, Debug)]
-pub enum Vec2Axis {
-    X,
-    Y,
-}
-
-// Get the default axii from the Vec2Axis
-impl<T: SupportedValue> Vector2<T> {
-    // Get the default value
-    pub fn get_default_axis(axis: Vec2Axis) -> Self {
-        match axis {
-            Vec2Axis::X => Self::X,
-            Vec2Axis::Y => Self::Y,
-        }
-    }
-    // Get the value of the current axis
-    pub fn get_axis(&self, axis: Vec2Axis) -> T {
-        match axis {
-            Vec2Axis::X => self.x,
-            Vec2Axis::Y => self.y,
+impl<T: AddAssign + Copy> Add<&T> for Vector2<T> {
+    type Output = Self;
+    fn add(mut self, rhs: &T) -> Self::Output {
+        Self {
+            inner: {
+                for val in self.inner.iter_mut() {
+                    *val += *rhs;
+                }
+                self.inner
+            }
         }
     }
 }
+impl<T: AddAssign + Copy> AddAssign for Vector2<T> {
+    fn add_assign(&mut self, rhs: Self) {
+        for (i, val) in self.inner.iter_mut().enumerate() {
+            *val += rhs.inner[i];
+        }
+    }
+}
+impl<T: AddAssign + Copy> AddAssign<T> for Vector2<T> {
+    fn add_assign(&mut self, rhs: T) {
+        for val in self.inner.iter_mut() {
+            *val += rhs;
+        }
+    }
+}
+impl<T: AddAssign + Copy> AddAssign<&T> for Vector2<T> {
+    fn add_assign(&mut self, rhs: &T) {
+        for val in self.inner.iter_mut() {
+            *val += *rhs;
+        }
+    }
+}
+impl<T: SubAssign + Copy> Sub for Vector2<T> {
+    type Output = Self;
+    fn sub(mut self, rhs: Self) -> Self::Output {
+        Self {
+            inner: {
+                for (i, val) in self.inner.iter_mut().enumerate() {
+                    *val -= rhs.inner[i];
+                }
+                self.inner
+            }
+        }
+    }
+}
+impl<T: SubAssign + Copy> Sub<T> for Vector2<T> {
+    type Output = Self;
+    fn sub(mut self, rhs: T) -> Self::Output {
+        Self {
+            inner: {
+                for val in self.inner.iter_mut() {
+                    *val -= rhs;
+                }
+                self.inner
+            }
+        }
+    }
+}
+impl<T: SubAssign + Copy> Sub<&T> for Vector2<T> {
+    type Output = Self;
+    fn sub(mut self, rhs: &T) -> Self::Output {
+        Self {
+            inner: {
+                for val in self.inner.iter_mut() {
+                    *val -= *rhs;
+                }
+                self.inner
+            }
+        }
+    }
+}
+impl<T: SubAssign + Copy> SubAssign for Vector2<T> {
+    fn sub_assign(&mut self, rhs: Self) {
+        for (i, val) in self.inner.iter_mut().enumerate() {
+            *val -= rhs.inner[i];
+        }
+    }
+}
+impl<T: SubAssign + Copy> SubAssign<T> for Vector2<T> {
+    fn sub_assign(&mut self, rhs: T) {
+        for val in self.inner.iter_mut() {
+            *val -= rhs;
+        }
+    }
+}
+impl<T: SubAssign + Copy> SubAssign<&T> for Vector2<T> {
+    fn sub_assign(&mut self, rhs: &T) {
+        for val in self.inner.iter_mut() {
+            *val -= *rhs;
+        }
+    }
+}
+impl<T: MulAssign + Copy> Mul for Vector2<T> {
+    type Output = Self;
+    fn mul(mut self, rhs: Self) -> Self::Output {
+        Self {
+            inner: {
+                for (i, val) in self.inner.iter_mut().enumerate() {
+                    *val *= rhs.inner[i];
+                }
+                self.inner
+            }
+        }
+    }
+}
+impl<T: MulAssign + Copy> Mul<T> for Vector2<T> {
+    type Output = Self;
+    fn mul(mut self, rhs: T) -> Self::Output {
+        Self {
+            inner: {
+                for val in self.inner.iter_mut() {
+                    *val *= rhs;
+                }
+                self.inner
+            }
+        }
+    }
+}
+impl<T: MulAssign + Copy> Mul<&T> for Vector2<T> {
+    type Output = Self;
+    fn mul(mut self, rhs: &T) -> Self::Output {
+        Self {
+            inner: {
+                for val in self.inner.iter_mut() {
+                    *val *= *rhs;
+                }
+                self.inner
+            }
+        }
+    }
+}
+impl<T: MulAssign + Copy> MulAssign for Vector2<T> {
+    fn mul_assign(&mut self, rhs: Self) {
+        for (i, val) in self.inner.iter_mut().enumerate() {
+            *val *= rhs.inner[i];
+        }
+    }
+}
+impl<T: MulAssign + Copy> MulAssign<T> for Vector2<T> {
+    fn mul_assign(&mut self, rhs: T) {
+        for val in self.inner.iter_mut() {
+            *val *= rhs;
+        }
+    }
+}
+impl<T: MulAssign + Copy> MulAssign<&T> for Vector2<T> {
+    fn mul_assign(&mut self, rhs: &T) {
+        for val in self.inner.iter_mut() {
+            *val *= *rhs;
+        }
+    }
+}
+impl<T: DivAssign + Copy> Div for Vector2<T> {
+    type Output = Self;
+    fn div(mut self, rhs: Self) -> Self::Output {
+        Self {
+            inner: {
+                for (i, val) in self.inner.iter_mut().enumerate() {
+                    *val /= rhs.inner[i];
+                }
+                self.inner
+            }
+        }
+    }
+}
+impl<T: DivAssign + Copy> Div<T> for Vector2<T> {
+    type Output = Self;
+    fn div(mut self, rhs: T) -> Self::Output {
+        Self {
+            inner: {
+                for val in self.inner.iter_mut() {
+                    *val /= rhs;
+                }
+                self.inner
+            }
+        }
+    }
+}
+impl<T: DivAssign + Copy> Div<&T> for Vector2<T> {
+    type Output = Self;
+    fn div(mut self, rhs: &T) -> Self::Output {
+        Self {
+            inner: {
+                for val in self.inner.iter_mut() {
+                    *val /= *rhs;
+                }
+                self.inner
+            }
+        }
+    }
+}
+impl<T: DivAssign + Copy> DivAssign for Vector2<T> {
+    fn div_assign(&mut self, rhs: Self) {
+        for (i, val) in self.inner.iter_mut().enumerate() {
+            *val /= rhs.inner[i];
+        }
+    }
+}
+impl<T: DivAssign + Copy> DivAssign<T> for Vector2<T> {
+    fn div_assign(&mut self, rhs: T) {
+        for val in self.inner.iter_mut() {
+            *val /= rhs;
+        }
+    }
+}
+impl<T: DivAssign + Copy> DivAssign<&T> for Vector2<T> {
+    fn div_assign(&mut self, rhs: &T) {
+        for val in self.inner.iter_mut() {
+            *val /= *rhs;
+        }
+    }
+}
+impl<T: Neg<Output = T> + Copy> Neg for Vector2<T> {
+    type Output = Self;
 
-// Eq and Hash for int types
-crate::impl_eq_hash!(Vector2<i16>);
-crate::impl_eq_hash!(Vector2<i32>);
-crate::impl_eq_hash!(Vector2<i64>);
-crate::impl_eq_hash!(Vector2<i128>);
-crate::impl_eq_hash!(Vector2<u16>);
-crate::impl_eq_hash!(Vector2<u32>);
-crate::impl_eq_hash!(Vector2<u64>);
-crate::impl_eq_hash!(Vector2<u128>);
+    fn neg(mut self) -> Self::Output {
+        for val in self.inner.iter_mut() { 
+            *val = val.neg();
+        }
+        self
+    }
+}
+impl<T: Rem<Output = T> + Copy> Rem for Vector2<T> {
+    type Output = Vector2<T>;
 
-// Run the macros
-crate::setup_add!(Vector2<T>, T);
-crate::setup_sub!(Vector2<T>, T);
-crate::setup_mul!(Vector2<T>, T);
-crate::setup_div!(Vector2<T>, T);
-crate::setup_neg!(Vector2<T>, T);
+    fn rem(mut self, rhs: Self) -> Self::Output {
+        Self {
+            inner: {
+                for (i, val) in self.inner.iter_mut().enumerate() { 
+                    *val = *val % rhs.inner[i];
+                } 
+                self.inner
+            }
+        }
+    }
+}
+impl<T: Rem<Output = T> + Copy> Rem<T> for Vector2<T> {
+    type Output = Vector2<T>;
 
-crate::setup_any_vector_operations!(Vector2<u8>, T, u8);
-crate::setup_any_vector_operations!(Vector2<u16>, T, u16);
-crate::setup_any_vector_operations!(Vector2<u32>, T, u32);
-crate::setup_any_vector_operations!(Vector2<u64>, T, u64);
-crate::setup_any_vector_operations!(Vector2<u128>, T, u128);
-crate::setup_any_vector_operations!(Vector2<usize>, T, usize);
-crate::setup_any_vector_operations!(Vector2<i8>, T, i8);
-crate::setup_any_vector_operations!(Vector2<i16>, T, i16);
-crate::setup_any_vector_operations!(Vector2<i32>, T, i32);
-crate::setup_any_vector_operations!(Vector2<i64>, T, i64);
-crate::setup_any_vector_operations!(Vector2<i128>, T, i128);
-crate::setup_any_vector_operations!(Vector2<isize>, T, isize);
-crate::setup_any_vector_operations!(Vector2<f32>, T, f32);
-crate::setup_any_vector_operations!(Vector2<f64>, T, f64);
+    fn rem(mut self, rhs: T) -> Self::Output {
+        Self {
+            inner: {
+                for val in self.inner.iter_mut() { 
+                    *val = *val % rhs;
+                } 
+                self.inner
+            }
+        }
+    }
+}
+impl<T: Rem<Output = T> + Copy> RemAssign for Vector2<T> {
+    fn rem_assign(&mut self, rhs: Self) {
+        for (i, val) in self.inner.iter_mut().enumerate() { 
+            *val = *val % rhs.inner[i];
+        } 
+    }
+}
+impl<T: Rem<Output = T> + Copy> RemAssign<T> for Vector2<T> {
+    fn rem_assign(&mut self, rhs: T) {
+        for val in self.inner.iter_mut() { 
+            *val = *val % rhs;
+        } 
+    }
+}
+impl<T: Rem<Output = T> + Copy> RemAssign<&T> for Vector2<T> {
+    fn rem_assign(&mut self, rhs: &T) {
+        for val in self.inner.iter_mut() { 
+            *val = *val % *rhs;
+        } 
+    }
+}
+impl<T: Zero + AddAssign + Copy> Zero for Vector2<T> {
+    fn zero() -> Self {
+        Self {
+            inner: [T::zero(), T::zero()]
+        }
+    }
 
-crate::setup_floating_vector_operations!(Vector2<f32>, T, f32);
-crate::setup_floating_vector_operations!(Vector2<f64>, T, f64);
-crate::impl_elem_wise_comparison!(Vector2<T>, T, Vector2<bool>);
-
-// Dear lord
-// I deeply apologize for this
-// Floating point to floating point
-crate::impl_from_vec2!(Vector2<f64>, f64, f32);
-crate::impl_from_vec2!(Vector2<f32>, f32, f64);
-// Integers to floating point
-crate::impl_from_vec2!(Vector2<f32>, f32, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, usize, isize);
-crate::impl_from_vec2!(Vector2<f64>, f64, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, usize, isize);
-// Integers to integers
-crate::impl_from_vec2!(Vector2<i8>, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64, usize, bool, isize);
-crate::impl_from_vec2!(Vector2<i16>, i16, i8, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64, usize, bool, isize);
-crate::impl_from_vec2!(Vector2<i32>, i32, i8, i16, i64, i128, u8, u16, u32, u64, u128, f32, f64, usize, bool, isize);
-crate::impl_from_vec2!(Vector2<i64>, i64, i8, i16, i32, i128, u8, u16, u32, u64, u128, f32, f64, usize, bool, isize);
-crate::impl_from_vec2!(Vector2<i128>, i128, i8, i16, i32, i64, u8, u16, u32, u64, u128, f32, f64, usize, bool, isize);
-crate::impl_from_vec2!(Vector2<u8>, u8, i8, i16, i32, i64, i128, u16, u32, u64, u128, f32, f64, usize, bool, isize);
-crate::impl_from_vec2!(Vector2<u16>, u16, i8, i16, i32, i64, i128, u8, u32, u64, u128, f32, f64, usize, bool, isize);
-crate::impl_from_vec2!(Vector2<u32>, u32, i8, i16, i32, i64, i128, u8, u16, u64, u128, f32, f64, usize, bool, isize);
-crate::impl_from_vec2!(Vector2<u64>, u64, i8, i16, i32, i64, i128, u8, u16, u32, u128, f32, f64, usize, bool, isize);
-crate::impl_from_vec2!(Vector2<u128>, u128, i8, i16, i32, i64, i128, u8, u16, u32, u64, f32, f64, usize, bool, isize);
-crate::impl_from_vec2!(Vector2<isize>, isize, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64, bool, usize);
-crate::impl_from_vec2!(Vector2<usize>, usize, i8, i16, i32, i64, i128, u8, u16, u32, u64, u128, f32, f64, bool, isize);
+    fn is_zero(&self) -> bool {
+        self.inner[0].is_zero() && self.inner[1].is_zero()
+    }
+}
+impl<T: One + MulAssign + Copy> One for Vector2<T> {
+    fn one() -> Self {
+        Self {
+            inner: [T::one(), T::one()]
+        }
+    }
+}
